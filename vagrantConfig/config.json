@@ -1,0 +1,26 @@
+{
+    "ip": "192.168.56.102",
+    "hostname": "executive-ee",
+    "name": "executive-ee",
+    "publicKey": "~/.ssh/id_rsa.pub",
+    "privateKey": "~/.ssh/id_rsa",
+    "directories": [
+        {
+            "relative": true,
+            "map": "/",
+            "to": "/home/vagrant/development/"
+        },
+        {
+            "relative": true,
+            "map": "/executive",
+            "to": "/home/vagrant/development/libraries/ExpressionEngine/system/user/addons/executive/"
+        }
+    ],
+    "databases": [
+        {
+            "name": "site",
+            "user": "site",
+            "password": "secret"
+        }
+    ]
+}
