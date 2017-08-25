@@ -1,0 +1,107 @@
+#! /usr/local/bin/php
+<?php
+
+/**
+ * @author TJ Draper <tj@buzzingpixel.com>
+ * @copyright 2017 BuzzingPixel, LLC
+ * @license https://buzzingpixel.com/software/construct/license
+ * @link https://buzzingpixel.com/software/construct
+ */
+
+// System path
+$system_path = './system';
+
+
+/*
+ * --------------------------------------------------------------------
+ *  END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
+ * --------------------------------------------------------------------
+ */
+
+
+if (PHP_SAPI !== 'cli') {
+    exit("Invlid request\n");
+}
+
+
+// Error Reporting
+$debug = 1;
+
+// Invoke Executive
+define('REQ', 'CONSOLE');
+
+// Set the arguments
+define('EXECUTIVE_RAW_ARGS', $argv ?: array());
+
+// Define server name to prevent errors
+$_SERVER['SERVER_NAME'] = null;
+
+
+/*
+ * ---------------------------------------------------------------
+ *  Disable all routing, send everything to the frontend
+ * ---------------------------------------------------------------
+ */
+$routing['directory'] = '';
+$routing['controller'] = 'ee';
+$routing['function'] = 'index';
+
+/*
+ * --------------------------------------------------------------------
+ *  Resolve the system path for increased reliability
+ * --------------------------------------------------------------------
+ */
+
+if (realpath($system_path) !== false) {
+    $system_path = realpath($system_path);
+}
+
+$system_path = rtrim($system_path, '/').'/';
+
+/*
+ * --------------------------------------------------------------------
+ *  Now that we know the path, set the main constants
+ * --------------------------------------------------------------------
+ */
+// The name of this file
+define('SELF', basename(__FILE__));
+
+// Path to this file
+define('FCPATH', __DIR__.'/');
+
+// Path to the "system" folder
+define('SYSPATH', $system_path);
+
+// Name of the "system folder"
+define('SYSDIR', basename($system_path));
+
+// The $debug value as a constant for global access
+define('DEBUG', $debug);
+unset($debug);
+
+/*
+ * --------------------------------------------------------------------
+ *  Set the error reporting level
+ * --------------------------------------------------------------------
+ */
+if (DEBUG == 1) {
+    error_reporting(E_ALL);
+    @ini_set('display_errors', 1);
+} else {
+    error_reporting(0);
+}
+
+/*
+ *---------------------------------------------------------------
+ * LOAD THE BOOTSTRAP FILE
+ *---------------------------------------------------------------
+ *
+ * And away we go...
+ *
+ */
+if (! file_exists(SYSPATH . 'ee/EllisLab/ExpressionEngine/Boot/boot.php')) {
+    header('HTTP/1.1 503 Service Unavailable.', true, '503');
+    exit("\033[31mYour system folder path does not appear to be set correctly.\n");
+}
+
+require_once SYSPATH . 'ee/EllisLab/ExpressionEngine/Boot/boot.php';

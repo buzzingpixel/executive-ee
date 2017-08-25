@@ -24,6 +24,16 @@ sudo rm -rf /etc/nginx/sites-enabled/*;
 
 
 ###################################
+# Symlink
+###################################
+
+ln -s /home/vagrant/development/executive/executive /home/vagrant/development/libraries/ExpressionEngine/executive
+
+
+
+
+
+###################################
 # Run PHP Provisioning Script
 ###################################
 
