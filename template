@@ -1,0 +1,52 @@
+#! /usr/local/bin/php
+<?php
+
+// If argument one is not set, list the types of templates that can be made
+if (! isset($argv[1])) {
+    // Set the makers path
+    $makers = __DIR__ . '/TemplateMakers/*';
+
+    // Get files in the template makers directory
+    $makersFileArray = glob($makers);
+
+    // Itereate through the files and set array of availalble args
+    $available = array();
+    foreach ($makersFileArray as $filePath) {
+        $fileInfo = pathinfo($filePath);
+        $fileName = $fileInfo['filename'];
+        $available[] = lcfirst($fileName);
+    }
+
+    // Set console output
+    echo "\033[32mThe following templates are available\n";
+
+    // Output each template
+    foreach ($available as $item) {
+        echo "    {$item}\n";
+    }
+
+    // End processing
+    return;
+}
+
+// Set the class name
+$className = ucfirst($argv[1]);
+
+// Put together a filename for the maker class
+$makerFile = __DIR__ . '/TemplateMakers/' . $className . '.php';
+
+// If the maker file doesn't exist, we can end and send warning
+if (! file_exists($makerFile)) {
+    echo "\033[31mNo template maker of that type exists\n";
+    return;
+}
+
+// Require the maker file class
+require $makerFile;
+
+// Make a new instance of the class
+unset($argv[0], $argv[1]);
+$class = new $className(__DIR__, array_values($argv));
+
+// Run the make method
+$class = $class->make();
