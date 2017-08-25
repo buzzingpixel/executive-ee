@@ -3,8 +3,8 @@
 /**
  * @author TJ Draper <tj@buzzingpixel.com>
  * @copyright 2017 BuzzingPixel, LLC
- * @license https://buzzingpixel.com/software/construct/license
- * @link https://buzzingpixel.com/software/construct
+ * @license https://buzzingpixel.com/software/executive/license
+ * @link https://buzzingpixel.com/software/executive
  */
 
 use BuzzingPixel\Executive\Controller\MigrationController;

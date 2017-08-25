@@ -28,6 +28,7 @@ abstract class BaseMigration extends BaseComponent
      */
     public function init()
     {
+        ee()->load->dbforge();
         $this->dbForge = ee()->dbforge;
         $this->queryBuilder = ee('db');
     }

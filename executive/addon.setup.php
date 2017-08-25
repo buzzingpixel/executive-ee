@@ -5,8 +5,8 @@
 /**
  * @author TJ Draper <tj@buzzingpixel.com>
  * @copyright 2017 BuzzingPixel, LLC
- * @license https://buzzingpixel.com/software/construct/license
- * @link https://buzzingpixel.com/software/construct
+ * @license https://buzzingpixel.com/software/executive/license
+ * @link https://buzzingpixel.com/software/executive
  */
 
 // Get addon json path
@@ -39,6 +39,9 @@ if (defined('REQ') && REQ === 'CONSOLE') {
     // Make sure lang file is loaded
     ee()->lang->loadfile('executive');
 
+    // Get arguments sent to command line
+    $args = EXECUTIVE_RAW_ARGS;
+
     // Run query to check if Executive is installed
     /** @var \EllisLab\ExpressionEngine\Service\Database\Query $queryBuilder */
     $queryBuilder = ee('db');
@@ -48,9 +51,6 @@ if (defined('REQ') && REQ === 'CONSOLE') {
 
     // If Executive is not installed
     if ($query < 1) {
-        // Get arguments sent to command line
-        $args = EXECUTIVE_RAW_ARGS;
-
         // If command line is not requesting an installation, warn user
         if (isset($args[2]) ||
             count($args) > 2 ||
@@ -61,12 +61,31 @@ if (defined('REQ') && REQ === 'CONSOLE') {
             exit("\033[31m{$lang}\n");
         }
 
-        // Get the executive installer
+        // Manually include dependencies
         include_once __DIR__ . '/upd.executive.php';
+        include_once __DIR__ . '/BaseComponent.php';
+        include_once __DIR__ . '/Abstracts/BaseMigration.php';
+        include_once __DIR__ . '/Controller/MigrationController.php';
+
+        foreach (glob(__DIR__ . '/Migration/*') as $file) {
+            $pathInfo = pathinfo($file);
+            if (! isset($pathInfo['extension']) ||
+                $pathInfo['extension'] !== 'php'
+            ) {
+                continue;
+            }
+            include_once $file;
+        }
+
+        // Get the executive installer
         $installer = new Executive_upd();
 
         // Run the installer
         $installer->install();
+
+        // Show user message
+        $lang = lang('executiveInstalled');
+        exit("\033[32m{$lang}\n");
     }
 }
 

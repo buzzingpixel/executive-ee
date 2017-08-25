@@ -20,11 +20,31 @@ class Executive_ext
     public $version = EXECUTIVE_VER;
 
     /**
+     * session_start
+     */
+    public function sessions_start()
+    {
+        // Check for console request
+        if (! defined('REQ') || REQ !== 'CONSOLE') {
+            return;
+        }
+
+        /** @var \EE_Config $configService */
+        $configService = ee()->config;
+        $configService->set_item('disable_csrf_protection', 'y');
+    }
+
+    /**
      * core_boot
-     * @return mixed
      */
     public function core_boot()
     {
+        // Check for console request
+        if (! defined('REQ') || REQ !== 'CONSOLE') {
+            return;
+        }
+
+        // TODO: do stuff with console requests
         var_dump('here');
         die;
     }

@@ -11,4 +11,5 @@
 
 $lang = array(
     'notInstalled' => 'Executive is not installed. Please run "php executive install"',
+    'executiveInstalled' => 'Executive has been installed',
 );

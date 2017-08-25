@@ -4,8 +4,8 @@
 /**
  * @author TJ Draper <tj@buzzingpixel.com>
  * @copyright 2017 BuzzingPixel, LLC
- * @license https://buzzingpixel.com/software/construct/license
- * @link https://buzzingpixel.com/software/construct
+ * @license https://buzzingpixel.com/software/executive/license
+ * @link https://buzzingpixel.com/software/executive
  */
 
 // System path
@@ -33,8 +33,11 @@ define('REQ', 'CONSOLE');
 // Set the arguments
 define('EXECUTIVE_RAW_ARGS', $argv ?: array());
 
-// Define server name to prevent errors
+// Define SERVER_NAME to prevent errors
 $_SERVER['SERVER_NAME'] = null;
+
+// Define REMOTE_ADDR to prevent errors
+$_SERVER['REMOTE_ADDR'] = null;
 
 
 /*

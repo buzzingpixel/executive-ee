@@ -41,6 +41,7 @@ class MigrationController extends BaseComponent
      */
     public function init()
     {
+        ee()->load->dbforge();
         $this->dbForge = ee()->dbforge;
         $this->queryBuilder = ee('db');
         $this->migrationFilesPath = EXECUTIVE_MIGRATION_FILES_PATH;
@@ -51,7 +52,7 @@ class MigrationController extends BaseComponent
      */
     public function runMigrations()
     {
-        // Make sure Construct Migrations table exists
+        // Make sure Executive Migrations table exists
         $this->installMigrationsTable();
 
         // Build migration list
@@ -230,7 +231,7 @@ class MigrationController extends BaseComponent
 
             // Get the class name
             $className = $file->getBasename('.php');
-            $classNameFull = "\BuzzingPixel\Construct\Migration\\{$className}";
+            $classNameFull = "\BuzzingPixel\Executive\Migration\\{$className}";
 
             // Add the class name to the list
             $list[$className] = $classNameFull;
