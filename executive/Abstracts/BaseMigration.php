@@ -36,4 +36,11 @@ abstract class BaseMigration extends BaseComponent
      * Safe up
      */
     abstract public function safeUp();
+
+    /**
+     * Safe down
+     */
+    public function safeDown()
+    {
+    }
 }

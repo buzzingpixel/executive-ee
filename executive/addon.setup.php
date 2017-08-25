@@ -31,6 +31,8 @@ if (file_exists($vendorAutoloadFile)) {
 // Define constants
 defined('EXECUTIVE_NAME') || define('EXECUTIVE_NAME', $addOnJson->label);
 defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', $addOnJson->version);
+defined('EXECUTIVE_MIGRATION_FILES_PATH') ||
+    define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/Migration');
 
 // Check if this is a console request
 if (defined('REQ') && REQ === 'CONSOLE') {
