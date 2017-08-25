@@ -7,6 +7,9 @@
  * @link https://buzzingpixel.com/software/construct
  */
 
+use BuzzingPixel\Executive\Controller\MigrationController;
+use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
+
 /**
  * Class Executive_upd
  * @SuppressWarnings(PHPMD.CamelCaseClassName)
@@ -21,8 +24,8 @@ class Executive_upd
      */
     public function install()
     {
-        var_dump('todo');
-        die;
+        $migrationController = new MigrationController();
+        $migrationController->runMigrations();
 
         // All done
         return true;
@@ -34,8 +37,8 @@ class Executive_upd
      */
     public function uninstall()
     {
-        var_dump('todo');
-        die;
+        $migrationController = new MigrationController();
+        $migrationController->reverseMigrations();
 
         // All done
         return true;
@@ -48,8 +51,26 @@ class Executive_upd
      */
     public function update($current = '')
     {
-        var_dump('todo');
-        die;
+        $migrationController = new MigrationController();
+        $migrationController->runMigrations();
+
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = ee('db');
+
+        // Update module version
+        $queryBuilder->where('module_name', 'Executive');
+        $queryBuilder->update('modules', array(
+            'module_version' => EXECUTIVE_VER,
+        ));
+
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = ee('db');
+
+        // Update extension version
+        $queryBuilder->where('class', 'Executive_ext');
+        $queryBuilder->update('extensions', array(
+            'version' => EXECUTIVE_VER,
+        ));
 
         // All done
         return true;
