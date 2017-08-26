@@ -17,4 +17,5 @@ $lang = array(
     'executiveCommandLine' => 'Executive Command Line',
     'group:' => 'Group:',
     'mustSpecifyCommand' => 'A command must be specified',
+    'commandNotFound' => 'The specified command was not found',
 );

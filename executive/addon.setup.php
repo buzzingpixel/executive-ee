@@ -39,6 +39,33 @@ defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', $addOnJson->version);
 defined('EXECUTIVE_MIGRATION_FILES_PATH') ||
     define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/Migration');
 
+
+
+// Add an auto loader for user classes
+spl_autoload_register(function ($class) {
+    // Break up the class into an array
+    $ns = explode('\\', $class);
+
+    // Check if this is for us
+    if ($ns[0] !== 'User' || ! isset($ns[1])) {
+        return;
+    }
+
+    // Unset invalid parts of the namespace
+    unset($ns[0]);
+
+    // Put the path to the class file together
+    $sysPath = SYSPATH;
+    $sep = DIRECTORY_SEPARATOR;
+    $ns = implode($sep, $ns);
+    $path = "{$sysPath}user{$sep}{$ns}.php";
+
+    // Load the file if it exists
+    if (file_exists($path)) {
+        include_once $path;
+    }
+});
+
 // Check if this is a console request
 if (defined('REQ') && REQ === 'CONSOLE') {
     // Make sure lang file is loaded

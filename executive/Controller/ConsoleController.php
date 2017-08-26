@@ -48,22 +48,27 @@ class ConsoleController extends BaseComponent
 
     /**
      * Run console request
+     * @throws \Exception
      */
     public function runConsoleRequest()
     {
-        if ($this->args->getArgument('group') === null) {
+        if (($group = $this->args->getArgument('group')) === null) {
             $this->listCommands();
             return;
         }
 
-        if ($this->args->getArgument('command') === null) {
+        if (($command = $this->args->getArgument('command')) === null) {
             $this->consoleService->writeLn(lang('mustSpecifyCommand'), 'red');
             return;
         }
 
-        var_dump('TODO:');
-        var_dump($this->args->getArgument('addon'));
-        die;
+        $commandModel = $this->commandsService->getCommand($group, $command);
+
+        if (! $commandModel) {
+            $this->consoleService->writeLn(lang('commandNotFound'), 'red');
+        }
+
+        $this->commandsService->runCommand($commandModel, $this->args);
     }
 
     /**

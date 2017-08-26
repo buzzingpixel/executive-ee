@@ -13,6 +13,7 @@ use BuzzingPixel\DataModel\Model;
 use BuzzingPixel\DataModel\ModelCollection;
 use BuzzingPixel\Executive\BaseComponent;
 use BuzzingPixel\DataModel\DataType;
+use BuzzingPixel\Executive\Model\ArgumentsModel;
 use BuzzingPixel\Executive\Model\CommandGroupModel;
 use BuzzingPixel\Executive\Model\CommandModel;
 use EllisLab\ExpressionEngine\Service\Addon\Factory as EEAddonFactory;
@@ -115,5 +116,65 @@ class CommandsService extends BaseComponent
         $this->commandGroupStorage = $commandGroups;
 
         return $commandGroups;
+    }
+
+    /**
+     * Get command
+     * @param string $group
+     * @param string $command
+     * @return CommandModel|null
+     */
+    public function getCommand($group, $command)
+    {
+        foreach ($this->commandGroups as $groupModel) {
+            /** @var CommandGroupModel $groupModel */
+
+            if ($groupModel->name !== $group) {
+                continue;
+            }
+
+            foreach ($groupModel->commands as $commandModel) {
+                /** @var CommandModel $commandModel */
+
+                if ($commandModel->name !== $command) {
+                    continue;
+                }
+
+                return $commandModel;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Run command
+     * @param CommandModel $commandModel
+     * @param ArgumentsModel $argumentsModel
+     * @throws \Exception
+     */
+    public function runCommand(
+        CommandModel $commandModel,
+        ArgumentsModel $argumentsModel
+    ) {
+        $class = $commandModel->class;
+        $method = $commandModel->method;
+
+        $rMethod = new \ReflectionMethod($class, $method);
+        $rArguments = $rMethod->getParameters();
+
+        $argsArray = array();
+
+        foreach ($rArguments as $rArgument) {
+            $argsArray[] = $argumentsModel->getArgument($rArgument->name);
+        }
+
+        call_user_func_array(
+            array(
+                new $class,
+                $method,
+            ),
+            $argsArray
+        );
     }
 }
