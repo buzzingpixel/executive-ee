@@ -10,8 +10,11 @@
 namespace BuzzingPixel\Executive\Controller;
 
 use BuzzingPixel\Executive\BaseComponent;
+use BuzzingPixel\Executive\Model\CommandGroupModel;
+use BuzzingPixel\Executive\Model\CommandModel;
 use BuzzingPixel\Executive\Service\ArgsService;
 use BuzzingPixel\Executive\Model\ArgumentsModel;
+use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\ConsoleService;
 use EllisLab\ExpressionEngine\Service\Addon\Factory as AddonFactory;
 use EllisLab\ExpressionEngine\Service\Addon\Addon;
@@ -26,6 +29,9 @@ class ConsoleController extends BaseComponent
 
     /** @var ConsoleService $consoleService */
     private $consoleService;
+
+    /** @var CommandsService $commandsService */
+    private $commandsService;
 
     /** @var \EE_Config $eeConfig */
     private $eeConfig;
@@ -73,62 +79,64 @@ class ConsoleController extends BaseComponent
         $this->consoleService->writeLn(lang('usage:'), 'yellow');
         $this->consoleService->writeLn('  ' . lang('usageExample'));
 
-        // Put together an array of command groups
-        $commandGroups = array();
-
-        // Get user commands
-        $userCommands = $this->eeConfig->item('commands') ?: array();
-
-        if ($userCommands) {
-            $commandGroups['user'] = $userCommands;
-        }
-
-        foreach ($this->addonFactory->all() as $addon) {
-            /** @var Addon $addon */
-
-            $provider = $addon->getProvider();
-
-            if (! $addon->isInstalled() || ! $provider->get('commands')) {
-                continue;
-            }
-
-            $commandGroups[$provider->getPrefix()] = $provider->get('commands');
-        }
+        $commandGroups = $this->commandsService->commandGroups;
 
         $toCharacters = 0;
 
-        foreach ($commandGroups as $group => $commands) {
-            foreach (array_keys($commands) as $command) {
-                $len = strlen($command);
-                if ($len > $toCharacters) {
-                    $toCharacters = $len;
-                }
+        foreach ($commandGroups as $group) {
+            /** @var CommandGroupModel $group */
+            foreach ($group->commands as $command) {
+                /** @var CommandModel $command */
+                $len = strlen($command->name);
+                $toCharacters = $len > $toCharacters ? $len : $toCharacters;
             }
         }
 
         $toCharacters += 2;
 
-        foreach ($commandGroups as $group => $commands) {
-            $this->consoleService->writeLn('');
-            $this->consoleService->writeLn(lang('group:') . ' ', null, false);
-            $this->consoleService->writeLn($group, 'yellow');
+        foreach ($commandGroups as $group) {
+            /** @var CommandGroupModel $group */
+            $this->listGroup($group, $toCharacters);
+        }
 
-            foreach ($commands as $command => $details) {
-                $len = strlen($command);
-                $to = abs($len - $toCharacters);
+        $this->consoleService->writeLn('');
+    }
 
-                $this->consoleService->writeLn('  ' . $command, 'green', false);
+    /**
+     * List group
+     * @param CommandGroupModel $group
+     * @param int $toCharacters
+     */
+    private function listGroup(CommandGroupModel $group, $toCharacters = 2)
+    {
+        $this->consoleService->writeLn('');
+        $this->consoleService->writeLn(lang('group:') . ' ', null, false);
+        $this->consoleService->writeLn($group->name, 'yellow');
 
-                if (isset($details['description'])) {
-                    $this->consoleService->writeLn(
-                        str_repeat(' ', $to) . $details['description'],
-                        null,
-                        false
-                    );
-                }
+        foreach ($group->commands as $command) {
+            /** @var CommandModel $command */
+            $this->listCommand($command, $toCharacters);
+        }
+    }
 
-                $this->consoleService->writeLn('');
-            }
+    /**
+     * List command
+     * @param CommandModel $command
+     * @param int $toCharacters
+     */
+    private function listCommand(CommandModel $command, $toCharacters)
+    {
+        $len = strlen($command->name);
+        $to = abs($len - $toCharacters);
+
+        $this->consoleService->writeLn('  ' . $command->name, 'green', false);
+
+        if ($command->description) {
+            $this->consoleService->writeLn(
+                str_repeat(' ', $to) . $command->description,
+                null,
+                false
+            );
         }
 
         $this->consoleService->writeLn('');

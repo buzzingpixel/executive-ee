@@ -12,6 +12,7 @@
 use BuzzingPixel\Executive\Controller\ConsoleController;
 use BuzzingPixel\Executive\Service\ArgsService;
 use BuzzingPixel\Executive\Service\ConsoleService;
+use BuzzingPixel\Executive\Service\CommandsService;
 
 // Get addon json path
 $addOnPath = realpath(__DIR__);
@@ -120,6 +121,12 @@ return array(
         'ConsoleService' => function () {
             return new ConsoleService();
         },
+        'CommandsService' => function () {
+            return new CommandsService(array(
+                'eeAddonFactory' => ee('Addon'),
+                'eeConfigService' => ee()->config,
+            ));
+        }
     ),
     'commands' => array(
         'test' => array(
