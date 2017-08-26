@@ -78,11 +78,9 @@ class ConsoleController extends BaseComponent
         $this->consoleService->writeLn(lang('usage:'), 'yellow');
         $this->consoleService->writeLn('  ' . lang('usageExample'));
 
-        $commandGroups = $this->commandsService->commandGroups;
-
         $toCharacters = 0;
 
-        foreach ($commandGroups as $group) {
+        foreach ($this->commandsService->commandGroups as $group) {
             /** @var CommandGroupModel $group */
             foreach ($group->commands as $command) {
                 /** @var CommandModel $command */
@@ -93,7 +91,7 @@ class ConsoleController extends BaseComponent
 
         $toCharacters += 2;
 
-        foreach ($commandGroups as $group) {
+        foreach ($this->commandsService->commandGroups as $group) {
             /** @var CommandGroupModel $group */
             $this->listGroup($group, $toCharacters);
         }

@@ -9,6 +9,7 @@
 
 namespace BuzzingPixel\Executive\Service;
 
+use BuzzingPixel\DataModel\Model;
 use BuzzingPixel\DataModel\ModelCollection;
 use BuzzingPixel\Executive\BaseComponent;
 use BuzzingPixel\DataModel\DataType;
@@ -27,6 +28,9 @@ use EllisLab\ExpressionEngine\Service\Addon\Addon as EEAddon;
  */
 class CommandsService extends BaseComponent
 {
+    /** @var ModelCollection $commandGroupStorage */
+    private $commandGroupStorage;
+
     /**
      * @inheritdoc
      */
@@ -50,6 +54,10 @@ class CommandsService extends BaseComponent
      */
     public function getCommandGroups()
     {
+        if ($this->commandGroupStorage !== null) {
+            return $this->commandGroupStorage;
+        }
+
         $commandGroups = new ModelCollection();
 
         if ($userCommands = $this->eeConfigService->item('commands')) {
@@ -103,6 +111,8 @@ class CommandsService extends BaseComponent
 
             $commandGroups->addModel($commandGroup);
         }
+
+        $this->commandGroupStorage = $commandGroups;
 
         return $commandGroups;
     }
