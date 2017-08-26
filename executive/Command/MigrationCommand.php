@@ -9,26 +9,22 @@
 
 namespace BuzzingPixel\Executive\Command;
 
-use BuzzingPixel\Executive\BaseComponent;
+use BuzzingPixel\Executive\Abstracts\BaseCommand;
 use BuzzingPixel\Executive\Service\ConsoleService;
 
 /**
  * Class Service
  */
-class Migration extends BaseComponent
+class MigrationCommand extends BaseCommand
 {
-    /** @var ConsoleService $consoleService */
-    private $consoleService;
-
     /** @var string $dir */
     private $dir;
 
     /**
      * Initialize
      */
-    public function init()
+    public function initCommand()
     {
-        $this->consoleService = ee('executive:ConsoleService');
         $path = realpath(SYSPATH);
         $this->dir = "{$path}/user/Migration";
         if (! @mkdir($this->dir, DIR_WRITE_MODE, true) && ! is_dir($this->dir)) {

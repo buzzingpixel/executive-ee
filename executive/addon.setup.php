@@ -159,9 +159,14 @@ return array(
     ),
     'commands' => array(
         'makeMigration' => array(
-            'class' => 'BuzzingPixel\Executive\Command\Migration',
+            'class' => 'BuzzingPixel\Executive\Command\MigrationCommand',
             'method' => 'make',
             'description' => 'Create a migration skeleton class in "system/user/Migration"',
+        ),
+        'runAddonUpdates' => array(
+            'class' => 'BuzzingPixel\Executive\Command\AddonUpdates',
+            'method' => 'run',
+            'description' => 'Run all addon updates',
         ),
     ),
 );

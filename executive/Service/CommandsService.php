@@ -18,6 +18,7 @@ use BuzzingPixel\Executive\Model\CommandModel;
 use EllisLab\ExpressionEngine\Service\Addon\Factory as EEAddonFactory;
 use EllisLab\ExpressionEngine\Service\Addon\Addon as EEAddon;
 use BuzzingPixel\Executive\Service\ConsoleService;
+use BuzzingPixel\Executive\Abstracts\BaseCommand;
 
 /**
  * Class CommandsService
@@ -170,7 +171,11 @@ class CommandsService extends BaseComponent
             return;
         }
 
-        if (! method_exists($class, $method)) {
+        $class = new $class;
+
+        if (! $class instanceof BaseCommand ||
+            ! method_exists($class, $method)
+        ) {
             $this->consoleService->writeLn(lang('classMethodNotFound'), 'red');
             return;
         }
@@ -186,7 +191,7 @@ class CommandsService extends BaseComponent
 
         call_user_func_array(
             array(
-                new $class,
+                $class,
                 $method,
             ),
             $argsArray
