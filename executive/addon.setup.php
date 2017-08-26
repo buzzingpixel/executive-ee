@@ -9,6 +9,10 @@
  * @link https://buzzingpixel.com/software/executive
  */
 
+use BuzzingPixel\Executive\Controller\ConsoleController;
+use BuzzingPixel\Executive\Service\ArgsService;
+use BuzzingPixel\Executive\Service\ConsoleService;
+
 // Get addon json path
 $addOnPath = realpath(__DIR__);
 $addOnJsonPath = "{$addOnPath}/addon.json";
@@ -99,5 +103,29 @@ return array(
     'namespace' => $addOnJson->namespace,
     'settings_exist' => $addOnJson->settingsExist,
     'version' => $addOnJson->version,
-    'services' => array(),
+    'services' => array(
+        /**
+         * Controllers
+         */
+        'ConsoleController' => function () {
+            return new ConsoleController();
+        },
+
+        /**
+         * Services
+         */
+        'ArgsService' => function () {
+            return new ArgsService();
+        },
+        'ConsoleService' => function () {
+            return new ConsoleService();
+        },
+    ),
+    'commands' => array(
+        'test' => array(
+            'class' => 'Testing\Class',
+            'method' => 'testMethod',
+            'description' => 'This is a test description',
+        ),
+    ),
 );

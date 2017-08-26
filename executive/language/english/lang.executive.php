@@ -12,4 +12,8 @@
 $lang = array(
     'notInstalled' => 'Executive is not installed. Please run "php executive install"',
     'executiveInstalled' => 'Executive has been installed',
+    'usage:' => 'usage:',
+    'usageExample' => 'php executive [group] [command] [--argument=value] [--argument2=value2]',
+    'executiveCommandLine' => 'Executive Command Line',
+    'group:' => 'Group:',
 );

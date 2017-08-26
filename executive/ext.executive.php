@@ -7,6 +7,8 @@
  * @link https://buzzingpixel.com/software/executive
  */
 
+use BuzzingPixel\Executive\Controller\ConsoleController;
+
 /**
  * Class Executive_ext
  * @SuppressWarnings(PHPMD.CamelCaseClassName)
@@ -22,7 +24,8 @@ class Executive_ext
     /**
      * session_start
      */
-    public function sessions_start()
+    // @codingStandardsIgnoreStart
+    public function sessions_start() // @codingStandardsIgnoreEnd
     {
         // Check for console request
         if (! defined('REQ') || REQ !== 'CONSOLE') {
@@ -37,15 +40,22 @@ class Executive_ext
     /**
      * core_boot
      */
-    public function core_boot()
+    // @codingStandardsIgnoreStart
+    public function core_boot() // @codingStandardsIgnoreEnd
     {
         // Check for console request
         if (! defined('REQ') || REQ !== 'CONSOLE') {
             return;
         }
 
-        // TODO: do stuff with console requests
-        var_dump('here');
-        die;
+        // Get the console controller
+        /** @var ConsoleController $consoleController */
+        $consoleController = ee('executive:ConsoleController');
+
+        // Run the console controller
+        $consoleController->runConsoleRequest();
+
+        // Make sure we exit here
+        exit;
     }
 }
