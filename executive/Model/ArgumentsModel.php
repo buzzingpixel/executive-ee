@@ -42,8 +42,10 @@ class ArgumentsModel extends DataModel
 
         foreach ($this->rawArgs as $key => $rawArg) {
             if ($key === 0) {
-                $parsedArgs['addon'] = $rawArg;
+                $parsedArgs['group'] = $rawArg;
                 continue;
+            } elseif ($key === 1) {
+                $parsedArgs['command'] = $rawArg;
             }
 
             if (strpos($rawArg, '--') !== 0) {

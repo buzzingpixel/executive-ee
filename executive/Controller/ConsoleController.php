@@ -33,12 +33,6 @@ class ConsoleController extends BaseComponent
     /** @var CommandsService $commandsService */
     private $commandsService;
 
-    /** @var \EE_Config $eeConfig */
-    private $eeConfig;
-
-    /** @var AddonFactory $addonFactory */
-    private $addonFactory;
-
     /**
      * Init
      */
@@ -49,8 +43,7 @@ class ConsoleController extends BaseComponent
 
         $this->args = $argsService->parseRawArgs(EXECUTIVE_RAW_ARGS);
         $this->consoleService = ee('executive:ConsoleService');
-        $this->eeConfig = ee()->config;
-        $this->addonFactory = ee('Addon');
+        $this->commandsService = ee('executive:CommandsService');
     }
 
     /**
@@ -58,10 +51,16 @@ class ConsoleController extends BaseComponent
      */
     public function runConsoleRequest()
     {
-        if ($this->args->getArgument('addon') === null) {
+        if ($this->args->getArgument('group') === null) {
             $this->listCommands();
             return;
         }
+
+        if ($this->args->getArgument('command') === null) {
+            $this->consoleService->writeLn(lang('mustSpecifyCommand'), 'red');
+            return;
+        }
+
         var_dump('TODO:');
         var_dump($this->args->getArgument('addon'));
         die;

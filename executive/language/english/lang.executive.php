@@ -16,4 +16,5 @@ $lang = array(
     'usageExample' => 'php executive [group] [command] [--argument=value] [--argument2=value2]',
     'executiveCommandLine' => 'Executive Command Line',
     'group:' => 'Group:',
+    'mustSpecifyCommand' => 'A command must be specified',
 );
