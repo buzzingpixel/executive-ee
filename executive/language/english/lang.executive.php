@@ -22,5 +22,6 @@ $lang = array(
     'classMethodNotFound' => 'The specified class method was not found',
     'unableToCreateDirectory:' => 'Unable to create directory:',
     'migrationDescriptionRequired' => 'A migration description is required: --description=MyMigration',
-    'migrationCreatedSuccessfully:' => 'Migration created successfully:'
+    'migrationCreatedSuccessfully:' => 'Migration created successfully:',
+    'addonsUpdatedSuccessfully' => 'Addons updated successfully',
 );

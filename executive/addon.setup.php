@@ -164,7 +164,7 @@ return array(
             'description' => 'Create a migration skeleton class in "system/user/Migration"',
         ),
         'runAddonUpdates' => array(
-            'class' => 'BuzzingPixel\Executive\Command\AddonUpdates',
+            'class' => 'BuzzingPixel\Executive\Command\AddonUpdatesCommand',
             'method' => 'run',
             'description' => 'Run all addon updates',
         ),

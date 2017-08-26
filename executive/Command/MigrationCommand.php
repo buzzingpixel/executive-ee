@@ -10,7 +10,6 @@
 namespace BuzzingPixel\Executive\Command;
 
 use BuzzingPixel\Executive\Abstracts\BaseCommand;
-use BuzzingPixel\Executive\Service\ConsoleService;
 
 /**
  * Class Service
