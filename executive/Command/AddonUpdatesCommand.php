@@ -113,7 +113,7 @@ class AddonUpdatesCommand extends BaseCommand
 
             $plugin = $this->getPlugin($addon);
             if (! empty($plugin)
-                && $plugin['installed'] === TRUE
+                && $plugin['installed'] === true
                 && array_key_exists('update', $plugin)
             ) {
                 $typography = 'n';

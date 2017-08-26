@@ -24,4 +24,5 @@ $lang = array(
     'migrationDescriptionRequired' => 'A migration description is required: --description=MyMigration',
     'migrationCreatedSuccessfully:' => 'Migration created successfully:',
     'addonsUpdatedSuccessfully' => 'Addons updated successfully',
+    'keyMustBeSpecified' => 'A key must be specified: --key=debug',
 );

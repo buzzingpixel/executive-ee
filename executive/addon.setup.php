@@ -159,14 +159,19 @@ return array(
     ),
     'commands' => array(
         'makeMigration' => array(
-            'class' => 'BuzzingPixel\Executive\Command\MigrationCommand',
+            'class' => '\BuzzingPixel\Executive\Command\MigrationCommand',
             'method' => 'make',
             'description' => 'Create a migration skeleton class in "system/user/Migration"',
         ),
         'runAddonUpdates' => array(
-            'class' => 'BuzzingPixel\Executive\Command\AddonUpdatesCommand',
+            'class' => '\BuzzingPixel\Executive\Command\AddonUpdatesCommand',
             'method' => 'run',
             'description' => 'Run all addon updates',
+        ),
+        'getConfig' => array(
+            'class' => '\BuzzingPixel\Executive\Command\ConfigCommand',
+            'method' => 'get',
+            'description' => 'Get config item: --key=expressionengine --index=database',
         ),
     ),
 );
