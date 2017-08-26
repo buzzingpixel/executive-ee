@@ -36,6 +36,7 @@ if (file_exists($vendorAutoloadFile)) {
 // Define constants
 defined('EXECUTIVE_NAME') || define('EXECUTIVE_NAME', $addOnJson->label);
 defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', $addOnJson->version);
+defined('EXECUTIVE_PATH') || define('EXECUTIVE_PATH', realpath(__DIR__));
 defined('EXECUTIVE_MIGRATION_FILES_PATH') ||
     define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/Migration');
 
@@ -152,14 +153,15 @@ return array(
             return new CommandsService(array(
                 'eeAddonFactory' => ee('Addon'),
                 'eeConfigService' => ee()->config,
+                'consoleService' => ee('executive:ConsoleService'),
             ));
         }
     ),
     'commands' => array(
-        'test' => array(
-            'class' => 'Testing\Class',
-            'method' => 'testMethod',
-            'description' => 'This is a test description',
+        'makeMigration' => array(
+            'class' => 'BuzzingPixel\Executive\Command\Migration',
+            'method' => 'make',
+            'description' => 'Create a migration skeleton class in "system/user/Migration"',
         ),
     ),
 );

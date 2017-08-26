@@ -20,4 +20,7 @@ $lang = array(
     'commandNotFound' => 'The specified command was not found',
     'classNotFound' => 'The specified class was not found',
     'classMethodNotFound' => 'The specified class method was not found',
+    'unableToCreateDirectory:' => 'Unable to create directory:',
+    'migrationDescriptionRequired' => 'A migration description is required: --description=MyMigration',
+    'migrationCreatedSuccessfully:' => 'Migration created successfully:'
 );
