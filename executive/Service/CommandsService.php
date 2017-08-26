@@ -9,7 +9,6 @@
 
 namespace BuzzingPixel\Executive\Service;
 
-use BuzzingPixel\DataModel\Model;
 use BuzzingPixel\DataModel\ModelCollection;
 use BuzzingPixel\Executive\BaseComponent;
 use BuzzingPixel\DataModel\DataType;
@@ -18,6 +17,7 @@ use BuzzingPixel\Executive\Model\CommandGroupModel;
 use BuzzingPixel\Executive\Model\CommandModel;
 use EllisLab\ExpressionEngine\Service\Addon\Factory as EEAddonFactory;
 use EllisLab\ExpressionEngine\Service\Addon\Addon as EEAddon;
+use BuzzingPixel\Executive\Service\ConsoleService;
 
 /**
  * Class CommandsService
@@ -26,6 +26,7 @@ use EllisLab\ExpressionEngine\Service\Addon\Addon as EEAddon;
  * # Following properties for internal use only
  * @property-read EEAddonFactory $eeAddonFactory Internal use only
  * @property-read \EE_Config $eeConfigService
+ * @property-read ConsoleService $consoleService
  */
 class CommandsService extends BaseComponent
 {
@@ -45,6 +46,10 @@ class CommandsService extends BaseComponent
             'eeConfigService' => array(
                 'type' => DataType::INSTANCE,
                 'expect' => '\EE_Config',
+            ),
+            'consoleService' => array(
+                'type' => DataType::INSTANCE,
+                'expect' => '\BuzzingPixel\Executive\Service\ConsoleService',
             ),
         );
     }
@@ -159,6 +164,16 @@ class CommandsService extends BaseComponent
     ) {
         $class = $commandModel->class;
         $method = $commandModel->method;
+
+        if (! class_exists($class)) {
+            $this->consoleService->writeLn(lang('classNotFound'), 'red');
+            return;
+        }
+
+        if (! method_exists($class, $method)) {
+            $this->consoleService->writeLn(lang('classMethodNotFound'), 'red');
+            return;
+        }
 
         $rMethod = new \ReflectionMethod($class, $method);
         $rArguments = $rMethod->getParameters();

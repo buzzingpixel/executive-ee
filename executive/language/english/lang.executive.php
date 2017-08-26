@@ -18,4 +18,6 @@ $lang = array(
     'group:' => 'Group:',
     'mustSpecifyCommand' => 'A command must be specified',
     'commandNotFound' => 'The specified command was not found',
+    'classNotFound' => 'The specified class was not found',
+    'classMethodNotFound' => 'The specified class method was not found',
 );
