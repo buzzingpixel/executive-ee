@@ -163,6 +163,11 @@ return array(
             'method' => 'make',
             'description' => 'Create a migration skeleton class in "system/user/Migration"',
         ),
+        'runMigrations' => array(
+            'class' => '\BuzzingPixel\Executive\Command\UserMigrationCommand',
+            'method' => 'runMigrations',
+            'description' => 'Run any migrations in the "user/Migration" directory that need to be run',
+        ),
         'runAddonUpdates' => array(
             'class' => '\BuzzingPixel\Executive\Command\AddonUpdatesCommand',
             'method' => 'run',

@@ -29,4 +29,6 @@ $lang = array(
     'addonNotFound' => 'That addon was not found',
     'addonNotInstalled' => 'That addon is not installed',
     'addonUpdateRunSuccessfully' => 'Addon update run successfully',
+    'noMigrationsToRun' => "You're up to date! There are no migrations to run.",
+    'followingMigrationsRun' => 'The following migrations were run:',
 );
