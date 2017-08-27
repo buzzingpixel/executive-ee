@@ -183,5 +183,10 @@ return array(
             'method' => 'get',
             'description' => lang('getConfigDescription'),
         ),
+        'clearCaches' => array(
+            'class' => '\BuzzingPixel\Executive\Command\CacheCommand',
+            'method' => 'clearCaches',
+            'description' => lang('clearCachesDescription'),
+        ),
     ),
 );

@@ -36,4 +36,6 @@ $lang = array(
     'runAddonUpdatesDescription' => 'Run all addon updates',
     'runAddonUpdateMethodDescription' => "Run an add-on's update method: --addon=addon_name",
     'getConfigDescription' => 'Get config item: --key=expressionengine --index=database',
+    'clearCachesDescription' => 'Clear caches. Optionally specify type: --type=page (default: "all")',
+    'cachesCleared' => 'Caches cleared',
 );
