@@ -28,7 +28,7 @@ class ConfigCommand extends BaseCommand
     }
 
     /**
-     * Make a migration
+     * Get config item
      * @param string $key
      * @param string $index
      */
