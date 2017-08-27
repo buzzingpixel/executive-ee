@@ -31,4 +31,9 @@ $lang = array(
     'addonUpdateRunSuccessfully' => 'Addon update run successfully',
     'noMigrationsToRun' => "You're up to date! There are no migrations to run.",
     'followingMigrationsRun' => 'The following migrations were run:',
+    'makeMigrationDescription' => 'Create a migration skeleton class in "system/user/Migration"',
+    'runMigrationsDescription' => 'Run any migrations in the "user/Migration" directory that need to be run',
+    'runAddonUpdatesDescription' => 'Run all addon updates',
+    'runAddonUpdateMethodDescription' => "Run an add-on's update method: --addon=addon_name",
+    'getConfigDescription' => 'Get config item: --key=expressionengine --index=database',
 );

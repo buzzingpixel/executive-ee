@@ -161,27 +161,27 @@ return array(
         'makeMigration' => array(
             'class' => '\BuzzingPixel\Executive\Command\MigrationCommand',
             'method' => 'make',
-            'description' => 'Create a migration skeleton class in "system/user/Migration"',
+            'description' => lang('makeMigrationDescription'),
         ),
         'runMigrations' => array(
             'class' => '\BuzzingPixel\Executive\Command\UserMigrationCommand',
             'method' => 'runMigrations',
-            'description' => 'Run any migrations in the "user/Migration" directory that need to be run',
+            'description' => lang('runMigrationsDescription'),
         ),
         'runAddonUpdates' => array(
             'class' => '\BuzzingPixel\Executive\Command\AddonUpdatesCommand',
             'method' => 'run',
-            'description' => 'Run all addon updates',
+            'description' => lang('runAddonUpdatesDescription'),
         ),
         'runAddonUpdateMethod' => array(
             'class' => '\BuzzingPixel\Executive\Command\AddonUpdatesCommand',
             'method' => 'runAddonUpdateMethod',
-            'description' => "Run an add-on's update method: --addon=addon_name",
+            'description' => lang('runAddonUpdateMethodDescription'),
         ),
         'getConfig' => array(
             'class' => '\BuzzingPixel\Executive\Command\ConfigCommand',
             'method' => 'get',
-            'description' => 'Get config item: --key=expressionengine --index=database',
+            'description' => lang('getConfigDescription'),
         ),
     ),
 );
