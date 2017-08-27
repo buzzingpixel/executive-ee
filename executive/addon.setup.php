@@ -154,6 +154,7 @@ return array(
                 'eeAddonFactory' => ee('Addon'),
                 'eeConfigService' => ee()->config,
                 'consoleService' => ee('executive:ConsoleService'),
+                'queryBuilder' => ee('db'),
             ));
         }
     ),

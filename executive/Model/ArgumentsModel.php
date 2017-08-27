@@ -34,7 +34,7 @@ class ArgumentsModel extends DataModel
     }
 
     /**
-     * Set raw args
+     * Parse raw args
      */
     private function parseArgs()
     {
@@ -46,6 +46,7 @@ class ArgumentsModel extends DataModel
                 continue;
             } elseif ($key === 1) {
                 $parsedArgs['command'] = $rawArg;
+                continue;
             }
 
             if (strpos($rawArg, '--') !== 0) {
