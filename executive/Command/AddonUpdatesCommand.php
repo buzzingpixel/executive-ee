@@ -30,7 +30,47 @@ class AddonUpdatesCommand extends BaseCommand
     }
 
     /**
-     * Make a migration
+     * Run a single add-on's update method (regardless if version is behind)
+     * @param string $addon
+     */
+    public function runAddonUpdateMethod($addon)
+    {
+        if ($addon === null) {
+            $this->consoleService->writeLn(
+                lang('addonMustBeSpecified:') . ' ' . '--addon=addon_name',
+                'red'
+            );
+            return;
+        }
+
+        if ($this->eeAddonFactory->get($addon) === null) {
+            $this->consoleService->writeLn(lang('addonNotFound'), 'red');
+            return;
+        }
+
+        /** @var EEAddon $addon */
+        $addonInfo = $this->eeAddonFactory->get($addon);
+
+        if (! $addonInfo->isInstalled()) {
+            $this->consoleService->writeLn(lang('addonNotInstalled'), 'red');
+            return;
+        }
+
+        $class = $addonInfo->getInstallerClass();
+        $installed = ee()->addons->get_installed('modules', true);
+
+        $UPD = new $class;
+        $UPD->_ee_path = APPPATH;
+        $UPD->update($installed[$addon]['module_version']);
+
+        $this->consoleService->writeLn(
+            lang('addonUpdateRunSuccessfully'),
+            'green'
+        );
+    }
+
+    /**
+     * Run all updates
      */
     public function run()
     {

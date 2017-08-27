@@ -168,6 +168,11 @@ return array(
             'method' => 'run',
             'description' => 'Run all addon updates',
         ),
+        'runAddonUpdateMethod' => array(
+            'class' => '\BuzzingPixel\Executive\Command\AddonUpdatesCommand',
+            'method' => 'runAddonUpdateMethod',
+            'description' => "Run an add-on's update method: --addon=addon_name",
+        ),
         'getConfig' => array(
             'class' => '\BuzzingPixel\Executive\Command\ConfigCommand',
             'method' => 'get',

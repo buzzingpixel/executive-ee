@@ -25,4 +25,8 @@ $lang = array(
     'migrationCreatedSuccessfully:' => 'Migration created successfully:',
     'addonsUpdatedSuccessfully' => 'Addons updated successfully',
     'keyMustBeSpecified' => 'A key must be specified: --key=debug',
+    'addonMustBeSpecified:' => 'An addon must be specified:',
+    'addonNotFound' => 'That addon was not found',
+    'addonNotInstalled' => 'That addon is not installed',
+    'addonUpdateRunSuccessfully' => 'Addon update run successfully',
 );

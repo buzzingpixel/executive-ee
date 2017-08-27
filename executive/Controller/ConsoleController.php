@@ -16,8 +16,6 @@ use BuzzingPixel\Executive\Service\ArgsService;
 use BuzzingPixel\Executive\Model\ArgumentsModel;
 use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\ConsoleService;
-use EllisLab\ExpressionEngine\Service\Addon\Factory as AddonFactory;
-use EllisLab\ExpressionEngine\Service\Addon\Addon;
 
 /**
  * Class ConsoleController
