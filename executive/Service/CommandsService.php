@@ -224,7 +224,7 @@ class CommandsService extends BaseComponent
             }
 
             /** @var array $addonSchedule */
-            $addonSchedule = $provider->get('schedule');
+            $addonSchedule = $provider->get('schedule') ?: array();
 
             foreach ($addonSchedule as $schedule) {
                 $schedule['arguments'] = isset($schedule['arguments']) ?

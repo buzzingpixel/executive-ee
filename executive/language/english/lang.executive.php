@@ -43,4 +43,5 @@ $lang = array(
     'notRunYet' => 'does not need run at this time',
     'anErrorOccurredRunningCommand:' => 'An error occurred running the command:',
     'ranSuccessfully' => 'ran successfully',
+    'noScheduledCommands' => 'There are no scheduled commands set up',
 );

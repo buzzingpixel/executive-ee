@@ -39,6 +39,14 @@ class ScheduleCommand extends BaseCommand
      */
     public function run()
     {
+        if (count($this->commandsService->schedule) < 1) {
+            $this->consoleService->writeLn(
+                lang('noScheduledCommands'),
+                'yellow'
+            );
+            return;
+        }
+
         // Let's try not to run out of time
         @set_time_limit(0);
 
