@@ -38,4 +38,5 @@ $lang = array(
     'getConfigDescription' => 'Get config item: --key=expressionengine --index=database',
     'clearCachesDescription' => 'Clear caches. Optionally specify type: --type=page (default: "all")',
     'cachesCleared' => 'Caches cleared',
+    'runScheduleDescription' => 'Run scheduled commands. You can (and should) run this command every minute on a cron.'
 );

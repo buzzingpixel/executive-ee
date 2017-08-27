@@ -158,6 +158,11 @@ return array(
         }
     ),
     'commands' => array(
+        'runSchedule' => array(
+            'class' => '\BuzzingPixel\Executive\Command\ScheduleCommand',
+            'method' => 'run',
+            'description' => lang('runScheduleDescription'),
+        ),
         'makeMigration' => array(
             'class' => '\BuzzingPixel\Executive\Command\MigrationCommand',
             'method' => 'make',
