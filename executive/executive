@@ -20,6 +20,7 @@ $system_path = './system';
 
 
 if (PHP_SAPI !== 'cli') {
+    header('HTTP/1.1 503 Service Unavailable.', true, '503');
     exit("Invlid request\n");
 }
 
@@ -103,7 +104,6 @@ if (DEBUG == 1) {
  *
  */
 if (! file_exists(SYSPATH . 'ee/EllisLab/ExpressionEngine/Boot/boot.php')) {
-    header('HTTP/1.1 503 Service Unavailable.', true, '503');
     exit("\033[31mYour system folder path does not appear to be set correctly.\n");
 }
 
