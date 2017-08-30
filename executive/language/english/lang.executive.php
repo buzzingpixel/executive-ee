@@ -9,11 +9,17 @@
 
 // @codingStandardsIgnoreStart
 
+$fileName = 'ee';
+
+if (defined('REQ') && REQ === 'CONSOLE') {
+    $fileName = basename($_SERVER['SCRIPT_FILENAME'], '.php');
+}
+
 $lang = array(
-    'notInstalled' => 'Executive is not installed. Please run "php ee install"',
+    'notInstalled' => 'Executive is not installed. Please run "php ' . $fileName . ' install"',
     'executiveInstalled' => 'Executive has been installed',
     'usage:' => 'usage:',
-    'usageExample' => 'php ee [group] [command] [--argument=value] [--argument2=value2]',
+    'usageExample' => 'php ' . $fileName . ' [group] [command] [--argument=value] [--argument2=value2]',
     'executiveCommandLine' => 'Executive Command Line',
     'group:' => 'Group:',
     'mustSpecifyCommand' => 'A command must be specified',
