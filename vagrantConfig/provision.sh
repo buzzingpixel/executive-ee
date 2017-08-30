@@ -27,7 +27,7 @@ sudo rm -rf /etc/nginx/sites-enabled/*;
 # Symlink
 ###################################
 
-ln -s /home/vagrant/development/executive/executive /home/vagrant/development/libraries/ExpressionEngine/executive
+ln -s /home/vagrant/development/ee /home/vagrant/development/libraries/ExpressionEngine/ee;
 
 
 
