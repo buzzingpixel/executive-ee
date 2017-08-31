@@ -52,7 +52,7 @@ class MigrationCommand extends BaseCommand
         $date = new \DateTime();
 
         // Create a class name
-        $className = "m{$date->format('Y_m_d_Gis')}";
+        $className = "m{$date->format('Y_m_d_His')}";
         $first = true;
         foreach (range(strlen($className), 18) as $key => $val) {
             if ($first) {
