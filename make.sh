@@ -40,16 +40,13 @@ echo 'Copying files to the build directory...';
 
 # Copy items to the build directory
 cp -r executive localStorage/build/system/user/addons/;
-cp -r executive/executive localStorage/build/executive;
+cp -r ee localStorage/build/ee;
 cp -r license.md localStorage/build/system/user/addons/executive/license.md;
 cp -r license.md localStorage/build/license.md;
 cp -r copyright.md localStorage/build/system/user/addons/executive/copyright.md;
 cp -r copyright.md localStorage/build/copyright.md;
 cp -r install.md localStorage/build/install.md;
 cp -r install.md localStorage/build/install.md;
-
-# Remove things we don't want/need in some directories
-rm localStorage/build/system/user/addons/executive/executive
 
 # Tell the user we're creating the distribution file
 echo 'Creating distribution zip file..';
@@ -58,7 +55,7 @@ echo 'Creating distribution zip file..';
 cd localStorage/build;
 
 # Zip it all up
-zip -rq ../"$name"-"$version".zip system/ executive license.md install.md copyright.md -x "*.DS_Store" "*.gitkeep";
+zip -rq ../"$name"-"$version".zip system/ ee license.md install.md copyright.md -x "*.DS_Store" "*.gitkeep";
 
 # Tell the user we're deleting the build directory
 echo 'Deleting build directory...';
