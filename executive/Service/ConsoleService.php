@@ -24,17 +24,32 @@ class ConsoleService extends BaseComponent
      */
     public function writeLn($line, $color = null, $addBreak = true)
     {
-        // No color
+        // Formats
         $reset = $cColor = "\033[0m";
+        $red = "\033[31m";
+        $green = "\033[32m";
+        $yellow = "\033[33m";
+        $bold = "\033[1m";
 
         // Determine if color is something we can deal with
         if ($color === 'red') {
-            $cColor = "\033[31m";
+            $cColor = $red;
         } elseif ($color === 'green') {
-            $cColor = "\033[32m";
+            $cColor = $green;
         } elseif ($color === 'yellow') {
-            $cColor = "\033[33m";
+            $cColor = $yellow;
         }
+
+        $line = strtr($line, array(
+            '<red>' => $red,
+            '</red>' => $reset,
+            '<green>' => $green,
+            '</green>' => $reset,
+            '<yellow>' => $yellow,
+            '</yellow>' => $reset,
+            '<bold>' => $bold,
+            '</bold>' => $reset,
+        ));
 
         echo "{$cColor}{$line}{$reset}";
 
