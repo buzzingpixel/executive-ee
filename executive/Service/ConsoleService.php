@@ -20,6 +20,7 @@ class ConsoleService extends BaseComponent
      * Write line
      * @param string $line
      * @param string $color
+     * @param bool $addBreak
      */
     public function writeLn($line, $color = null, $addBreak = true)
     {
