@@ -11,13 +11,19 @@ Executive also provides an interface for you to create custom commands and sched
 ## Docs
 
 - [Installing](install.md)
-- [Out of the Box Command](docs/out-of-box-commands.md)
+- [Out of the Box Commands](docs/out-of-box-commands.md)
 - [Migrations](docs/migrations.md)
     - [ChannelDesigner](docs/channel-designer.md)
 - [Custom Commands](docs/custom-commands.md)
 - [Addon Comands](docs/addon-commands.md)
 - [Schedule](docs/schedule.md)
 - [Addon Schedule](docs/addon-schedule.md)
+
+## Videos
+
+- [Installing and Basic Usage](https://vimeo.com/231915582)
+- [Migrations](https://vimeo.com/231917905)
+- [Commands and Scheduling](https://vimeo.com/231919679)
 
 ## License
 
