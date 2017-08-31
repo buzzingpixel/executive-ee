@@ -10,11 +10,13 @@
 namespace BuzzingPixel\Executive\Abstracts;
 
 use BuzzingPixel\Executive\BaseComponent;
+use BuzzingPixel\Executive\SchemaDesign\ChannelDesigner;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 
 /**
  * Class MigrationService
+ * @property-read ChannelDesigner $channelDesigner
  */
 abstract class BaseMigration extends BaseComponent
 {
@@ -30,12 +32,21 @@ abstract class BaseMigration extends BaseComponent
     /**
      * MigrationService constructor
      */
-    public function init()
+    protected function init()
     {
         ee()->load->dbforge();
         $this->dbForge = ee()->dbforge;
         $this->queryBuilder = ee('db');
         $this->modelFacade = ee('Model');
+    }
+
+    /**
+     * Get channel designer
+     * @return ChannelDesigner
+     */
+    protected function getChannelDesigner()
+    {
+        return new ChannelDesigner();
     }
 
     /**
