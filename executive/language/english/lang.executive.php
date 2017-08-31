@@ -50,4 +50,6 @@ $lang = array(
     'anErrorOccurredRunningCommand:' => 'An error occurred running the command:',
     'ranSuccessfully' => 'ran successfully',
     'noScheduledCommands' => 'There are no scheduled commands set up',
+    'followingExceptionCaught' => 'The following exception was caught',
+    'getTrace' => 'To get the backtrace, use the option: --trace=true',
 );

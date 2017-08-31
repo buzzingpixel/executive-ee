@@ -384,12 +384,25 @@ class CommandsService extends BaseComponent
             $argsArray[] = $argumentsModel->getArgument($rArgument->name);
         }
 
-        call_user_func_array(
-            array(
-                $class,
-                $method,
-            ),
-            $argsArray
-        );
+        try {
+            call_user_func_array(
+                array(
+                    $class,
+                    $method,
+                ),
+                $argsArray
+            );
+        } catch (\Exception $e) {
+            $exceptionCaught = lang('followingExceptionCaught');
+            $this->consoleService->writeLn("<bold>{$exceptionCaught}</bold>", 'red');
+            $this->consoleService->writeLn($e->getMessage(), 'red');
+            $this->consoleService->writeLn("File: {$e->getFile()}");
+            $this->consoleService->writeLn("Line: {$e->getLine()}");
+            if ($argumentsModel->getArgument('trace') !== 'true') {
+                $this->consoleService->writeLn(lang('getTrace'), 'yellow');
+                return;
+            }
+            print_r($e->getTrace());
+        }
     }
 }
