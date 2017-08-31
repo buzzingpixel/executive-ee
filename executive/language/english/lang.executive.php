@@ -52,4 +52,7 @@ $lang = array(
     'noScheduledCommands' => 'There are no scheduled commands set up',
     'followingExceptionCaught' => 'The following exception was caught',
     'getTrace' => 'To get the backtrace, use the option: --trace=true',
+    'commandCreatedSuccessfully:' => 'Command created successfully:',
+    'makeCommandDescription' => 'Create a command skeleton class in "system/user/Command"',
+    'fileExists' => 'That file already exists',
 );

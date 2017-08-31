@@ -164,6 +164,11 @@ return array(
             'method' => 'run',
             'description' => lang('runScheduleDescription'),
         ),
+        'makeCommand' => array(
+            'class' => '\BuzzingPixel\Executive\Command\CommandCommand',
+            'method' => 'make',
+            'description' => lang('makeCommandDescription'),
+        ),
         'makeMigration' => array(
             'class' => '\BuzzingPixel\Executive\Command\MigrationCommand',
             'method' => 'make',
