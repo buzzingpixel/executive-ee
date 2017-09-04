@@ -10,12 +10,14 @@ namespace BuzzingPixel\Executive\Abstracts;
 
 use BuzzingPixel\Executive\BaseComponent;
 use BuzzingPixel\Executive\SchemaDesign\ChannelDesigner;
+use BuzzingPixel\Executive\SchemaDesign\LayoutDesigner;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 
 /**
  * Class MigrationService
  * @property-read ChannelDesigner $channelDesigner
+ * @property-read LayoutDesigner $layoutDesigner
  */
 abstract class BaseMigration extends BaseComponent
 {
@@ -46,6 +48,15 @@ abstract class BaseMigration extends BaseComponent
     protected function getChannelDesigner()
     {
         return new ChannelDesigner();
+    }
+
+    /**
+     * Get layout designer
+     * @return LayoutDesigner
+     */
+    protected function getLayoutDesigner()
+    {
+        return new LayoutDesigner();
     }
 
     /**
