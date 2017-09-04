@@ -161,13 +161,22 @@ class ChannelDesigner extends BaseComponent
 
     /**
      * Set site model
+     * @throws \Exception
      */
     private function setSiteModel()
     {
+        if (! $this->siteName) {
+            throw new \Exception('Site name not defined');
+        }
+
         /** @var SiteModel $site */
         $this->siteModel = $this->modelFacade->get('Site')
             ->filter('site_name', $this->siteName)
             ->first();
+
+        if (! $this->siteModel) {
+            throw new \Exception('Site not found');
+        }
     }
 
     /** @var StatusGroupModel $statusGroupModel */
