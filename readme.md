@@ -14,6 +14,7 @@ Executive also provides an interface for you to create custom commands and sched
 - [Out of the Box Commands](docs/out-of-box-commands.md)
 - [Migrations](docs/migrations.md)
     - [ChannelDesigner](docs/channel-designer.md)
+    - [LayoutDesigner](docs/layout-designer.md)
 - [Custom Commands](docs/custom-commands.md)
 - [Addon Comands](docs/addon-commands.md)
 - [Schedule](docs/schedule.md)
