@@ -70,6 +70,16 @@ fi
 
 
 
+######################################
+# CD into the project on vagrant ssh
+######################################
+echo '' >> /home/vagrant/.profile;
+echo 'cd /home/vagrant/development/libraries/ExpressionEngine' >> /home/vagrant/.profile;
+
+
+
+
+
 ###################################
 # Restart services
 ###################################
