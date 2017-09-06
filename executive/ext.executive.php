@@ -70,6 +70,10 @@ class Executive_ext
          */
         function errorHandler($type, $message, $file, $line)
         {
+            if (! error_reporting()) {
+                return;
+            }
+
             $errors = array(
                 0x0001 => 'E_ERROR',
                 0x0002 => 'E_WARNING',
