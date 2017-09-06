@@ -38,7 +38,7 @@ class ExtensionDesigner extends BaseComponent
      */
     public function extClass($str)
     {
-        $this->extClass = $str;
+        $this->extClass = str_replace('\\', '\\\\', $str);
         return $this;
     }
 
