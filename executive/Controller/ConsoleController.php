@@ -55,7 +55,7 @@ class ConsoleController extends BaseComponent
         }
 
         if (($command = $this->args->getArgument('command')) === null) {
-            $this->consoleService->writeLn(lang('mustSpecifyCommand'), 'red');
+            $this->listGroupCommands($group);
             return;
         }
 
@@ -97,6 +97,53 @@ class ConsoleController extends BaseComponent
             /** @var CommandGroupModel $group */
             $this->listGroup($group, $toCharacters);
         }
+
+        $this->consoleService->writeLn('');
+    }
+
+    /**
+     * List group commands
+     * @param string $group
+     */
+    private function listGroupCommands($group)
+    {
+        $matchedGroup = null;
+
+        foreach ($this->commandsService->commandGroups as $groupModel) {
+            /** @var CommandGroupModel $groupModel */
+
+            if ($groupModel->name !== $group) {
+                continue;
+            }
+
+            $matchedGroup = $groupModel;
+
+            break;
+        }
+
+        if (! $matchedGroup) {
+            $this->consoleService->writeLn(lang('groupNotFound'), 'red');
+            return;
+        }
+
+        // Show usage
+        $this->consoleService->writeLn(lang('executiveCommandLine') . ' ', null, false);
+        $this->consoleService->writeLn(EXECUTIVE_VER, 'green');
+        $this->consoleService->writeLn('');
+        $this->consoleService->writeLn(lang('usage:'), 'yellow');
+        $this->consoleService->writeLn('  ' . lang('usageExample'));
+
+        $toCharacters = 0;
+
+        foreach ($matchedGroup->commands as $command) {
+            /** @var CommandModel $command */
+            $len = strlen($command->name);
+            $toCharacters = $len > $toCharacters ? $len : $toCharacters;
+        }
+
+        $toCharacters += 2;
+
+        $this->listGroup($matchedGroup, $toCharacters);
 
         $this->consoleService->writeLn('');
     }
