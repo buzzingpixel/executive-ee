@@ -15,10 +15,12 @@ Executive also provides an interface for you to create custom commands and sched
 - [Migrations](docs/migrations.md)
     - [ChannelDesigner](docs/channel-designer.md)
     - [LayoutDesigner](docs/layout-designer.md)
+    - [ExtensionDesigner](docs/extension-designer.md)
 - [Custom Commands](docs/custom-commands.md)
 - [Addon Comands](docs/addon-commands.md)
 - [Schedule](docs/schedule.md)
 - [Addon Schedule](docs/addon-schedule.md)
+- [User Extension](docs/user-extensions.md)
 
 ## Videos
 

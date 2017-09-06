@@ -29,3 +29,5 @@ Your new migration will be run and your schema updated. You can then go on devel
 ### `\BuzzingPixel\Executive\SchemaDesign\ChannelDesigner $channelDesigner`
 
 ### `\BuzzingPixel\Executive\SchemaDesign\LayoutDesigner $layoutDesigner`
+
+### `\BuzzingPixel\Executive\SchemaDesign\ExtensionDesigner $layoutDesigner`
