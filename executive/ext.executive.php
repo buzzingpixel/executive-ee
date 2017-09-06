@@ -21,6 +21,19 @@ class Executive_ext
     /** @var string $version */
     public $version = EXECUTIVE_VER;
 
+    /** @var array $settings */
+    public $settings = array();
+
+    /**
+     * Executive_ext constructor
+     * @param mixed $settings
+     */
+    public function __construct($settings = '')
+    {
+        $this->settings = is_array($settings) ? $settings : array();
+        ee()->extensions->s_cache['Executive_ext'] = null;
+    }
+
     /**
      * session_start
      */
@@ -139,8 +152,15 @@ class Executive_ext
      */
     public function userExtensionRouting()
     {
-        // TODO: route user extension
-        var_dump('TODO: route user extension');
-        die;
+        $class = $this->settings['class'];
+        $method = $this->settings['method'];
+
+        call_user_func_array(
+            array(
+                new $class(),
+                $method,
+            ),
+            func_get_args()
+        );
     }
 }
