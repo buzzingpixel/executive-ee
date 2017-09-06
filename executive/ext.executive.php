@@ -133,4 +133,14 @@ class Executive_ext
         // Make sure we exit here
         exit;
     }
+
+    /**
+     * User extension routing
+     */
+    public function userExtensionRouting()
+    {
+        // TODO: route user extension
+        var_dump('TODO: route user extension');
+        die;
+    }
 }

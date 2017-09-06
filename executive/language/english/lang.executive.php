@@ -56,4 +56,8 @@ $lang = array(
     'commandCreatedSuccessfully:' => 'Command created successfully:',
     'makeCommandDescription' => 'Create a command skeleton class in "system/user/Command"',
     'fileExists' => 'That file already exists',
+    'extClassRequired' => 'Extension class required',
+    'extMethodRequired' => 'Extension method required',
+    'extHookRequired' => 'Extension hook required',
+    'extPriorityRequired' => 'Extension priority required',
 );
