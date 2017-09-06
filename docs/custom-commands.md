@@ -6,7 +6,7 @@ Executive includes a command to create a skeleton of the command for you:
 
 `php ee executive makeCommand --description=MyCommandDescription`
 
-After you've written your command, simple add your command to the config file:
+After you've written your command, just add your command to the config file:
 
 ```php
 $config['commands'] = array(
