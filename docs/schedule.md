@@ -17,7 +17,7 @@ $config['schedule'] = array(
     array(
         'group' => 'user',
         'command' => 'testUserCommand',
-        'runEvery' => 'FiveMinutes', // Always|FiveMinutes|TenMinutes|ThirtyMinutes|Hour|Day|Week|Month
+        'runEvery' => 'FiveMinutes', // Always|FiveMinutes|TenMinutes|ThirtyMinutes|Hour|Day|Week|Month|DayAtMidnight|SaturdayAtMidnight|SundayAtMidnight|MondayAtMidnight|TuesdayAtMidnight|WednesdayAtMidnight|ThursdayAtMidNight|FridayAtMidnight
         'arguments' => array(
             'foo' => 'bar',
             'foobar' => 'barfoo',
@@ -26,7 +26,7 @@ $config['schedule'] = array(
     array(
         'group' => 'user',
         'command' => 'testUserCommand2',
-        'runEvery' => 'Day', // Always|FiveMinutes|TenMinutes|ThirtyMinutes|Hour|Day|Week|Month
+        'runEvery' => 'Day', // Always|FiveMinutes|TenMinutes|ThirtyMinutes|Hour|Day|Week|Month|DayAtMidnight|SaturdayAtMidnight|SundayAtMidnight|MondayAtMidnight|TuesdayAtMidnight|WednesdayAtMidnight|ThursdayAtMidNight|FridayAtMidnight
     ),
     array(
         'group' => 'user',
