@@ -180,11 +180,11 @@ class CommandsService extends BaseComponent
         if ($userSchedule = $this->eeConfigService->item('schedule')) {
             /** @var array $userSchedule */
 
-            $userSchedule['arguments'] = isset($userSchedule['arguments']) ?
-                $userSchedule['arguments'] :
-                array();
-
             foreach ($userSchedule as $schedule) {
+                $schedule['arguments'] = isset($schedule['arguments']) ?
+                    $schedule['arguments'] :
+                    array();
+
                 $model = new ScheduleModel($schedule);
 
                 $model->source = 'user';
@@ -199,7 +199,7 @@ class CommandsService extends BaseComponent
                     $model->command,
                 );
 
-                foreach ($userSchedule['arguments'] as $key => $val) {
+                foreach ($schedule['arguments'] as $key => $val) {
                     $args[] = "--{$key}={$val}";
                 }
 
