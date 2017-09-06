@@ -25,7 +25,14 @@ class CommandCommand extends BaseCommand
     {
         $path = realpath(SYSPATH);
         $this->dir = "{$path}/user/Command";
-        if (! @mkdir($this->dir, DIR_WRITE_MODE, true) && ! is_dir($this->dir)) {
+
+        if (is_dir($this->dir)) {
+            return;
+        }
+
+        if (! @mkdir($this->dir, DIR_WRITE_MODE, true) &&
+            ! is_dir($this->dir)
+        ) {
             $this->consoleService->writeLn(
                 lang('unableToCreateDirectory:') . ' ' . $this->dir,
                 'red'

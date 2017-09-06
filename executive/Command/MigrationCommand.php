@@ -25,7 +25,14 @@ class MigrationCommand extends BaseCommand
     {
         $path = realpath(SYSPATH);
         $this->dir = "{$path}/user/Migration";
-        if (! @mkdir($this->dir, DIR_WRITE_MODE, true) && ! is_dir($this->dir)) {
+
+        if (is_dir($this->dir)) {
+            return;
+        }
+
+        if (! @mkdir($this->dir, DIR_WRITE_MODE, true) &&
+            ! is_dir($this->dir)
+        ) {
             $this->consoleService->writeLn(
                 lang('unableToCreateDirectory:') . ' ' . $this->dir,
                 'red'
