@@ -51,6 +51,7 @@ $lang = array(
     'ranSuccessfully' => 'ran successfully',
     'noScheduledCommands' => 'There are no scheduled commands set up',
     'followingExceptionCaught' => 'The following exception was caught',
+    'followingErrorEncountered' => 'The following error was encountered',
     'getTrace' => 'To get the backtrace, use the option: --trace=true',
     'commandCreatedSuccessfully:' => 'Command created successfully:',
     'makeCommandDescription' => 'Create a command skeleton class in "system/user/Command"',
