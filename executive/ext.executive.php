@@ -8,6 +8,7 @@
 
 use BuzzingPixel\Executive\Controller\ConsoleController;
 use BuzzingPixel\Executive\Service\ConsoleService;
+use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 
 /**
  * Class Executive_ext
@@ -20,19 +21,6 @@ class Executive_ext
 {
     /** @var string $version */
     public $version = EXECUTIVE_VER;
-
-    /** @var array $settings */
-    public $settings = array();
-
-    /**
-     * Executive_ext constructor
-     * @param mixed $settings
-     */
-    public function __construct($settings = '')
-    {
-        $this->settings = is_array($settings) ? $settings : array();
-        ee()->extensions->s_cache['Executive_ext'] = null;
-    }
 
     /**
      * session_start
@@ -148,19 +136,41 @@ class Executive_ext
     }
 
     /**
-     * User extension routing
+     * Call method for routing user extensions
+     * @param string $name
+     * @param array $args
      */
-    public function userExtensionRouting()
+    public function __call($name, $args)
     {
-        $class = $this->settings['class'];
-        $method = $this->settings['method'];
+        if (stripos($name, 'userExtensionRouting') !== 0) {
+            return;
+        }
+
+        $idFind = explode('__', $name);
+
+        if (! isset($idFind[1]) || ! is_numeric($idFind[1])) {
+            return;
+        }
+
+        $id = (int) $idFind[1];
+
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = ee('db');
+
+        $row = $queryBuilder->where('id', $id)
+            ->get('executive_user_extensions')
+            ->row();
+
+        if (! $row) {
+            return;
+        }
 
         call_user_func_array(
             array(
-                new $class(),
-                $method,
+                new $row->class(),
+                $row->method,
             ),
-            func_get_args()
+            $args
         );
     }
 }
