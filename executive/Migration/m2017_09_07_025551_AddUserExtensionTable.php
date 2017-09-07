@@ -48,6 +48,11 @@ class m2017_09_07_025551_AddUserExtensionTable extends BaseMigration
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ),
+            'hook' => array(
+                'default' => '',
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+            ),
         ));
 
         // Set the primary key

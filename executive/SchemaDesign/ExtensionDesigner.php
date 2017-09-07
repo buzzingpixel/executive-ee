@@ -11,6 +11,7 @@ namespace BuzzingPixel\Executive\SchemaDesign;
 use BuzzingPixel\Executive\BaseComponent;
 use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 use EllisLab\ExpressionEngine\Model\Addon\Extension as ExtensionModel;
+use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 
 /**
  * Class ExtensionDesigner
@@ -20,12 +21,16 @@ class ExtensionDesigner extends BaseComponent
     /** @var ModelFacade $modelFacade */
     private $modelFacade;
 
+    /** @var QueryBuilder $queryBuilder */
+    private $queryBuilder;
+
     /**
      * Initialize class
      */
     protected function init()
     {
         $this->modelFacade = ee('Model');
+        $this->queryBuilder = ee('db');
     }
 
     /** @var string $class */
@@ -38,7 +43,7 @@ class ExtensionDesigner extends BaseComponent
      */
     public function extClass($str)
     {
-        $this->extClass = str_replace('\\', '\\\\', $str);
+        $this->extClass = $str;
         return $this;
     }
 
@@ -96,20 +101,22 @@ class ExtensionDesigner extends BaseComponent
             throw new \Exception(lang('extPriorityRequired'));
         }
 
+        $this->queryBuilder->insert('executive_user_extensions', array(
+            'class' => $this->extClass,
+            'method' => $this->extMethod,
+            'hook' => $this->extHook,
+        ));
+
         /** @var ExtensionModel $extension */
         $extension = $this->modelFacade->make('Extension');
 
         $extension->set(array(
             'class' => 'Executive_ext',
-            'method' => 'userExtensionRouting',
+            'method' => "userExtensionRouting__{$this->queryBuilder->insert_id()}",
             'hook' => $this->extHook,
             'priority' => $this->extPriority,
             'version' => EXECUTIVE_VER,
             'enabled' => 'y',
-            'settings' => array(
-                'class' => $this->extClass,
-                'method' => $this->extMethod,
-            ),
         ));
 
         $extension->save();
@@ -123,23 +130,28 @@ class ExtensionDesigner extends BaseComponent
     {
         $this->checkPropertiesSet();
 
-        $extensionCandidates = $this->modelFacade->get('Extension')
-            ->filter('class', 'Executive_ext')
-            ->filter('method', 'userExtensionRouting')
-            ->filter('hook', $this->extHook)
-            ->all();
+        $row = $this->queryBuilder->select('id')
+            ->where('class', $this->extClass)
+            ->where('method', $this->extMethod)
+            ->where('hook', $this->extHook)
+            ->get('executive_user_extensions')
+            ->row();
 
-        foreach ($extensionCandidates as $candidate) {
-            /** @var ExtensionModel $candidate */
-
-            $settings = $candidate->getProperty('settings');
-
-            if ($settings['class'] === $this->extClass &&
-                $settings['method'] === $this->extMethod
-            ) {
-                $candidate->delete();
-            }
+        if (! $row) {
+            return;
         }
+
+        $id = (int) $row->id;
+
+        $this->modelFacade->get('Extension')
+            ->filter('class', 'Executive_ext')
+            ->filter('method', "userExtensionRouting__{$id}")
+            ->filter('hook', $this->extHook)
+            ->delete();
+
+        $this->queryBuilder->delete('executive_user_extensions', array(
+            'id' => $id,
+        ));
     }
 
     /**
