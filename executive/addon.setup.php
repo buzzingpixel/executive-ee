@@ -173,6 +173,11 @@ return array(
             'method' => 'make',
             'description' => lang('makeMigrationDescription'),
         ),
+        'makeTag' => array(
+            'class' => '\BuzzingPixel\Executive\Command\TagCommand',
+            'method' => 'make',
+            'description' => lang('makeTagDescription'),
+        ),
         'runMigrations' => array(
             'class' => '\BuzzingPixel\Executive\Command\UserMigrationCommand',
             'method' => 'runMigrations',

@@ -48,7 +48,7 @@ class MigrationCommand extends BaseCommand
     {
         if (! $description) {
             $this->consoleService->writeLn(
-                lang('migrationDescriptionRequired'),
+                lang('templateDescriptionRequired'),
                 'red'
             );
             return;

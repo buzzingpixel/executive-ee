@@ -11,9 +11,9 @@ namespace BuzzingPixel\Executive\Command;
 use BuzzingPixel\Executive\Abstracts\BaseCommand;
 
 /**
- * Class CommandCommand
+ * Class TagCommand
  */
-class CommandCommand extends BaseCommand
+class TagCommand extends BaseCommand
 {
     /** @var string $dir */
     private $dir;
@@ -24,7 +24,7 @@ class CommandCommand extends BaseCommand
     public function initCommand()
     {
         $path = realpath(SYSPATH);
-        $this->dir = "{$path}/user/Command";
+        $this->dir = "{$path}/user/Tag";
 
         if (is_dir($this->dir)) {
             return;
@@ -57,29 +57,27 @@ class CommandCommand extends BaseCommand
         $description = ucfirst($description);
         $rev = strrev($description);
 
-        if (stripos($rev, strrev('Command')) === 0) {
-            $description = strrev(substr($rev, 7));
+        if (stripos($rev, strrev('Tag')) === 0) {
+            $description = strrev(substr($rev, 3));
         }
 
         // Get the template contents
-        $contents = file_get_contents(
-            EXECUTIVE_PATH . '/Template/Command.php'
-        );
+        $contents = file_get_contents(EXECUTIVE_PATH . '/Template/Tag.php');
 
         // Replace things
         $contents = str_replace(
             array(
-                'Class Command',
-                'class Command',
+                'Class Tag',
+                'class Tag',
             ),
             array(
-                "Class {$description}Command",
-                "class {$description}Command",
+                "Class {$description}Tag",
+                "class {$description}Tag",
             ),
             $contents
         );
 
-        $fullFilePath = "{$this->dir}/{$description}Command.php";
+        $fullFilePath = "{$this->dir}/{$description}Tag.php";
 
         if (file_exists($fullFilePath)) {
             $this->consoleService->writeLn(lang('fileExists'), 'red');
@@ -90,7 +88,7 @@ class CommandCommand extends BaseCommand
         file_put_contents($fullFilePath, $contents);
 
         $this->consoleService->writeLn(
-            lang('commandCreatedSuccessfully:') . ' ' . $fullFilePath,
+            lang('tagCreatedSuccessfully:') . ' ' . $fullFilePath,
             'green'
         );
     }

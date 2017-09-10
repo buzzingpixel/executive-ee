@@ -27,7 +27,7 @@ $lang = array(
     'classNotFound' => 'The specified class was not found',
     'classMethodNotFound' => 'The specified class method was not found',
     'unableToCreateDirectory:' => 'Unable to create directory:',
-    'migrationDescriptionRequired' => 'A migration description is required: --description=MyMigration',
+    'templateDescriptionRequired' => 'A description is required: --description=MyDescription',
     'migrationCreatedSuccessfully:' => 'Migration created successfully:',
     'addonsUpdatedSuccessfully' => 'Addons updated successfully',
     'keyMustBeSpecified' => 'A key must be specified: --key=debug',
@@ -60,4 +60,6 @@ $lang = array(
     'extMethodRequired' => 'Extension method required',
     'extHookRequired' => 'Extension hook required',
     'extPriorityRequired' => 'Extension priority required',
+    'tagCreatedSuccessfully:' => 'Tag created successfully:',
+    'makeTagDescription' => 'Create a tag skeleton class in "system/user/Tag"',
 );
