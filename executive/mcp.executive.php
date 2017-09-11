@@ -56,10 +56,20 @@ class Executive_mcp
             return $this->showAvailableSections();
         }
 
-        // TODO: route user cp sections
-        var_dump('TODO');
-        var_dump($section);
-        die;
+        $sections = $this->configService->item('cpSections') ?: array();
+
+        $sectionConfig = $sections[$section];
+
+        $pageKey = $this->requestService->get('page');
+
+        $page = 'index';
+        if ($pageKey) {
+            $page = $pageKey;
+        }
+
+        $class = new $sectionConfig[$page]['class'];
+
+        return $class->{$sectionConfig[$page]['method']}();
     }
 
     /**

@@ -8,10 +8,12 @@
  * @license Apache-2.0
  */
 
+use EllisLab\ExpressionEngine\Core\Provider;
 use BuzzingPixel\Executive\Controller\ConsoleController;
 use BuzzingPixel\Executive\Service\ArgsService;
 use BuzzingPixel\Executive\Service\ConsoleService;
 use BuzzingPixel\Executive\Service\CommandsService;
+use BuzzingPixel\Executive\Service\UserViewService;
 
 // Get addon json path
 $addOnPath = realpath(__DIR__);
@@ -155,7 +157,10 @@ return array(
                 'consoleService' => ee('executive:ConsoleService'),
                 'queryBuilder' => ee('db'),
             ));
-        }
+        },
+        'UserView' => function (Provider $addOn, $path = '') {
+            return new UserViewService($path, $addOn);
+        },
     ),
     'commands' => array(
         'runSchedule' => array(
