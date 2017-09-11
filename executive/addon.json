@@ -8,7 +8,7 @@
 	"label": "Executive",
 	"name": "executive",
 	"namespace": "BuzzingPixel\\Executive",
-	"settingsExist": false,
+	"settingsExist": true,
 	"releaseFeedUrl": "https://buzzingpixel.com/software/executive-ee/changelog/feed",
 	"version": "1.0.0-a.6"
 }
