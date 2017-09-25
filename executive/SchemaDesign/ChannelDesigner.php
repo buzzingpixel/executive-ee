@@ -9,10 +9,11 @@
 namespace BuzzingPixel\Executive\SchemaDesign;
 
 use BuzzingPixel\Executive\BaseComponent;
-use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
+use EllisLab\ExpressionEngine\Model\Channel\ChannelField;
 use EllisLab\ExpressionEngine\Model\Site\Site as SiteModel;
-use EllisLab\ExpressionEngine\Model\Channel\ChannelFieldGroup as ChannelFieldGroupModel;
+use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 use EllisLab\ExpressionEngine\Model\Status\StatusGroup as StatusGroupModel;
+use EllisLab\ExpressionEngine\Model\Channel\ChannelFieldGroup as ChannelFieldGroupModel;
 
 /**
  * Class ChannelDesigner
@@ -353,6 +354,7 @@ class ChannelDesigner extends BaseComponent
                 continue;
             }
 
+            /** @var ChannelField $fieldModel */
             $fieldModel = $this->modelFacade->get('ChannelField')
                 ->filter('site_id', $siteId)
                 ->filter('group_id', $groupId)
@@ -367,13 +369,24 @@ class ChannelDesigner extends BaseComponent
                 $fieldModel = $this->modelFacade->make('ChannelField');
             }
 
-            $fieldModel->set(array_merge(
+            $fieldData = array_merge(
                 $defaultProperties,
                 $field,
                 $presetProperties
-            ));
+            );
+
+            $_POST = $fieldData;
+
+            $fieldModel->set($fieldData);
 
             $fieldModel->save();
+
+            $fieldModel->emit('afterUpdate', array(
+                'field_id' => $fieldModel->getProperty('field_id'),
+                'group_id' => $groupId,
+            ));
+
+            $_POST = array();
         }
     }
 

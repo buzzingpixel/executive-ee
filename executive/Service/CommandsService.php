@@ -326,7 +326,7 @@ class CommandsService extends BaseComponent
     }
 
     /**
-     * Set schedule is running
+     * Set schedule is finished
      * @param ScheduleModel $scheduleModel
      */
     public function setScheduleFinished(ScheduleModel $scheduleModel)
