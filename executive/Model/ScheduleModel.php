@@ -63,7 +63,8 @@ class ScheduleModel extends DataModel
     }
 
     /** @var array $shouldRunMap */
-    private $shouldRunMap = array(
+    private static $shouldRunMap = array(
+        'always' => 0,
         'fiveminutes' => 5,
         'tenminutes' => 10,
         'thirtyminutes' => 30,
@@ -94,14 +95,14 @@ class ScheduleModel extends DataModel
 
         $val = strtolower($val);
 
-        $mappedVal = $this->shouldRunMap[$val];
+        $mappedVal = self::$shouldRunMap[$val];
 
         if (is_string($mappedVal)) {
             return $mappedVal;
         }
 
-        return isset($this->shouldRunMap[$val]) ?
-            $this->shouldRunMap[$val] * 60 :
+        return isset(self::$shouldRunMap[$val]) ?
+            self::$shouldRunMap[$val] * 60 :
             1;
     }
 
