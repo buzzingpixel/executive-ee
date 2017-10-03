@@ -124,6 +124,9 @@ class Executive_ext
             return;
         }
 
+        // Make sure the lang file is loaded
+        ee()->lang->loadfile('executive');
+
         // Prevent timeout (hopefully)
         @set_time_limit(0);
 
