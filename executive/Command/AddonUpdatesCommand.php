@@ -174,7 +174,7 @@ class AddonUpdatesCommand extends BaseCommand
         }
 
         $this->consoleService->writeLn(
-            lang('addonsUpdatedSuccessfully:'),
+            lang('addonsUpdatedSuccessfully'),
             'green'
         );
     }
