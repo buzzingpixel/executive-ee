@@ -64,4 +64,5 @@ $lang = array(
     'makeTagDescription' => 'Create a tag skeleton class in "system/user/Tag"',
     'noCpSections' => 'No user CP sections have been set up.',
     'userCpSections' => 'User CP Sections',
+    'userCpSectionNotFound' => 'The requested User CP Section was not found.',
 );

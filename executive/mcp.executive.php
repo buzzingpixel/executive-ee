@@ -12,6 +12,7 @@ use EllisLab\ExpressionEngine\Library\CP\Table;
 use EllisLab\ExpressionEngine\Service\URL\URLFactory;
 use EllisLab\ExpressionEngine\Core\Request as RequestService;
 use EllisLab\ExpressionEngine\Service\View\ViewFactory;
+use EllisLab\ExpressionEngine\Service\Alert\AlertCollection as AlertCollection;
 
 /**
  * Class Executive_mcp
@@ -58,7 +59,25 @@ class Executive_mcp
 
         $sections = $this->configService->item('cpSections') ?: array();
 
-        $sectionConfig = $sections[$section];
+        $sectionConfig = isset($sections[$section]) ? $sections[$section] : null;
+
+        if (! $sectionConfig) {
+            /** @var AlertCollection $eeAlertCollection */
+            $eeAlertCollection = ee('CP/Alert');
+
+            // Create the alert
+            $eeAlertCollection->makeInline('shared-form')
+                ->withTitle(lang('userCpSectionNotFound'))
+                ->cannotClose()
+                ->asIssue()
+                ->now();
+
+            return array(
+                'heading' => lang('userCpSectionNotFound'),
+                'body' => $this->viewFactory->make('executive:CP/AlertOnly')
+                    ->render(),
+            );
+        }
 
         $pageKey = $this->requestService->get('page');
 
