@@ -124,6 +124,9 @@ class Executive_ext
             return;
         }
 
+        // Prevent timeout (hopefully)
+        @set_time_limit(0);
+
         // Get the console controller
         /** @var ConsoleController $consoleController */
         $consoleController = ee('executive:ConsoleController');
