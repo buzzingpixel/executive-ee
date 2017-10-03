@@ -8,7 +8,7 @@
  */
 
 // System path
-$system_path = './system';
+$system_path = realpath(dirname($_SERVER['SCRIPT_FILENAME'])) . '/system';
 
 
 /*
