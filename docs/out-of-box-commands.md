@@ -26,7 +26,7 @@ Runs any user migrations that have not been run yet. As long as you are using th
 
 ## runAddonUpdates
 
-`php ee executive runMigrations`
+`php ee executive runAddonUpdates`
 
 This will run updates for any add-ons that need to be updated.
 
