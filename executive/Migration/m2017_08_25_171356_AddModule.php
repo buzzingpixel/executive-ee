@@ -35,6 +35,7 @@ class m2017_08_25_171356_AddModule extends BaseMigration
             'module_version' => EXECUTIVE_VER,
             'has_cp_backend' => 'n',
             'has_publish_fields' => 'n',
+            'settings' => '',
         ));
     }
 
