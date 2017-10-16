@@ -36,6 +36,7 @@ class m2017_08_25_174225_AddSessionsStartHook extends BaseMigration
             'class' => 'Executive_ext',
             'method' => 'sessions_start',
             'hook' => 'sessions_start',
+            'settings' => '',
             'priority' => 1,
             'version' => EXECUTIVE_VER,
             'enabled' => 'y',

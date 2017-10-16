@@ -36,6 +36,7 @@ class m2017_08_25_171531_AddCoreBootExtensionHook extends BaseMigration
             'class' => 'Executive_ext',
             'method' => 'core_boot',
             'hook' => 'core_boot',
+            'settings' => '',
             'priority' => 1,
             'version' => EXECUTIVE_VER,
             'enabled' => 'y',
