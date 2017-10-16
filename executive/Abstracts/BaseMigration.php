@@ -16,7 +16,7 @@ use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 
 /**
- * Class MigrationService
+ * Class BaseMigration
  * @property-read ChannelDesigner $channelDesigner
  * @property-read LayoutDesigner $layoutDesigner
  * @property-read ExtensionDesigner $extensionDesigner
