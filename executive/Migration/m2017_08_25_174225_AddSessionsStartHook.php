@@ -39,6 +39,7 @@ class m2017_08_25_174225_AddSessionsStartHook extends BaseMigration
             'priority' => 1,
             'version' => EXECUTIVE_VER,
             'enabled' => 'y',
+            'settings' => '',
         ));
     }
 
