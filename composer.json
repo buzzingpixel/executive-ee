@@ -1,0 +1,32 @@
+{
+    "name": "tjdraper/executive-ee",
+    "version": "1.0.2",
+    "description": "Run ExpressionEngine tasks from the command line",
+    "type": "ee-add-on",
+    "authors": [
+        {
+            "name": "TJ Draper",
+            "email": "tj@buzzingpixel.com",
+            "homepage": "https://buzzingpixel.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "require": {
+        "roave/security-advisories": "dev-master",
+        "buzzingpixel/datamodel": "^1.2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "BuzzingPixel\\Executive\\": "executive/"
+        }
+    },
+    "extra": {
+        "handle": "executive",
+        "systemPath": "executive"
+    }
+}
