@@ -19,7 +19,7 @@ class m2017_08_31_151615_ChannelDesignerTest extends BaseMigration
      */
     public function safeUp()
     {
-        $this->channelDesigner->fieldGroupName('Test')
+        $this->channelDesigner
             ->addField(array(
                 'field_name' => 'test_field_1',
                 'field_label' => 'Test Field 1',
@@ -42,7 +42,7 @@ class m2017_08_31_151615_ChannelDesignerTest extends BaseMigration
 
 ## Methods
 
-Each of these methods can be used in conjunction with creating any or all of these items. For instance, if you just want to add new fields to a field group, or update existing fields in a field group, you can do that without using the methods to specify or create a channel.
+Each of these methods can be used in conjunction with creating any or all of these items. For instance, if you just want to add new fields to a channel, or update existing fields, you can do that.
 
 Each of the methods except `save()` return an instance of the class.
 
@@ -50,21 +50,21 @@ Each of the methods except `save()` return an instance of the class.
 
 For MSM sites, if you are manipulating schema for a site other than `default_site`, use this method to set the site name you will be manipulating.
 
-### `statusGroupName('My Status Group')`
-
-The status group to assign to the channel you are creating. Or if that group does not exist, it will be created.
-
-### `addStatus('Custom Stats', '009933')`
+### `addStatus('Custom Status', '009933')`
 
 Add a status to the specified status group and optionally set the highlight color of that status. If you do not provide the second argument of `$color`, it will default to `'000000'`.
 
-### `fieldGroupName('My Custom Field Group')`
+### `removeStatus('Custom Status')`
 
-The name of the field group to use or create.
+Removes a status from a channel. Note that this will not delete the status from the database as it may be used on other channels. If you wish to delete a status from the database, use the native model methods to do that.
 
 ### `addField(array())`
 
 Set the field properties to add or update. The array argument can receive any property on ExpressionEngine's field model. Many third party fields will require specific settings to be added. The only required key for something like a test field is `field_name` although you'll probably want to set a `field_label` too. If you do not provide that, it will default to `field_name`.
+
+### `removeField('field_name')`
+
+Removes a field from a channel. Note that this will not delete the field from the database as it may be used on other channels. If you wish to delete a field from the database, use the native model methods to do that.
 
 ### `channelName('my_channel')`
 
