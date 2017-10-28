@@ -74,6 +74,20 @@ class ChannelDesigner extends BaseComponent
         return $this;
     }
 
+    /** @var array $removeFields */
+    private $removeFields = array();
+
+    /**
+     * Remove field
+     * @param $fieldName
+     * @return $this
+     */
+    public function removeField($fieldName)
+    {
+        $this->removeFields[] = $fieldName;
+        return $this;
+    }
+
     /** @var string $channelName */
     private $channelName;
 
@@ -340,6 +354,10 @@ class ChannelDesigner extends BaseComponent
 
         if ($existingFields) {
             foreach ($existingFields as $field) {
+                if (in_array($field->field_name, $this->removeFields, false)) {
+                    continue;
+                }
+
                 $fields[$field->field_name] = $field;
             }
         }
