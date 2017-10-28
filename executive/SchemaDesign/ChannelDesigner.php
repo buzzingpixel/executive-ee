@@ -8,12 +8,12 @@
 
 namespace BuzzingPixel\Executive\SchemaDesign;
 
+use Exception;
 use BuzzingPixel\Executive\BaseComponent;
 use EllisLab\ExpressionEngine\Model\Channel\ChannelField;
 use EllisLab\ExpressionEngine\Model\Site\Site as SiteModel;
 use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
-use EllisLab\ExpressionEngine\Model\Status\StatusGroup as StatusGroupModel;
-use EllisLab\ExpressionEngine\Model\Channel\ChannelFieldGroup as ChannelFieldGroupModel;
+use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
 
 /**
  * Class ChannelDesigner
@@ -45,20 +45,6 @@ class ChannelDesigner extends BaseComponent
         return $this;
     }
 
-    /** @var string $statusGroupName */
-    private $statusGroupName = 'Default';
-
-    /**
-     * Set the status group name
-     * @param string $str
-     * @return self
-     */
-    public function statusGroupName($str)
-    {
-        $this->statusGroupName = $str;
-        return $this;
-    }
-
     /** @var array $statuses */
     private $statuses = array();
 
@@ -71,20 +57,6 @@ class ChannelDesigner extends BaseComponent
     public function addStatus($status, $color = '000000')
     {
         $this->statuses[$status] = $color;
-        return $this;
-    }
-
-    /** @var string $fieldGroupName */
-    private $fieldGroupName;
-
-    /**
-     * Set the field group name
-     * @param string $str
-     * @return self
-     */
-    public function fieldGroupName($str)
-    {
-        $this->fieldGroupName = $str;
         return $this;
     }
 
@@ -146,13 +118,12 @@ class ChannelDesigner extends BaseComponent
 
     /**
      * Save schema design
+     * @throws Exception
      */
     public function save()
     {
         $this->setSiteModel();
-        $this->setStatusGroupModel();
         $this->addUpdateStatuses();
-        $this->setFieldGroup();
         $this->addUpdateFields();
         $this->addOrUpdateChannel();
     }
@@ -162,12 +133,12 @@ class ChannelDesigner extends BaseComponent
 
     /**
      * Set site model
-     * @throws \Exception
+     * @throws Exception
      */
     private function setSiteModel()
     {
         if (! $this->siteName) {
-            throw new \Exception('Site name not defined');
+            throw new Exception('Site name not defined');
         }
 
         /** @var SiteModel $site */
@@ -176,63 +147,8 @@ class ChannelDesigner extends BaseComponent
             ->first();
 
         if (! $this->siteModel) {
-            throw new \Exception('Site not found');
+            throw new Exception('Site not found');
         }
-    }
-
-    /** @var StatusGroupModel $statusGroupModel */
-    private $statusGroupModel;
-
-    /**
-     * Set status group model
-     */
-    private function setStatusGroupModel()
-    {
-        if (! $this->statusGroupName) {
-            return;
-        }
-
-        $siteId = $this->siteModel->getProperty('site_id');
-
-        $statusGroup = $this->modelFacade->get('StatusGroup')
-            ->filter('site_id', $siteId)
-            ->filter('group_name', $this->statusGroupName)
-            ->first();
-
-        if (! $statusGroup) {
-            $statusGroup = $this->modelFacade->make('StatusGroup');
-
-            $statusGroup->set(array(
-                'site_id' => $siteId,
-                'group_name' => $this->statusGroupName,
-            ));
-
-            $statusGroup->save();
-
-            $groupId = $statusGroup->getProperty('group_id');
-
-            $open = $this->modelFacade->make('Status');
-            $open->set(array(
-                'site_id' => $siteId,
-                'group_id' => $groupId,
-                'status' => 'open',
-                'status_order' => 1,
-                'highlight' => '009933',
-            ));
-            $open->save();
-
-            $closed = $this->modelFacade->make('Status');
-            $closed->set(array(
-                'site_id' => $siteId,
-                'group_id' => $groupId,
-                'status' => 'closed',
-                'status_order' => 2,
-                'highlight' => '990000',
-            ));
-            $closed->save();
-        }
-
-        $this->statusGroupModel = $statusGroup;
     }
 
     /**
@@ -240,19 +156,13 @@ class ChannelDesigner extends BaseComponent
      */
     private function addUpdateStatuses()
     {
-        if (! $this->statusGroupModel || ! $this->statuses) {
+        if (! $this->statuses) {
             return;
         }
-
-        $siteId = $this->siteModel->getProperty('site_id');
-
-        $groupId = $this->statusGroupModel->getProperty('group_id');
 
         $order = 3;
 
         $lastOrder = $this->modelFacade->get('Status')
-            ->filter('site_id', $siteId)
-            ->filter('group_id', $groupId)
             ->order('status_order', 'desc')
             ->first();
 
@@ -262,8 +172,6 @@ class ChannelDesigner extends BaseComponent
 
         foreach ($this->statuses as $status => $color) {
             $statusModel = $this->modelFacade->get('Status')
-                ->filter('site_id', $siteId)
-                ->filter('group_id', $groupId)
                 ->filter('status', $status)
                 ->first();
 
@@ -272,8 +180,6 @@ class ChannelDesigner extends BaseComponent
             }
 
             $statusModel->set(array(
-                'site_id' => $siteId,
-                'group_id' => $groupId,
                 'status' => $status,
                 'status_order' => $order,
                 'highlight' => $color,
@@ -285,55 +191,19 @@ class ChannelDesigner extends BaseComponent
         }
     }
 
-    /** @var ChannelFieldGroupModel $fieldGroupModel */
-    private $fieldGroupModel;
-
-    /**
-     * Set field group
-     */
-    private function setFieldGroup()
-    {
-        if (! $this->fieldGroupName) {
-            return;
-        }
-
-        $siteId = $this->siteModel->getProperty('site_id');
-
-        $fieldGroup = $this->modelFacade->get('ChannelFieldGroup')
-            ->filter('site_id', $siteId)
-            ->filter('group_name', $this->fieldGroupName)
-            ->first();
-
-        if (! $fieldGroup) {
-            $fieldGroup = $this->modelFacade->make('ChannelFieldGroup');
-
-            $fieldGroup->set(array(
-                'site_id' => $siteId,
-                'group_name' => $this->fieldGroupName,
-            ));
-
-            $fieldGroup->save();
-        }
-
-        $this->fieldGroupModel = $fieldGroup;
-    }
-
     /**
      * Add or update fields
      */
     private function addUpdateFields()
     {
-        if (! $this->fieldGroupModel || ! $this->fields) {
+        if (! $this->fields) {
             return;
         }
 
         $siteId = $this->siteModel->getProperty('site_id');
 
-        $groupId = $this->fieldGroupModel->getProperty('group_id');
-
         $presetProperties = array(
             'site_id' => $siteId,
-            'group_id' => $groupId,
         );
 
         $defaultProperties = array(
@@ -357,7 +227,6 @@ class ChannelDesigner extends BaseComponent
             /** @var ChannelField $fieldModel */
             $fieldModel = $this->modelFacade->get('ChannelField')
                 ->filter('site_id', $siteId)
-                ->filter('group_id', $groupId)
                 ->filter('field_name', $field['field_name'])
                 ->first();
 
@@ -383,7 +252,6 @@ class ChannelDesigner extends BaseComponent
 
             $fieldModel->emit('afterUpdate', array(
                 'field_id' => $fieldModel->getProperty('field_id'),
-                'group_id' => $groupId,
             ));
 
             $_POST = array();
@@ -427,21 +295,102 @@ class ChannelDesigner extends BaseComponent
             $presetProperties['channel_title'] = $this->channelTitle;
         }
 
-        if ($this->statusGroupModel) {
-            $statusGroupId = $this->statusGroupModel->getProperty('group_id');
-            $presetProperties['status_group'] = $statusGroupId;
-        }
-
-        if ($this->fieldGroupModel) {
-            $fieldGroupId = $this->fieldGroupModel->getProperty('group_id');
-            $presetProperties['field_group'] = $fieldGroupId;
-        }
-
         $channelModel->set(array_merge(
             $this->extendedChannelProperties,
             $presetProperties
         ));
 
+        $channelModel->CustomFields = $this->getCustomFieldsCollection(
+            $channelModel->CustomFields
+        );
+
+        $channelModel->Statuses = $this->getStatusCollection(
+            $channelModel->Statuses
+        );
+
         $channelModel->save();
+    }
+
+    /**
+     * Gets the custom fields
+     * @param ModelCollection $existingFields
+     * @return ModelCollection
+     */
+    private function getCustomFieldsCollection($existingFields = null)
+    {
+        $fieldShortNames = array();
+
+        foreach ($this->fields as $field) {
+            if (! isset($field['field_name'])) {
+                continue;
+            }
+
+            $fieldShortNames[] = $field['field_name'];
+        }
+
+        $newFields = new ModelCollection();
+
+        if ($fieldShortNames) {
+            $newFields = $this->modelFacade->get('ChannelField')
+                ->filter('field_name', 'IN', $fieldShortNames)
+                ->all();
+        }
+
+        $fields = array();
+
+        if ($existingFields) {
+            foreach ($existingFields as $field) {
+                $fields[$field->field_name] = $field;
+            }
+        }
+
+        foreach ($newFields as $field) {
+            $fields[$field->field_name] = $field;
+        }
+
+        return new ModelCollection(array_values($fields));
+    }
+
+    /**
+     * Gets the status collection
+     * @param ModelCollection $existingStatuses
+     * @return ModelCollection
+     */
+    private function getStatusCollection($existingStatuses = null)
+    {
+        $requiredStatuses = array(
+            'open',
+            'closed',
+        );
+
+        $requiredStatusModels = $this->modelFacade->get('Status')
+            ->filter('status', 'IN', $requiredStatuses)
+            ->all();
+
+        $newStatuses = new ModelCollection();
+
+        if ($this->statuses) {
+            $newStatuses = $this->modelFacade->get('Status')
+                ->filter('status', 'IN', array_keys($this->statuses))
+                ->all();
+        }
+
+        $statuses = array();
+
+        foreach ($requiredStatusModels as $status) {
+            $statuses[$status->status] = $status;
+        }
+
+        if ($existingStatuses) {
+            foreach ($existingStatuses as $status) {
+                $statuses[$status->status] = $status;
+            }
+        }
+
+        foreach ($newStatuses as $status) {
+            $statuses[$status->status] = $status;
+        }
+
+        return new ModelCollection(array_values($statuses));
     }
 }
