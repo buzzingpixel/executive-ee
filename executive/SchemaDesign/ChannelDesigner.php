@@ -60,6 +60,20 @@ class ChannelDesigner extends BaseComponent
         return $this;
     }
 
+    /** @var array $removeStatuses */
+    private $removeStatuses = array();
+
+    /**
+     * Remove a status
+     * @param $status
+     * @return $this
+     */
+    public function removeStatus($status)
+    {
+        $this->removeStatuses[] = $status;
+        return $this;
+    }
+
     /** @var array $fields */
     private $fields = array();
 
@@ -401,6 +415,10 @@ class ChannelDesigner extends BaseComponent
 
         if ($existingStatuses) {
             foreach ($existingStatuses as $status) {
+                if (in_array($status->status, $this->removeStatuses, false)) {
+                    continue;
+                }
+
                 $statuses[$status->status] = $status;
             }
         }
