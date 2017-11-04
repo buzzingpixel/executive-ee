@@ -2,6 +2,10 @@
     <h1>Executive: A CLI for ExpressionEngine</h1>
 </div>
 
+## Executive 2.x requires EE 4
+
+Because of the changes required to the ChannelDesigner class that were backwards incompatible with EE 3, Executive has been updated to 2.x and requires EE 4.
+
 ## About Executive for ExpressionEngine
 
 Executive provides a command line interface into ExpressionEngine, custom migrations, custom class auto-loading, developer defined extensions per/project, developer template tags per/project, and custom control panel sections per/project. You can run commands as you're developing, log in to your server via SSH and run commands, run commands on deploy, schedule commands to run at certain intervals, and more.
