@@ -482,7 +482,7 @@ class LayoutDesigner extends BaseComponent
 
         // Go through this channel's fields and make sure they have been set
         /** @var ModelCollection $channelFields */
-        $channelFields = $this->channelModel->FieldGroup->ChannelFields;
+        $channelFields = $this->channelModel->getAllCustomFields();
         foreach ($channelFields as $field) {
             /** @var ChannelFieldModel $field */
             $fieldIdStr = "field_id_{$field->getProperty('field_id')}";
