@@ -236,15 +236,6 @@ class ChannelDesigner extends BaseComponent
 
         $defaultProperties = array(
             'field_name' => null,
-            'field_label' => null,
-            'field_type' => 'text',
-            'field_required' => false,
-            'field_settings' => array(
-                'field_maxl' => '256',
-                'field_content_type' => 'all',
-                'field_show_smileys' => 'n',
-                'field_show_file_selector' => 'n',
-            ),
         );
 
         foreach ($this->fields as $field) {
@@ -272,9 +263,13 @@ class ChannelDesigner extends BaseComponent
                 $presetProperties
             );
 
+            $_POST = $fieldData;
+
             $fieldModel->set($fieldData);
 
             $fieldModel->save();
+
+            $_POST = array();
         }
     }
 
