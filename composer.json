@@ -1,6 +1,6 @@
 {
     "name": "tjdraper/executive-ee",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "description": "Run ExpressionEngine tasks from the command line",
     "type": "ee-add-on",
     "authors": [
