@@ -272,13 +272,9 @@ class ChannelDesigner extends BaseComponent
                 $presetProperties
             );
 
-            $_POST = $fieldData;
-
             $fieldModel->set($fieldData);
 
             $fieldModel->save();
-
-            $_POST = array();
         }
     }
 
