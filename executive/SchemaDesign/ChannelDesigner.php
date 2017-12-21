@@ -278,10 +278,6 @@ class ChannelDesigner extends BaseComponent
 
             $fieldModel->save();
 
-            $fieldModel->emit('afterUpdate', array(
-                'field_id' => $fieldModel->getProperty('field_id'),
-            ));
-
             $_POST = array();
         }
     }
