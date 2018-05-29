@@ -1,6 +1,6 @@
 {
     "name": "tjdraper/executive-ee",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "description": "Run ExpressionEngine tasks from the command line",
     "type": "ee-add-on",
     "authors": [
@@ -17,7 +17,6 @@
         }
     ],
     "require": {
-        "roave/security-advisories": "dev-master",
         "buzzingpixel/datamodel": "^1.2.0"
     },
     "autoload": {
@@ -28,5 +27,8 @@
     "extra": {
         "handle": "executive",
         "systemPath": "executive"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
     }
 }

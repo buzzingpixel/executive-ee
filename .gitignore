@@ -12,6 +12,7 @@ libraries/*
 	# Tools
 #------------------------------------
 
+/auth.json
 /fabCache/*
 configLocal.json
 localStorage/*
