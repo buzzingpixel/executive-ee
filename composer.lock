@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ccf22222d69c0fc4e756cf0b82bcda58",
+    "content-hash": "5aceafabca5a0f9f19dd7d95fb6ed71c",
     "packages": [
         {
             "name": "buzzingpixel/datamodel",
@@ -1581,25 +1581,29 @@
         },
         {
             "name": "tjdraper/expressionengine",
-            "version": "4.3.4",
+            "version": "4.3.4.1",
             "source": {
                 "type": "git",
                 "url": "git@github.com:tjdraper/expressionengine.git",
-                "reference": "3d86dd9ab180030458aa94112b0cbaadafab399f"
+                "reference": "a9219e85b0f1b12676cba3c55b22097bc2cba3f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tjdraper/expressionengine/zipball/3d86dd9ab180030458aa94112b0cbaadafab399f",
-                "reference": "3d86dd9ab180030458aa94112b0cbaadafab399f",
+                "url": "https://api.github.com/repos/tjdraper/expressionengine/zipball/a9219e85b0f1b12676cba3c55b22097bc2cba3f3",
+                "reference": "a9219e85b0f1b12676cba3c55b22097bc2cba3f3",
                 "shasum": ""
             },
-            "type": "library",
+            "type": "ee",
+            "extra": {
+                "systemEEDir": "src/system/ee",
+                "themesEEDir": "src/themes/ee"
+            },
             "description": "ExpressionEngine - dependency managed",
             "support": {
-                "source": "https://github.com/tjdraper/expressionengine/tree/4.3.4",
+                "source": "https://github.com/tjdraper/expressionengine/tree/4.3.4.1",
                 "issues": "https://github.com/tjdraper/expressionengine/issues"
             },
-            "time": "2018-08-18T16:43:35+00:00"
+            "time": "2018-08-18T22:43:11+00:00"
         }
     ],
     "aliases": [],
@@ -1610,8 +1614,9 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.0",
-        "ext-json": "*"
+        "php": ">=7.1",
+        "ext-json": "*",
+        "ext-zip": "*"
     },
     "platform-dev": []
 }
