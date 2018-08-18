@@ -1,4 +1,13 @@
 <?php
 declare(strict_types=1);
 
-return [];
+use buzzingpixel\executive\commands\ComposerProvisionCommand;
+
+return [
+    /**
+     * Commands
+     */
+    ComposerProvisionCommand::class => function () {
+        return new ComposerProvisionCommand();
+    },
+];
