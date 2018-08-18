@@ -1,7 +1,7 @@
 {
-    "name": "tjdraper/executive-ee",
-    "version": "2.0.5",
-    "description": "Run ExpressionEngine tasks from the command line",
+    "name": "buzzingpixel/executive-ee",
+    "version": "3.0.0",
+    "description": "An ExpressionEngine toolkit that provides a CLI, migrations, command scheduling, custom extensions, custom template tags, custom CP views, and more!",
     "type": "ee-add-on",
     "authors": [
         {
@@ -12,23 +12,27 @@
     ],
     "repositories": [
         {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
+            "type": "vcs",
+            "url": "git@github.com:tjdraper/expressionengine.git"
         }
     ],
     "require": {
-        "buzzingpixel/datamodel": "^1.2.0"
+        "php": ">=7.0",
+        "ext-json": "*",
+        "buzzingpixel/datamodel": "^1.2.0",
+        "composer/composer": "^1.7"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "BuzzingPixel\\Executive\\": "executive/"
+            "BuzzingPixel\\Executive\\": "src/executive",
+            "buzzingpixel\\executive\\": "src/executive"
         }
     },
     "extra": {
         "handle": "executive",
         "systemPath": "executive"
-    },
-    "require-dev": {
-        "roave/security-advisories": "dev-master"
     }
 }

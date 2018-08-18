@@ -9,130 +9,44 @@
  */
 
 use EllisLab\ExpressionEngine\Core\Provider;
-use BuzzingPixel\Executive\Controller\ConsoleController;
+use Composer\Package\CompletePackageInterface;
 use BuzzingPixel\Executive\Service\ArgsService;
 use BuzzingPixel\Executive\Service\ConsoleService;
 use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\UserViewService;
-
-// Get addon json path
-$addOnPath = realpath(__DIR__);
-$addOnJsonPath = "{$addOnPath}/addon.json";
-
-// Get the addon json file
-$addOnJson = json_decode(file_get_contents($addOnJsonPath));
-
-// Set paths
-$sysPath = rtrim(realpath(SYSPATH), '/') . '/';
-$cachePath = "{$sysPath}user/cache/";
-
-// Get vendor autoload
-$vendorAutoloadFile = "{$addOnPath}/vendor/autoload.php";
-
-// Require the autoload file if path exists
-if (file_exists($vendorAutoloadFile)) {
-    require $vendorAutoloadFile;
-}
+use BuzzingPixel\Executive\Controller\ConsoleController;
 
 // Define constants
-defined('EXECUTIVE_NAME') || define('EXECUTIVE_NAME', $addOnJson->label);
-defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', $addOnJson->version);
+defined('EXECUTIVE_NAME') || define('EXECUTIVE_NAME', 'Executive');
+defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', '3.0.0');
 defined('EXECUTIVE_PATH') || define('EXECUTIVE_PATH', realpath(__DIR__));
 defined('EXECUTIVE_MIGRATION_FILES_PATH') ||
     define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/Migration');
 
+$composerApp = new Composer\Console\Application();
+/** @noinspection PhpUnhandledExceptionInspection */
+$composer = $composerApp->getComposer();
+$repositoryManager = $composer->getRepositoryManager();
+$installedFilesystemRepository = $repositoryManager->getLocalRepository();
+/** @var CompletePackageInterface $executive */
+$executive = $installedFilesystemRepository->findPackage(
+    'buzzingpixel/executive-ee',
+    '>0'
+);
 
-
-// Add an auto loader for user classes
-spl_autoload_register(function ($class) {
-    // Break up the class into an array
-    $ns = explode('\\', $class);
-
-    // Check if this is for us
-    if ($ns[0] !== 'User' || ! isset($ns[1])) {
-        return;
-    }
-
-    // Unset invalid parts of the namespace
-    unset($ns[0]);
-
-    // Put the path to the class file together
-    $sysPath = SYSPATH;
-    $sep = DIRECTORY_SEPARATOR;
-    $ns = implode($sep, $ns);
-    $path = "{$sysPath}user{$sep}{$ns}.php";
-
-    // Load the file if it exists
-    if (file_exists($path)) {
-        include_once $path;
-    }
-});
-
-// Check if this is a console request
-if (defined('REQ') && REQ === 'CONSOLE') {
-    // Make sure lang file is loaded
-    ee()->lang->loadfile('executive');
-
-    // Get arguments sent to command line
-    $args = EXECUTIVE_RAW_ARGS;
-
-    // Run query to check if Executive is installed
-    /** @var \EllisLab\ExpressionEngine\Service\Database\Query $queryBuilder */
-    $queryBuilder = ee('db');
-    $query = (int) $queryBuilder->where('module_name', 'Executive')
-        ->get('modules')
-        ->num_rows();
-
-    // If Executive is not installed
-    if ($query < 1) {
-        // If command line is not requesting an installation, warn user
-        if (isset($args[2]) ||
-            count($args) > 2 ||
-            ! isset($args[1]) ||
-            $args[1] !== 'install'
-        ) {
-            $lang = lang('notInstalled');
-            exit("\033[31m{$lang}\n");
-        }
-
-        // Manually include dependencies
-        include_once __DIR__ . '/upd.executive.php';
-        include_once __DIR__ . '/BaseComponent.php';
-        include_once __DIR__ . '/Abstracts/BaseMigration.php';
-        include_once __DIR__ . '/Controller/MigrationController.php';
-
-        foreach (glob(__DIR__ . '/Migration/*') as $file) {
-            $pathInfo = pathinfo($file);
-            if (! isset($pathInfo['extension']) ||
-                $pathInfo['extension'] !== 'php'
-            ) {
-                continue;
-            }
-            include_once $file;
-        }
-
-        // Get the executive installer
-        $installer = new Executive_upd();
-
-        // Run the installer
-        $installer->install();
-
-        // Show user message
-        $lang = lang('executiveInstalled');
-        exit("\033[32m{$lang}\n");
-    }
-}
+$author = $executive->getAuthors()[0];
+$extra = $executive->getExtra();
 
 // Return info about the add on for ExpressionEngine
 return array(
-    'author' => $addOnJson->author,
-    'author_url' => $addOnJson->authorUrl,
-    'description' => $addOnJson->description,
-    'docs_url' => $addOnJson->docsUrl,
-    'name' => $addOnJson->label,
-    'namespace' => $addOnJson->namespace,
-    'settings_exist' => $addOnJson->settingsExist,
-    'version' => $addOnJson->version,
+    'author' => $author->name,
+    'author_url' => $author->homepage,
+    'description' => $executive->getDescription(),
+    'docs_url' => 'https://buzzingpixel.com/software/executive-ee/documentation',
+    'name' => 'Executive',
+    'namespace' => '\\',
+    'settings_exist' => true,
+    'version' => $executive->getVersion(),
     'services' => array(
         /**
          * Controllers

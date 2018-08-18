@@ -1,24 +1,31 @@
 #------------------------------------
-	# Project
+# Project
 #------------------------------------
 
-libraries/*
+# ...custom project excludes
 
 
 
 
 
 #------------------------------------
-	# Tools
+# Tools
 #------------------------------------
 
 /auth.json
-/fabCache/*
+/*-workspace
+/.env
 configLocal.json
+/fabCache/*
+scripts/syncStagingToLocalCreds.sh
 localStorage/*
 !localStorage/dbBackups
 localStorage/dbBackups/*
-libraries/ExpressionEngine/system/user/cache/*
+!localStorage/dbBackups/.gitkeep
+!localStorage/syncBackups
+localStorage/syncBackups/*
+!localStorage/syncBackups/.gitkeep
+backups/*
 bower_components/
 node_modules/
 out/
@@ -42,11 +49,10 @@ prepros.json
 
 
 #------------------------------------
-	# System
+# System
 #------------------------------------
 
-assetsSource/coreFAB/compileCache/*
-projectOverrides.json
+.phpunit.result.cache
 .cache
 .DS_Store
 .tmp
@@ -63,8 +69,6 @@ Thumbs.db
 Homestead.yaml
 vendor/*
 *.vagrant
-libraries/ExpressionEngine/images/captchas/*
-!libraries/ExpressionEngine/images/captchas/index.html
 
 
 
