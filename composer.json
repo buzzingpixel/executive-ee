@@ -21,7 +21,9 @@
         "ext-json": "*",
         "buzzingpixel/datamodel": "^1.2.0",
         "composer/composer": "^1.7",
-        "php-di/php-di": "^6.0"
+        "php-di/php-di": "^6.0",
+        "filp/whoops": "^2.2",
+        "vlucas/phpdotenv": "^2.5"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",

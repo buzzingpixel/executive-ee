@@ -6,8 +6,9 @@ namespace buzzingpixel\executive;
 use EE_Config;
 use Exception;
 use DI\Container;
-use function DI\get;
 use DI\ContainerBuilder;
+use DI\NotFoundException;
+use DI\DependencyException;
 use buzzingpixel\executive\exceptions\DependencyInjectionBuilderException;
 
 /**
@@ -30,7 +31,7 @@ class ExecutiveDi
                 $configDefinitions = [];
 
                 /** @var EE_Config $eeConfig */
-                $eeConfig = ee()->config ?? null;
+                $eeConfig = \function_exists('ee') ? ee()->config : null;
 
                 if ($eeConfig) {
                     $configDefinitions = $eeConfig->item('diDefinitions');
@@ -82,19 +83,29 @@ class ExecutiveDi
      * @return mixed
      * @throws DependencyInjectionBuilderException
      */
-    public static function definition(string $def)
+
+    /**
+     * @param string $def
+     * @return mixed
+     * @throws NotFoundException
+     * @throws DependencyException
+     * @throws DependencyInjectionBuilderException
+     */
+    public static function get(string $def)
     {
-        return get($def)->resolve(self::diContainer());
+        return self::diContainer()->get($def);
     }
 
     /**
      * Gets a definition
      * @param string $def
      * @return mixed
+     * @throws NotFoundException
+     * @throws DependencyException
      * @throws DependencyInjectionBuilderException
      */
     public function getDefinition(string $def)
     {
-        return self::definition($def);
+        return self::get($def);
     }
 }
