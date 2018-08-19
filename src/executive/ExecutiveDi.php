@@ -12,7 +12,7 @@ use DI\DependencyException;
 use buzzingpixel\executive\exceptions\DependencyInjectionBuilderException;
 
 /**
- * Class DuBoseDi
+ * Class ExecutiveDi
  */
 class ExecutiveDi
 {
@@ -33,7 +33,7 @@ class ExecutiveDi
                 /** @var EE_Config $eeConfig */
                 $eeConfig = \function_exists('ee') ? ee()->config : null;
 
-                if ($eeConfig) {
+                if ($eeConfig && isset($eeConfig->config['diDefinitions'])) {
                     $configDefinitions = $eeConfig->item('diDefinitions');
 
                     if (! \is_array($configDefinitions)) {
