@@ -1,10 +1,10 @@
 <div align="center">
-    <h1>Executive: A CLI for ExpressionEngine</h1>
+    <h1>Executive: A Development Toolbox for ExpressionEngine</h1>
 </div>
 
-## Executive 2.x requires EE 4
+## Executive requires EE 4
 
-Because of the changes required to the ChannelDesigner class that were backwards incompatible with EE 3, Executive has been updated to 2.x and requires EE 4.
+Executive 3.x and newer requires ExpressionEngine 4 or newer.
 
 ## About Executive for ExpressionEngine
 
@@ -15,7 +15,7 @@ Executive also provides an interface for you to create custom commands and sched
 ## Docs
 
 - [Notes on EE 4](docs/ee4.md)
-- [Installing](install.md)
+- [Installing](docs/install.md)
 - [Out of the Box Commands](docs/out-of-box-commands.md)
 - [Migrations](docs/migrations.md)
     - [ChannelDesigner](docs/channel-designer.md)
