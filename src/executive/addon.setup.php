@@ -16,13 +16,6 @@ use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\UserViewService;
 use BuzzingPixel\Executive\Controller\ConsoleController;
 
-// Define constants
-defined('EXECUTIVE_NAME') || define('EXECUTIVE_NAME', 'Executive');
-defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', '3.0.0');
-defined('EXECUTIVE_PATH') || define('EXECUTIVE_PATH', realpath(__DIR__));
-defined('EXECUTIVE_MIGRATION_FILES_PATH') ||
-    define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/Migration');
-
 $composerApp = new Composer\Console\Application();
 $oldCwd = getcwd();
 chdir(APP_DIR);
@@ -41,13 +34,20 @@ $extra = $executive->getExtra();
 
 chdir($oldCwd);
 
+// Define constants
+defined('EXECUTIVE_NAME') || define('EXECUTIVE_NAME', 'Executive');
+defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', $executive->getVersion());
+defined('EXECUTIVE_PATH') || define('EXECUTIVE_PATH', realpath(__DIR__));
+defined('EXECUTIVE_MIGRATION_FILES_PATH') ||
+    define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/Migration');
+
 // Return info about the add on for ExpressionEngine
 return array(
     'author' => $author['name'],
     'author_url' => $author['homepage'],
     'description' => $executive->getDescription(),
     'docs_url' => 'https://buzzingpixel.com/software/executive-ee/documentation',
-    'name' => 'Executive',
+    'name' => EXECUTIVE_NAME,
     'namespace' => '\\',
     'settings_exist' => true,
     'version' => $executive->getVersion(),
