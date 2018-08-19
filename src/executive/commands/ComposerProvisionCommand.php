@@ -278,7 +278,7 @@ class ComposerProvisionCommand
             $this->fileSystem->remove($linkToPath);
         }
 
-        $this->fileSystem->symlink($sysPath, $linkToPath, true);
+        $this->fileSystem->symlink(realpath($sysPath), $linkToPath, true);
 
         $linkToPath = $this->processPathForPlatform($this->themesPath . '/ee');
 
@@ -294,7 +294,7 @@ class ComposerProvisionCommand
             $this->fileSystem->remove($linkToPath);
         }
 
-        $this->fileSystem->symlink($themePath, $linkToPath, true);
+        $this->fileSystem->symlink(realpath($themePath), $linkToPath, true);
 
         $this->eeProvisioned = true;
     }
@@ -373,7 +373,7 @@ class ComposerProvisionCommand
             $this->fileSystem->remove($linkToPath);
         }
 
-        $this->fileSystem->symlink($sysPath, $linkToPath, true);
+        $this->fileSystem->symlink(realpath($sysPath), $linkToPath);
 
         $this->systemUserAddonsGitIgnore[] = $extra['handle'];
 
@@ -415,7 +415,7 @@ class ComposerProvisionCommand
             $this->fileSystem->remove($linkToPath);
         }
 
-        $this->fileSystem->symlink($themePath, $linkToPath, true);
+        $this->fileSystem->symlink(realpath($themePath), $linkToPath, true);
 
         $this->themesUserGitIgnore[] = $extra['handle'];
     }
@@ -488,7 +488,7 @@ class ComposerProvisionCommand
             $this->fileSystem->remove($linkToPath);
         }
 
-        $this->fileSystem->symlink($sysPath, $linkToPath, true);
+        $this->fileSystem->symlink(realpath($sysPath), $linkToPath, true);
 
         $this->systemUserAddonsGitIgnore[] = $addOn['handle'];
 
@@ -530,7 +530,7 @@ class ComposerProvisionCommand
             $this->fileSystem->remove($linkToPath);
         }
 
-        $this->fileSystem->symlink($themePath, $linkToPath, true);
+        $this->fileSystem->symlink(realpath($themePath), $linkToPath, true);
 
         $this->themesUserGitIgnore[] = $addOn['handle'];
     }
@@ -647,7 +647,7 @@ class ComposerProvisionCommand
             $this->fileSystem->remove($linkToPath);
         }
 
-        $this->fileSystem->symlink($sysPath, $linkToPath, true);
+        $this->fileSystem->symlink(realpath($sysPath), $linkToPath, true);
 
         $this->systemUserAddonsGitIgnore[] = $addOn['handle'];
 
@@ -689,7 +689,7 @@ class ComposerProvisionCommand
             $this->fileSystem->remove($linkToPath);
         }
 
-        $this->fileSystem->symlink($themePath, $linkToPath, true);
+        $this->fileSystem->symlink(realpath($themePath), $linkToPath, true);
 
         $this->themesUserGitIgnore[] = $addOn['handle'];
     }
