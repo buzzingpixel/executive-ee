@@ -7,8 +7,6 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * Class FinderFactory
- *
- * @package buzzingpixel\executive\factories
  */
 class FinderFactory
 {
