@@ -9,8 +9,8 @@
 namespace BuzzingPixel\Executive\Controller;
 
 use BuzzingPixel\Executive\BaseComponent;
+use buzzingpixel\executive\abstracts\BaseMigration;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
-use BuzzingPixel\Executive\Abstracts\BaseMigration;
 
 /**
  * Class MigrationController
@@ -230,7 +230,7 @@ class MigrationController extends BaseComponent
 
             // Get the class name
             $className = $file->getBasename('.php');
-            $classNameFull = "\BuzzingPixel\Executive\Migration\\{$className}";
+            $classNameFull = "\buzzingpixel\\executive\\migrations\\{$className}";
 
             // Add the class name to the list
             $list[$className] = $classNameFull;

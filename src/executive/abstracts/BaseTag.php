@@ -6,13 +6,13 @@
  * @license Apache-2.0
  */
 
-namespace BuzzingPixel\Executive\Abstracts;
+namespace buzzingpixel\executive\abstracts;
 
 use BuzzingPixel\Executive\BaseComponent;
 use BuzzingPixel\DataModel\DataType;
 
 /**
- * Class BaseTag
+ * Abstract Class BaseTag
  * @property \EE_Template $templateService
  */
 abstract class BaseTag extends BaseComponent

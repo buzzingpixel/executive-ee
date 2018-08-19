@@ -8,7 +8,7 @@
 
 namespace BuzzingPixel\Executive\Command;
 
-use BuzzingPixel\Executive\Abstracts\BaseCommand;
+use buzzingpixel\executive\abstracts\BaseCommand;
 use BuzzingPixel\Executive\Model\ScheduleModel;
 use BuzzingPixel\Executive\Service\CommandsService;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;

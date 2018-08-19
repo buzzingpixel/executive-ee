@@ -6,13 +6,13 @@
  * @license Apache-2.0
  */
 
-namespace BuzzingPixel\Executive\Abstracts;
+namespace buzzingpixel\executive\abstracts;
 
 use BuzzingPixel\Executive\BaseComponent;
 use BuzzingPixel\Executive\Service\ConsoleService;
 
 /**
- * Class MigrationService
+ * Abstract Class BaseCommand
  */
 abstract class BaseCommand extends BaseComponent
 {

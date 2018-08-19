@@ -2,7 +2,7 @@
 
 namespace User\Migration;
 
-use BuzzingPixel\Executive\Abstracts\BaseMigration;
+use buzzingpixel\executive\abstracts\BaseMigration;
 
 /**
  * Class Migration

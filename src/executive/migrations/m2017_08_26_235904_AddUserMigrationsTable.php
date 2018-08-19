@@ -6,9 +6,9 @@
  * @license Apache-2.0
  */
 
-namespace BuzzingPixel\Executive\Migration;
+namespace buzzingpixel\executive\migrations;
 
-use BuzzingPixel\Executive\Abstracts\BaseMigration;
+use buzzingpixel\executive\abstracts\BaseMigration;
 
 /**
  * Class m2017_08_26_235904_AddUserMigrationsTable
@@ -65,7 +65,7 @@ class m2017_08_26_235904_AddUserMigrationsTable extends BaseMigration
         $queryBuilder = clone $this->queryBuilder;
 
         // If the table does not exist, we don't need to do anything
-        if (! $queryBuilder->table_exists('executive_migrations')) {
+        if (! $queryBuilder->table_exists('executive_user_migrations')) {
             return;
         }
 
@@ -73,6 +73,6 @@ class m2017_08_26_235904_AddUserMigrationsTable extends BaseMigration
         $dbForge = clone $this->dbForge;
 
         // Drop the table
-        $dbForge->drop_table('executive_migrations');
+        $dbForge->drop_table('executive_user_migrations');
     }
 }

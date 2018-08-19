@@ -2,7 +2,7 @@
 
 namespace User\Tag;
 
-use BuzzingPixel\Executive\Abstracts\BaseTag;
+use buzzingpixel\executive\abstracts\BaseTag;
 
 /**
  * Class Tag

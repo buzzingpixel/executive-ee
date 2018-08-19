@@ -2,7 +2,7 @@
 
 namespace User\Command;
 
-use BuzzingPixel\Executive\Abstracts\BaseCommand;
+use buzzingpixel\executive\abstracts\BaseCommand;
 
 /**
  * Class Command

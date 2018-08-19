@@ -8,7 +8,7 @@
 
 namespace BuzzingPixel\Executive\Command;
 
-use BuzzingPixel\Executive\Abstracts\BaseCommand;
+use buzzingpixel\executive\abstracts\BaseCommand;
 use EllisLab\ExpressionEngine\Service\Addon\Factory as EEAddonFactory;
 use EllisLab\ExpressionEngine\Service\Addon\Addon as EEAddon;
 

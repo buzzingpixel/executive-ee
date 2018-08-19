@@ -49,7 +49,7 @@ defined('EXECUTIVE_NAME') || define('EXECUTIVE_NAME', 'Executive');
 defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', $executive->getPrettyVersion());
 defined('EXECUTIVE_PATH') || define('EXECUTIVE_PATH', realpath(__DIR__));
 defined('EXECUTIVE_MIGRATION_FILES_PATH') ||
-    define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/Migration');
+    define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/migrations');
 
 // We need to check if an installation is being requested
 // Also, we need to make sure EE loads our lang file at all times

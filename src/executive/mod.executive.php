@@ -8,7 +8,7 @@
 
 namespace BuzzingPixel\Executive;
 
-use BuzzingPixel\Executive\Abstracts\BaseTag;
+use buzzingpixel\executive\abstracts\BaseTag;
 
 /**
  * Class Executive

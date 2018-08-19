@@ -6,7 +6,7 @@
  * @license Apache-2.0
  */
 
-namespace BuzzingPixel\Executive\Abstracts;
+namespace buzzingpixel\executive\abstracts;
 
 use BuzzingPixel\Executive\BaseComponent;
 use BuzzingPixel\Executive\SchemaDesign\ChannelDesigner;
@@ -16,7 +16,7 @@ use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 
 /**
- * Class BaseMigration
+ * Abstract Class BaseMigration
  * @property-read ChannelDesigner $channelDesigner
  * @property-read LayoutDesigner $layoutDesigner
  * @property-read ExtensionDesigner $extensionDesigner

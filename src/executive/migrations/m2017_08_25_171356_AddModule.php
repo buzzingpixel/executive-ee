@@ -6,9 +6,9 @@
  * @license Apache-2.0
  */
 
-namespace BuzzingPixel\Executive\Migration;
+namespace buzzingpixel\executive\migrations;
 
-use BuzzingPixel\Executive\Abstracts\BaseMigration;
+use buzzingpixel\executive\abstracts\BaseMigration;
 
 /**
  * Class m2017_08_25_171356_AddModule

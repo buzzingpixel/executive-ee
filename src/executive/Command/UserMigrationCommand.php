@@ -8,12 +8,12 @@
 
 namespace BuzzingPixel\Executive\Command;
 
-use BuzzingPixel\Executive\Abstracts\BaseCommand;
+use buzzingpixel\executive\abstracts\BaseCommand;
+use buzzingpixel\executive\abstracts\BaseMigration;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
-use BuzzingPixel\Executive\Abstracts\BaseMigration;
 
 /**
- * Class UserMigrationController
+ * Class UserMigrationCommand
  */
 class UserMigrationCommand extends BaseCommand
 {
