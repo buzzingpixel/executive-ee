@@ -6,8 +6,8 @@
  * @license Apache-2.0
  */
 
+use buzzingpixel\executive\factories\QueryBuilderFactory;
 use BuzzingPixel\Executive\Controller\MigrationController;
-use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 
 /**
  * Class Executive_upd
@@ -17,61 +17,76 @@ use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 class Executive_upd
 // @codingStandardsIgnoreEnd
 {
+    /** @var QueryBuilderFactory $queryBuilderFactory */
+    private $queryBuilderFactory;
+
+    /** @var MigrationController $migrationController */
+    private $migrationController;
+
     /**
-     * Install
+     * Executive_upd constructor
+     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param MigrationController $migrationController
+     */
+    public function __construct(
+        QueryBuilderFactory $queryBuilderFactory = null,
+        MigrationController $migrationController = null
+    ) {
+        $this->queryBuilderFactory = $queryBuilderFactory ?:
+            new QueryBuilderFactory();
+
+        $this->migrationController = $migrationController ?:
+            new MigrationController();
+    }
+
+    /**
+     * Installs Executive
      * @return bool
      */
-    public function install()
+    public function install(): bool
     {
-        $migrationController = new MigrationController();
-        $migrationController->runMigrations();
-
-        // All done
+        $this->migrationController->runMigrations();
         return true;
     }
 
     /**
-     * Uninstall
+     * Uninstalls Executive
      * @return bool
      */
-    public function uninstall()
+    public function uninstall(): bool
     {
-        $migrationController = new MigrationController();
-        $migrationController->reverseMigrations();
-
-        // All done
+        $this->migrationController->reverseMigrations();
         return true;
     }
 
     /**
-     * Update
-     * @param string $current The current version before update
+     * Updates Executive to latest version
      * @return bool
      */
-    public function update($current = '')
+    public function update(): bool
     {
-        $migrationController = new MigrationController();
-        $migrationController->runMigrations();
+        $this->migrationController->runMigrations();
 
-        /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = ee('db');
+        $this->queryBuilderFactory->make()->update(
+            'modules',
+            [
+                'module_version' => EXECUTIVE_VER,
+            ],
+            [
+                'module_name' => 'Executive'
+            ]
+        );
 
-        // Update module version
-        $queryBuilder->where('module_name', 'Executive');
-        $queryBuilder->update('modules', array(
-            'module_version' => EXECUTIVE_VER,
-        ));
+        $this->queryBuilderFactory->make()->update(
+            'extensions',
+            [
+                'version' => EXECUTIVE_VER,
+            ],
+            [
+                'class' => 'Executive_ext'
+            ]
+        );
 
-        /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = ee('db');
-
-        // Update extension version
-        $queryBuilder->where('class', 'Executive_ext');
-        $queryBuilder->update('extensions', array(
-            'version' => EXECUTIVE_VER,
-        ));
-
-        // All done
         return true;
     }
 }
