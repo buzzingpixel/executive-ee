@@ -15,4 +15,4 @@ define('MASKED_CP', true);
 define('REQ', 'CP');
 define('SELF', basename(__FILE__));
 define('FCPATH', __DIR__ . '/');
-require dirname(__DIR__) . DIRECTORY_SEPARATOR . $frontControllerPath;
+require $frontControllerPath;

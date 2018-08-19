@@ -16,4 +16,4 @@ define('FCPATH', __DIR__ . '/');
 $routing['directory'] = '';
 $routing['controller'] = 'ee';
 $routing['function'] = 'index';
-require dirname(__DIR__) . DIRECTORY_SEPARATOR . $frontControllerPath;
+require $frontControllerPath;
