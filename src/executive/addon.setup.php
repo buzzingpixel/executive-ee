@@ -38,7 +38,7 @@ chdir($oldCwd);
 
 // Define constants
 defined('EXECUTIVE_NAME') || define('EXECUTIVE_NAME', 'Executive');
-defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', $executive->getVersion());
+defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', $executive->getPrettyVersion());
 defined('EXECUTIVE_PATH') || define('EXECUTIVE_PATH', realpath(__DIR__));
 defined('EXECUTIVE_MIGRATION_FILES_PATH') ||
     define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/Migration');
@@ -66,7 +66,7 @@ return array(
     'name' => EXECUTIVE_NAME,
     'namespace' => '\\',
     'settings_exist' => true,
-    'version' => $executive->getVersion(),
+    'version' => EXECUTIVE_VER,
     'services' => array(
         /**
          * Controllers
