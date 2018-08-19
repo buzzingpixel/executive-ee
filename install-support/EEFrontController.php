@@ -21,6 +21,7 @@ if (class_exists(Dotenv::class) && file_exists($basePath . $sep . '.env')) {
 }
 
 // Define constants
+define('APP_DIR', __DIR__);
 define('SYSPATH', $basePath . $sep . 'system' . $sep);
 define('SYSDIR', basename(SYSPATH));
 define('DEBUG', getenv('DEV_MODE') === 'true' ? 1 : 0);

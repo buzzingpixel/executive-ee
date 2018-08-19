@@ -24,6 +24,8 @@ defined('EXECUTIVE_MIGRATION_FILES_PATH') ||
     define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/Migration');
 
 $composerApp = new Composer\Console\Application();
+$oldCwd = getcwd();
+chdir(APP_DIR);
 /** @noinspection PhpUnhandledExceptionInspection */
 $composer = $composerApp->getComposer();
 $repositoryManager = $composer->getRepositoryManager();
@@ -37,10 +39,12 @@ $executive = $installedFilesystemRepository->findPackage(
 $author = $executive->getAuthors()[0];
 $extra = $executive->getExtra();
 
+chdir($oldCwd);
+
 // Return info about the add on for ExpressionEngine
 return array(
-    'author' => $author->name,
-    'author_url' => $author->homepage,
+    'author' => $author['name'],
+    'author_url' => $author['homepage'],
     'description' => $executive->getDescription(),
     'docs_url' => 'https://buzzingpixel.com/software/executive-ee/documentation',
     'name' => 'Executive',
