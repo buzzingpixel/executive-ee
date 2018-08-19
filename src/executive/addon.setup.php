@@ -11,11 +11,19 @@
 use buzzingpixel\executive\ExecutiveDi;
 use EllisLab\ExpressionEngine\Core\Provider;
 use Composer\Package\CompletePackageInterface;
+use BuzzingPixel\Executive\Command\TagCommand;
 use BuzzingPixel\Executive\Service\ArgsService;
+use BuzzingPixel\Executive\Command\CacheCommand;
+use BuzzingPixel\Executive\Command\ConfigCommand;
 use BuzzingPixel\Executive\Service\ConsoleService;
+use BuzzingPixel\Executive\Command\CommandCommand;
+use BuzzingPixel\Executive\Command\ScheduleCommand;
 use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\UserViewService;
+use BuzzingPixel\Executive\Command\MigrationCommand;
+use BuzzingPixel\Executive\Command\AddonUpdatesCommand;
 use BuzzingPixel\Executive\Controller\ConsoleController;
+use BuzzingPixel\Executive\Command\UserMigrationCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 
 $composerApp = new Composer\Console\Application();
@@ -98,47 +106,47 @@ return array(
     ),
     'commands' => array(
         'runSchedule' => array(
-            'class' => '\BuzzingPixel\Executive\Command\ScheduleCommand',
+            'class' => ScheduleCommand::class,
             'method' => 'run',
             'description' => lang('runScheduleDescription'),
         ),
         'makeCommand' => array(
-            'class' => '\BuzzingPixel\Executive\Command\CommandCommand',
+            'class' => CommandCommand::class,
             'method' => 'make',
             'description' => lang('makeCommandDescription'),
         ),
         'makeMigration' => array(
-            'class' => '\BuzzingPixel\Executive\Command\MigrationCommand',
+            'class' => MigrationCommand::class,
             'method' => 'make',
             'description' => lang('makeMigrationDescription'),
         ),
         'makeTag' => array(
-            'class' => '\BuzzingPixel\Executive\Command\TagCommand',
+            'class' => TagCommand::class,
             'method' => 'make',
             'description' => lang('makeTagDescription'),
         ),
         'runMigrations' => array(
-            'class' => '\BuzzingPixel\Executive\Command\UserMigrationCommand',
+            'class' => UserMigrationCommand::class,
             'method' => 'runMigrations',
             'description' => lang('runMigrationsDescription'),
         ),
         'runAddonUpdates' => array(
-            'class' => '\BuzzingPixel\Executive\Command\AddonUpdatesCommand',
+            'class' => AddonUpdatesCommand::class,
             'method' => 'run',
             'description' => lang('runAddonUpdatesDescription'),
         ),
         'runAddonUpdateMethod' => array(
-            'class' => '\BuzzingPixel\Executive\Command\AddonUpdatesCommand',
+            'class' => AddonUpdatesCommand::class,
             'method' => 'runAddonUpdateMethod',
             'description' => lang('runAddonUpdateMethodDescription'),
         ),
         'getConfig' => array(
-            'class' => '\BuzzingPixel\Executive\Command\ConfigCommand',
+            'class' => ConfigCommand::class,
             'method' => 'get',
             'description' => lang('getConfigDescription'),
         ),
         'clearCaches' => array(
-            'class' => '\BuzzingPixel\Executive\Command\CacheCommand',
+            'class' => CacheCommand::class,
             'method' => 'clearCaches',
             'description' => lang('clearCachesDescription'),
         ),
