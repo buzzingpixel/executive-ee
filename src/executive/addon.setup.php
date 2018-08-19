@@ -8,6 +8,7 @@
  * @license Apache-2.0
  */
 
+use buzzingpixel\executive\ExecutiveDi;
 use EllisLab\ExpressionEngine\Core\Provider;
 use Composer\Package\CompletePackageInterface;
 use BuzzingPixel\Executive\Service\ArgsService;
@@ -15,6 +16,7 @@ use BuzzingPixel\Executive\Service\ConsoleService;
 use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\UserViewService;
 use BuzzingPixel\Executive\Controller\ConsoleController;
+use buzzingpixel\executive\commands\InstallExecutiveCommand;
 
 $composerApp = new Composer\Console\Application();
 $oldCwd = getcwd();
@@ -40,6 +42,20 @@ defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', $executive->getVersion());
 defined('EXECUTIVE_PATH') || define('EXECUTIVE_PATH', realpath(__DIR__));
 defined('EXECUTIVE_MIGRATION_FILES_PATH') ||
     define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/Migration');
+
+// We need to check if an installation is being requested
+// Also, we need to make sure EE loads our lang file at all times
+if (defined('REQ') && REQ === 'CONSOLE') {
+    // Load the dang lang file, EE
+    ee()->lang->loadfile('executive');
+
+    /** @noinspection PhpUnhandledExceptionInspection */
+    $exit = ExecutiveDi::get(InstallExecutiveCommand::class)->run();
+
+    if ($exit) {
+        exit();
+    }
+}
 
 // Return info about the add on for ExpressionEngine
 return array(
