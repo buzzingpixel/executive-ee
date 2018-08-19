@@ -278,7 +278,7 @@ class ComposerProvisionCommand
             $this->fileSystem->remove($linkToPath);
         }
 
-        $this->fileSystem->symlink($themePath, $linkToPath, true);
+        $this->fileSystem->symlink($sysPath, $linkToPath, true);
 
         $linkToPath = $this->processPathForPlatform($this->themesPath . '/ee');
 
