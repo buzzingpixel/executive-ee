@@ -41,10 +41,6 @@ class m2017_08_24_171356_AddMigrationsTable extends MigrationAbstract
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'batch' => [
-                'type' => 'INT',
-                'unsigned' => true,
-            ],
         ]);
 
         $dbForge->add_key('id', true);
