@@ -6,8 +6,10 @@
  * @license Apache-2.0
  */
 
-use BuzzingPixel\Executive\Controller\ConsoleController;
+use buzzingpixel\executive\ExecutiveDi;
 use BuzzingPixel\Executive\Service\ConsoleService;
+use BuzzingPixel\Executive\Controller\ConsoleController;
+use buzzingpixel\executive\services\ElevateSessionService;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 
 /**
@@ -23,10 +25,10 @@ class Executive_ext
     public $version = EXECUTIVE_VER;
 
     /**
-     * session_start
+     * session_start extension
      */
     // @codingStandardsIgnoreStart
-    public function sessions_start() // @codingStandardsIgnoreEnd
+    public function sessions_start(): void // @codingStandardsIgnoreEnd
     {
         // Check for console request
         if (! defined('REQ') || REQ !== 'CONSOLE') {
@@ -113,16 +115,20 @@ class Executive_ext
     }
 
     /**
-     * core_boot
+     * core_boot extension
      * @throws \Exception
      */
     // @codingStandardsIgnoreStart
-    public function core_boot() // @codingStandardsIgnoreEnd
+    public function core_boot(): void // @codingStandardsIgnoreEnd
     {
         // Check for console request
         if (! defined('REQ') || REQ !== 'CONSOLE') {
             return;
         }
+
+        /** @var ElevateSessionService $elevateSessionService */
+        $elevateSessionService = ExecutiveDi::get(ElevateSessionService::class);
+        $elevateSessionService->run();
 
         // Make sure the lang file is loaded
         ee()->lang->loadfile('executive');
@@ -142,7 +148,7 @@ class Executive_ext
     }
 
     /**
-     * Call method for routing user extensions
+     * Routes user extensions
      * @param string $name
      * @param array $args
      */

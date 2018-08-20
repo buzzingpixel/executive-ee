@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace buzzingpixel\executive\services;
 
 use Executive_upd;
+use EllisLab\ExpressionEngine\Library\Filesystem\FilesystemException;
 
 /**
  * Class CliInstallService
@@ -30,6 +31,7 @@ class CliInstallService
 
     /**
      * Runs the installation
+     * @throws FilesystemException
      */
     public function run(): void
     {
