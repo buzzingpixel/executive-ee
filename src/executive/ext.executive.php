@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * @author TJ Draper <tj@buzzingpixel.com>
@@ -10,6 +11,7 @@ use buzzingpixel\executive\ExecutiveDi;
 use BuzzingPixel\Executive\Service\ConsoleService;
 use BuzzingPixel\Executive\Controller\ConsoleController;
 use buzzingpixel\executive\services\ElevateSessionService;
+use buzzingpixel\executive\services\CliErrorHandlerService;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 
 /**
@@ -26,11 +28,11 @@ class Executive_ext
 
     /**
      * session_start extension
+     * @throws \Exception
      */
     // @codingStandardsIgnoreStart
     public function sessions_start(): void // @codingStandardsIgnoreEnd
     {
-        // Check for console request
         if (! defined('REQ') || REQ !== 'CONSOLE') {
             return;
         }
@@ -39,79 +41,12 @@ class Executive_ext
         $configService = ee()->config;
         $configService->set_item('disable_csrf_protection', 'y');
 
+        /** @var CliErrorHandlerService $cliErrorHandlerService */
+        $cliErrorHandlerService = ExecutiveDi::get(
+            CliErrorHandlerService::class
+        );
 
-        /*
-         *  Custom errors
-         */
-
-        // Set error reporting
-        ini_set('display_errors', 'On');
-        ini_set('html_errors', 0);
-        error_reporting(-1);
-
-        /**
-         * Shutdown handler
-         * @return bool|mixed
-         */
-        function shutdownHandler()
-        {
-            if (@is_array($error = @error_get_last())) {
-                return(@call_user_func_array('errorHandler', $error));
-            }
-
-            return true ;
-        }
-
-        register_shutdown_function('shutdownHandler');
-
-        /**
-         * Error handler
-         * @param $type
-         * @param $message
-         * @param $file
-         * @param $line
-         */
-        function errorHandler($type, $message, $file, $line)
-        {
-            if (! error_reporting()) {
-                return;
-            }
-
-            $errors = array(
-                0x0001 => 'E_ERROR',
-                0x0002 => 'E_WARNING',
-                0x0004 => 'E_PARSE',
-                0x0008 => 'E_NOTICE',
-                0x0010 => 'E_CORE_ERROR',
-                0x0020 => 'E_CORE_WARNING',
-                0x0040 => 'E_COMPILE_ERROR',
-                0x0080 => 'E_COMPILE_WARNING',
-                0x0100 => 'E_USER_ERROR',
-                0x0200 => 'E_USER_WARNING',
-                0x0400 => 'E_USER_NOTICE',
-                0x0800 => 'E_STRICT',
-                0x1000 => 'E_RECOVERABLE_ERROR',
-                0x2000 => 'E_DEPRECATED',
-                0x4000 => 'E_USER_DEPRECATED'
-            );
-
-            if (! @is_string($name = @array_search($type, @array_flip($errors)))) {
-                $name = 'E_UNKNOWN';
-            }
-
-            /** @var ConsoleService $consoleService */
-            $consoleService = ee('executive:ConsoleService');
-
-            $errorEncountered = lang('followingErrorEncountered');
-
-            $consoleService->writeLn("<bold>{$errorEncountered}</bold>", 'red');
-            $consoleService->writeLn("{$name}: {$message}", 'red');
-            $consoleService->writeLn("File: {$file}");
-            $consoleService->writeLn("Line: {$line}");
-            $consoleService->writeLn('');
-        }
-
-        set_error_handler('errorHandler');
+        $cliErrorHandlerService->register();
     }
 
     /**

@@ -7,6 +7,7 @@ use EE_Lang;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use buzzingpixel\executive\services\CliInstallService;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
+use EllisLab\ExpressionEngine\Library\Filesystem\FilesystemException;
 
 /**
  * Class InstallExecutiveCommand
@@ -55,6 +56,7 @@ class InstallExecutiveCommand
      * Returns true if not installed and displays message asking user to install
      * If correct args are in place on CLI, runs install
      * @return bool
+     * @throws FilesystemException
      */
     public function run(): bool
     {

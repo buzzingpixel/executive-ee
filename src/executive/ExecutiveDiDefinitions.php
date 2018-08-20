@@ -10,6 +10,7 @@ use Composer\Repository\InstalledFilesystemRepository;
 use buzzingpixel\executive\services\CliInstallService;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
 use buzzingpixel\executive\services\ElevateSessionService;
+use buzzingpixel\executive\services\CliErrorHandlerService;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
 use buzzingpixel\executive\controllers\RunMigrationsController;
@@ -64,6 +65,12 @@ return [
         // Manually include non-auto-loaded dependencies
         include_once __DIR__ . '/upd.executive.php';
         return new CliInstallService(new Executive_upd());
+    },
+    CliErrorHandlerService::class => function () {
+        return new CliErrorHandlerService(
+            new ConsoleOutput(),
+            ee()->lang
+        );
     },
     ElevateSessionService::class => function () {
         return new ElevateSessionService(
