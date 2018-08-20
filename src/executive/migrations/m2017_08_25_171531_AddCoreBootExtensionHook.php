@@ -8,31 +8,30 @@
 
 namespace buzzingpixel\executive\migrations;
 
-use buzzingpixel\executive\abstracts\BaseMigration;
+use buzzingpixel\executive\abstracts\MigrationAbstract;
 
 /**
  * Class m2017_08_25_171531_AddCoreBootExtensionHook
  */
-class m2017_08_25_171531_AddCoreBootExtensionHook extends BaseMigration
+class m2017_08_25_171531_AddCoreBootExtensionHook extends MigrationAbstract
 {
     /**
-     * Run migration
+     * Runs the migration
+     * @return bool
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
-        // Check if the extension is already installed
-        $query = (int) $this->queryBuilder->where('class', 'Executive_ext')
+        $query = (int) $this->queryBuilderFactory->make()
+            ->where('class', 'Executive_ext')
             ->where('method', 'core_boot')
             ->where('hook', 'core_boot')
             ->count_all_results('extensions');
 
-        // If there is a result, we can end processing
         if ($query > 0) {
-            return;
+            return true;
         }
 
-        // Insert extension record
-        $this->queryBuilder->insert('extensions', array(
+        $this->queryBuilderFactory->make()->insert('extensions', [
             'class' => 'Executive_ext',
             'method' => 'core_boot',
             'hook' => 'core_boot',
@@ -40,18 +39,23 @@ class m2017_08_25_171531_AddCoreBootExtensionHook extends BaseMigration
             'priority' => 1,
             'version' => EXECUTIVE_VER,
             'enabled' => 'y',
-        ));
+        ]);
+
+        return true;
     }
 
     /**
-     * Reverse migration
+     * Reverses the migration
+     * @return bool
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
-        // Delete extension record
-        $this->queryBuilder->where('class', 'Executive_ext');
-        $this->queryBuilder->where('method', 'core_boot');
-        $this->queryBuilder->where('hook', 'core_boot');
-        $this->queryBuilder->delete('extensions');
+        $this->queryBuilderFactory->make()->delete('extensions', [
+            'class' => 'Executive_ext',
+            'method' => 'core_boot',
+            'hook' => 'core_boot',
+        ]);
+
+        return true;
     }
 }

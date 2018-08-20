@@ -11,9 +11,9 @@ namespace buzzingpixel\executive\migrations;
 use buzzingpixel\executive\abstracts\MigrationAbstract;
 
 /**
- * Class m2017_08_26_235904_AddUserMigrationsTable
+ * Class m2017_08_24_171356_AddMigrationsTable
  */
-class m2017_08_26_235904_AddUserMigrationsTable extends MigrationAbstract
+class m2017_08_24_171356_AddMigrationsTable extends MigrationAbstract
 {
     /**
      * Runs the migration
@@ -22,7 +22,7 @@ class m2017_08_26_235904_AddUserMigrationsTable extends MigrationAbstract
     public function safeUp(): bool
     {
         $tableExists = $this->queryBuilderFactory->make()
-            ->table_exists('executive_user_migrations');
+            ->table_exists('executive_migrations');
 
         if ($tableExists) {
             return true;
@@ -49,7 +49,7 @@ class m2017_08_26_235904_AddUserMigrationsTable extends MigrationAbstract
 
         $dbForge->add_key('id', true);
 
-        $dbForge->create_table('executive_user_migrations', true);
+        $dbForge->create_table('executive_migrations', true);
 
         return true;
     }
@@ -61,13 +61,13 @@ class m2017_08_26_235904_AddUserMigrationsTable extends MigrationAbstract
     public function safeDown(): bool
     {
         $tableExists = $this->queryBuilderFactory->make()
-            ->table_exists('executive_user_migrations');
+            ->table_exists('executive_migrations');
 
         if (! $tableExists) {
             return true;
         }
 
-        $this->dbForgeFactory->make()->drop_table('executive_user_migrations');
+        $this->dbForgeFactory->make()->drop_table('executive_migrations');
 
         return true;
     }

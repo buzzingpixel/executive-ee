@@ -8,77 +8,73 @@
 
 namespace buzzingpixel\executive\migrations;
 
-use buzzingpixel\executive\abstracts\BaseMigration;
+use buzzingpixel\executive\abstracts\MigrationAbstract;
 
 /**
  * Class m2017_09_07_025551_AddUserExtensionTable
  */
-class m2017_09_07_025551_AddUserExtensionTable extends BaseMigration
+class m2017_09_07_025551_AddUserExtensionTable extends MigrationAbstract
 {
     /**
-     * Run migration
+     * Runs the migration
+     * @return bool
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
-        // Get new instance of query builder
-        $queryBuilder = clone $this->queryBuilder;
+        $tableExists = $this->queryBuilderFactory->make()
+            ->table_exists('executive_user_extensions');
 
-        // If the table already exists, we don't need to do anything
-        if ($queryBuilder->table_exists('executive_user_extensions')) {
-            return;
+        if ($tableExists) {
+            return true;
         }
 
-        // Get new instance of db forge
-        $dbForge = clone $this->dbForge;
+        $dbForge = $this->dbForgeFactory->make();
 
-        // Add fields
-        $dbForge->add_field(array(
-            'id' => array(
+        $dbForge->add_field([
+            'id' => [
                 'type' => 'INT',
                 'unsigned' => true,
                 'auto_increment' => true,
-            ),
-            'class' => array(
+            ],
+            'class' => [
                 'default' => '',
                 'type' => 'VARCHAR',
                 'constraint' => 255,
-            ),
-            'method' => array(
+            ],
+            'method' => [
                 'default' => '',
                 'type' => 'VARCHAR',
                 'constraint' => 255,
-            ),
-            'hook' => array(
+            ],
+            'hook' => [
                 'default' => '',
                 'type' => 'VARCHAR',
                 'constraint' => 255,
-            ),
-        ));
+            ],
+        ]);
 
-        // Set the primary key
         $dbForge->add_key('id', true);
 
-        // Create the table
         $dbForge->create_table('executive_user_extensions', true);
+
+        return true;
     }
 
     /**
-     * Reverse migration
+     * Reverses the migration
+     * @return bool
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
-        // Get new instance of query builder
-        $queryBuilder = clone $this->queryBuilder;
+        $tableExists = $this->queryBuilderFactory->make()
+            ->table_exists('executive_user_extensions');
 
-        // If the table does not exist, we don't need to do anything
-        if (! $queryBuilder->table_exists('executive_user_extensions')) {
-            return;
+        if (! $tableExists) {
+            return true;
         }
 
-        // Get new instance of db forge
-        $dbForge = clone $this->dbForge;
+        $this->dbForgeFactory->make()->drop_table('executive_user_extensions');
 
-        // Drop the table
-        $dbForge->drop_table('executive_user_extensions');
+        return true;
     }
 }

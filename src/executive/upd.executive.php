@@ -6,8 +6,13 @@
  * @license Apache-2.0
  */
 
+use DI\NotFoundException;
+use DI\DependencyException;
+use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
-use BuzzingPixel\Executive\Controller\MigrationController;
+use buzzingpixel\executive\controllers\RunMigrationsController;
+use EllisLab\ExpressionEngine\Library\Filesystem\FilesystemException;
+use buzzingpixel\executive\exceptions\DependencyInjectionBuilderException;
 
 /**
  * Class Executive_upd
@@ -20,52 +25,60 @@ class Executive_upd
     /** @var QueryBuilderFactory $queryBuilderFactory */
     private $queryBuilderFactory;
 
-    /** @var MigrationController $migrationController */
-    private $migrationController;
+    /** @var RunMigrationsController $runMigrationsController */
+    private $runMigrationsController;
 
     /**
      * Executive_upd constructor
      * @param QueryBuilderFactory $queryBuilderFactory
-     * @param MigrationController $migrationController
+     * @param RunMigrationsController $runMigrationsController
+     * @throws NotFoundException
+     * @throws DependencyException
+     * @throws DependencyInjectionBuilderException
      */
     public function __construct(
         QueryBuilderFactory $queryBuilderFactory = null,
-        MigrationController $migrationController = null
+        RunMigrationsController $runMigrationsController = null
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory ?:
             new QueryBuilderFactory();
 
-        $this->migrationController = $migrationController ?:
-            new MigrationController();
+        $this->runMigrationsController = $runMigrationsController ?:
+            ExecutiveDi::get(RunMigrationsController::class);
     }
 
     /**
      * Installs Executive
      * @return bool
+     * @throws FilesystemException
      */
     public function install(): bool
     {
-        $this->migrationController->runMigrations();
-        return true;
+        return $this->runMigrationsController->migrateUp();
     }
 
     /**
      * Uninstalls Executive
      * @return bool
+     * @throws FilesystemException
      */
     public function uninstall(): bool
     {
-        $this->migrationController->reverseMigrations();
-        return true;
+        return $this->runMigrationsController->migrateDown();
     }
 
     /**
      * Updates Executive to latest version
      * @return bool
+     * @throws FilesystemException
      */
     public function update(): bool
     {
-        $this->migrationController->runMigrations();
+        $status = $this->runMigrationsController->migrateUp();
+
+        if (! $status) {
+            return false;
+        }
 
         $this->queryBuilderFactory->make()->update(
             'modules',

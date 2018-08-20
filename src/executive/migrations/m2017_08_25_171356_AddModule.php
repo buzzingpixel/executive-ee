@@ -8,43 +8,47 @@
 
 namespace buzzingpixel\executive\migrations;
 
-use buzzingpixel\executive\abstracts\BaseMigration;
+use buzzingpixel\executive\abstracts\MigrationAbstract;
 
 /**
  * Class m2017_08_25_171356_AddModule
  */
-class m2017_08_25_171356_AddModule extends BaseMigration
+class m2017_08_25_171356_AddModule extends MigrationAbstract
 {
     /**
-     * Run migration
+     * Runs the migration
+     * @return bool
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
-        // Check if the module is already installed
-        $query = (int) $this->queryBuilder->where('module_name', 'Executive')
+        $query = (int) $this->queryBuilderFactory->make()
+            ->where('module_name', 'Executive')
             ->count_all_results('modules');
 
-        // If there is a result, we can end processing
         if ($query > 0) {
-            return;
+            return true;
         }
 
-        // Insert module record
-        $this->queryBuilder->insert('modules', array(
+        $this->queryBuilderFactory->make()->insert('modules', [
             'module_name' => 'Executive',
             'module_version' => EXECUTIVE_VER,
             'has_cp_backend' => 'n',
             'has_publish_fields' => 'n',
-        ));
+        ]);
+
+        return true;
     }
 
     /**
-     * Reverse migration
+     * Reverses the migration
+     * @return bool
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
-        // Delete row from modules
-        $this->queryBuilder->where('module_name', 'Executive');
-        $this->queryBuilder->delete('modules');
+        $this->queryBuilderFactory->make()->delete('modules', [
+            'module_name' => 'Executive',
+        ]);
+
+        return true;
     }
 }
