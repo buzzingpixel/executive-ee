@@ -69,4 +69,5 @@ $lang = [
     'composerProvisionDescription' => 'Creates symlinks for EE and/or addons installed via Composer',
     'youMustProvideAValue' => 'You must provide a value',
     'addonShortName' => 'Add-on short name',
+    'configKey' => 'Config key',
 ];

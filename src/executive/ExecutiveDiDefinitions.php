@@ -12,6 +12,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\ArgvInput;
 use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\factories\EeDiFactory;
+use buzzingpixel\executive\commands\ConfigCommand;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use buzzingpixel\executive\factories\FinderFactory;
 use buzzingpixel\executive\services\CommandsService;
@@ -72,6 +73,13 @@ return [
             $package->getExtra()['publicDir'] ?? 'public',
             $package->getExtra()['eeAddOns'] ?? [],
             $package->getExtra()['installFromDownload'] ?? []
+        );
+    },
+    ConfigCommand::class => function () {
+        return new ConfigCommand(
+            ee()->config,
+            ee()->lang,
+            ExecutiveDi::get(CliQuestionService::class)
         );
     },
     InstallExecutiveCommand::class => function () {
