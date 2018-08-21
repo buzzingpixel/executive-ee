@@ -93,10 +93,15 @@ return array(
         },
     ),
     'commands' => array(
-        'runSchedule' => array(
-            'class' => ScheduleCommand::class,
-            'method' => 'run',
-            'description' => lang('runScheduleDescription'),
+        'clearCaches' => array(
+            'class' => CacheCommand::class,
+            'method' => 'clearCaches',
+            'description' => lang('clearCachesDescription'),
+        ),
+        'getConfig' => array(
+            'class' => ConfigCommand::class,
+            'method' => 'get',
+            'description' => lang('getConfigDescription'),
         ),
         'makeCommand' => array(
             'class' => CommandCommand::class,
@@ -108,35 +113,30 @@ return array(
             'method' => 'make',
             'description' => lang('makeMigrationDescription'),
         ),
-        'makeTag' => array(
-            'class' => TagCommand::class,
-            'method' => 'make',
-            'description' => lang('makeTagDescription'),
-        ),
         'runMigrations' => array(
             'class' => UserMigrationCommand::class,
             'method' => 'runMigrations',
             'description' => lang('runMigrationsDescription'),
         ),
-        'runAddonUpdates' => array(
-            'class' => AddonUpdatesCommand::class,
-            'method' => 'run',
-            'description' => lang('runAddonUpdatesDescription'),
+        'makeTag' => array(
+            'class' => TagCommand::class,
+            'method' => 'make',
+            'description' => lang('makeTagDescription'),
         ),
         'runAddonUpdateMethod' => array(
             'class' => AddonUpdatesCommand::class,
             'method' => 'runAddonUpdateMethod',
             'description' => lang('runAddonUpdateMethodDescription'),
         ),
-        'getConfig' => array(
-            'class' => ConfigCommand::class,
-            'method' => 'get',
-            'description' => lang('getConfigDescription'),
+        'runAddonUpdates' => array(
+            'class' => AddonUpdatesCommand::class,
+            'method' => 'run',
+            'description' => lang('runAddonUpdatesDescription'),
         ),
-        'clearCaches' => array(
-            'class' => CacheCommand::class,
-            'method' => 'clearCaches',
-            'description' => lang('clearCachesDescription'),
+        'runSchedule' => array(
+            'class' => ScheduleCommand::class,
+            'method' => 'run',
+            'description' => lang('runScheduleDescription'),
         ),
     ),
 );
