@@ -15,9 +15,9 @@ use buzzingpixel\executive\services\TemplateMakerService;
 use buzzingpixel\executive\services\CaseConversionService;
 
 /**
- * Class MakeCommandCommand
+ * Class MakeMigrationCommand
  */
-class MakeCommandCommand
+class MakeMigrationCommand
 {
     /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
@@ -37,11 +37,11 @@ class MakeCommandCommand
     /** @var string $templateLocation */
     private $templateLocation;
 
-    /** @var string $commandNameSpace */
-    private $commandNameSpace;
+    /** @var string $migrationNameSpace */
+    private $migrationNameSpace;
 
-    /** @var string $makeCommandDestination */
-    private $makeCommandDestination;
+    /** @var string $makeMigrationDestination */
+    private $makeMigrationDestination;
 
     /**
      * CacheCommand constructor
@@ -51,8 +51,8 @@ class MakeCommandCommand
      * @param CaseConversionService $pascaleCaseService
      * @param TemplateMakerService $templateMakerService
      * @param string $templateLocation
-     * @param string $commandNameSpace
-     * @param string $makeCommandDestination
+     * @param string $migrationNameSpace
+     * @param string $makeMigrationDestination
      */
     public function __construct(
         OutputInterface $consoleOutput,
@@ -61,8 +61,8 @@ class MakeCommandCommand
         CaseConversionService $pascaleCaseService,
         TemplateMakerService $templateMakerService,
         string $templateLocation,
-        string $commandNameSpace,
-        string $makeCommandDestination
+        string $migrationNameSpace,
+        string $makeMigrationDestination
     ) {
         $this->consoleOutput = $consoleOutput;
         $this->cliQuestionService = $cliQuestionService;
@@ -70,8 +70,8 @@ class MakeCommandCommand
         $this->pascaleCaseService = $pascaleCaseService;
         $this->templateMakerService = $templateMakerService;
         $this->templateLocation = $templateLocation;
-        $this->commandNameSpace = $commandNameSpace;
-        $this->makeCommandDestination = $makeCommandDestination;
+        $this->migrationNameSpace = $migrationNameSpace;
+        $this->makeMigrationDestination = $makeMigrationDestination;
     }
 
     /**
@@ -82,22 +82,22 @@ class MakeCommandCommand
     {
         $hasBlockingErrors = false;
 
-        if (! $this->commandNameSpace) {
+        if (! $this->migrationNameSpace) {
             $hasBlockingErrors = true;
 
             $this->consoleOutput->writeln(
                 '<fg=red>' .
-                $this->lang->line('specifyMakeCommandNamespace') .
+                $this->lang->line('specifyMakeMigrationNamespace') .
                 '</>'
             );
         }
 
-        if (! $this->makeCommandDestination) {
+        if (! $this->makeMigrationDestination) {
             $hasBlockingErrors = true;
 
             $this->consoleOutput->writeln(
                 '<fg=red>' .
-                $this->lang->line('specifyMakeCommandDestination') .
+                $this->lang->line('specifyMakeMigrationDestination') .
                 '</>'
             );
         }
@@ -107,11 +107,11 @@ class MakeCommandCommand
         }
 
         if (! $this->templateLocation) {
-            $this->templateLocation = EXECUTIVE_PATH . '/templates/Command.php';
+            $this->templateLocation = EXECUTIVE_PATH . '/templates/Migration.php';
 
             $this->consoleOutput->writeln(
                 '<fg=yellow>' .
-                $this->lang->line('usingDefaultCommandTemplate') .
+                $this->lang->line('usingDefaultMigrationTemplate') .
                 '</>'
             );
         }
@@ -125,15 +125,22 @@ class MakeCommandCommand
         }
 
         $name = $this->pascaleCaseService->convertStringToPascale($name);
-        $rev = strrev($name);
 
-        if (stripos(strtolower($rev), 'dnammoc') === 0) {
-            $name = strrev(substr($rev, 7));
+        $date = new \DateTime();
+
+        $namePrefix = 'm' . $date->format('Y_m_d_His');
+        $first = true;
+        foreach (range(\strlen($namePrefix), 18) as $key => $val) {
+            if ($first) {
+                $first = false;
+                continue;
+            }
+            $namePrefix .= '0';
         }
 
-        $name .= 'Command';
+        $name = $namePrefix . '_' . $name;
 
-        $destination = $this->makeCommandDestination . DIRECTORY_SEPARATOR .
+        $destination = $this->makeMigrationDestination . DIRECTORY_SEPARATOR .
             $name . '.php';
 
         $proceed = $this->cliQuestionService->ask(
@@ -158,9 +165,9 @@ class MakeCommandCommand
         }
 
         $makeTemplateStatus = $this->templateMakerService->makeTemplate(
-            'Command',
+            'Migration',
             $name,
-            $this->commandNameSpace,
+            $this->migrationNameSpace,
             $this->templateLocation,
             $destination
         );
@@ -185,7 +192,7 @@ class MakeCommandCommand
 
         $this->consoleOutput->writeln(
             '<fg=green>' .
-            $this->lang->line('commandCreated') .
+            $this->lang->line('migrationCreated') .
             '</>'
         );
     }

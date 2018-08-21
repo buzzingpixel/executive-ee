@@ -18,10 +18,10 @@ use BuzzingPixel\Executive\Service\ConsoleService;
 use BuzzingPixel\Executive\Command\ScheduleCommand;
 use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\UserViewService;
-use BuzzingPixel\Executive\Command\MigrationCommand;
 use buzzingpixel\executive\commands\MakeCommandCommand;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use BuzzingPixel\Executive\Command\UserMigrationCommand;
+use buzzingpixel\executive\commands\MakeMigrationCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
 
@@ -115,7 +115,7 @@ return [
             'description' => lang('makeCommandDescription'),
         ],
         'makeMigration' => [
-            'class' => MigrationCommand::class,
+            'class' => MakeMigrationCommand::class,
             'method' => 'make',
             'description' => lang('makeMigrationDescription'),
         ],

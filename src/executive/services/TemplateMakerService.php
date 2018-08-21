@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
+use Throwable;
 use Symfony\Component\Filesystem\Filesystem;
 use buzzingpixel\executive\factories\SplFileInfoFactory;
 
@@ -17,8 +18,9 @@ use buzzingpixel\executive\factories\SplFileInfoFactory;
  */
 class TemplateMakerService
 {
-    public const DESTINATION_EXISTS_ERROR = 'destinationExists';
-    public const CANNOT_CREATE_DESTINATION_DIRECTORY_ERROR = 'cannotCreateDirectory';
+    public const DESTINATION_EXISTS_ERROR = 'fileExistsAtDestination';
+    public const SOURCE_TEMPLATE_MISSING_ERROR = 'sourceTemplateMissing';
+    public const CANNOT_CREATE_DESTINATION_DIRECTORY_ERROR = 'cannotCreateTemplateDirectory';
     public const TEMPLATE_CREATED_SUCCESSFULLY = 'success';
 
     /** @var SplFileInfoFactory $splFileInfoFactory */
@@ -64,11 +66,15 @@ class TemplateMakerService
 
         try {
             $this->filesystem->mkdir($templateFile->getPath());
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return self::CANNOT_CREATE_DESTINATION_DIRECTORY_ERROR;
         }
 
-        $template = $templateFile->getContents();
+        try {
+            $template = $templateFile->getContents();
+        } catch (Throwable $e) {
+            return self::SOURCE_TEMPLATE_MISSING_ERROR;
+        }
 
         $template = str_replace(
             [

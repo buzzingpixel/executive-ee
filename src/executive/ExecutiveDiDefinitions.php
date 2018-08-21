@@ -27,6 +27,7 @@ use buzzingpixel\executive\services\CliArgumentsService;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use buzzingpixel\executive\services\TemplateMakerService;
 use buzzingpixel\executive\factories\CommandModelFactory;
+use buzzingpixel\executive\commands\MakeMigrationCommand;
 use buzzingpixel\executive\controllers\ConsoleController;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
 use buzzingpixel\executive\services\CaseConversionService;
@@ -101,8 +102,8 @@ return [
         /** @var \EE_Config $config */
         $config = ee()->config;
         $templateLocation = $config->item('makeCommandTemplateLocation');
-        $commandNameSpace = $config->item('makeCommandNamespace');
-        $makeCommandDestination = $config->item('makeCommandDestination');
+        $nameSpace = $config->item('makeCommandNamespace');
+        $destination = $config->item('makeCommandDestination');
 
         return new MakeCommandCommand(
             new ConsoleOutput(),
@@ -111,8 +112,26 @@ return [
             ExecutiveDi::get(CaseConversionService::class),
             ExecutiveDi::get(TemplateMakerService::class),
             \is_string($templateLocation) ? $templateLocation : '',
-            \is_string($commandNameSpace) ? $commandNameSpace : '',
-            \is_string($makeCommandDestination) ? $makeCommandDestination : ''
+            \is_string($nameSpace) ? $nameSpace : '',
+            \is_string($destination) ? $destination : ''
+        );
+    },
+    MakeMigrationCommand::class => function () {
+        /** @var \EE_Config $config */
+        $config = ee()->config;
+        $templateLocation = $config->item('makeMigrationTemplateLocation');
+        $nameSpace = $config->item('makeMigrationNamespace');
+        $destination = $config->item('makeMigrationDestination');
+
+        return new MakeMigrationCommand(
+            new ConsoleOutput(),
+            ExecutiveDi::get(CliQuestionService::class),
+            ee()->lang,
+            ExecutiveDi::get(CaseConversionService::class),
+            ExecutiveDi::get(TemplateMakerService::class),
+            \is_string($templateLocation) ? $templateLocation : '',
+            \is_string($nameSpace) ? $nameSpace : '',
+            \is_string($destination) ? $destination : ''
         );
     },
 
