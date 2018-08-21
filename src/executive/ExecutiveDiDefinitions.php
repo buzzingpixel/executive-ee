@@ -20,12 +20,16 @@ use buzzingpixel\executive\services\MigrationsService;
 use buzzingpixel\executive\services\RunCommandService;
 use Composer\Repository\InstalledFilesystemRepository;
 use buzzingpixel\executive\services\CliInstallService;
+use buzzingpixel\executive\commands\MakeCommandCommand;
 use buzzingpixel\executive\services\CliQuestionService;
+use buzzingpixel\executive\factories\SplFileInfoFactory;
 use buzzingpixel\executive\services\CliArgumentsService;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
+use buzzingpixel\executive\services\TemplateMakerService;
 use buzzingpixel\executive\factories\CommandModelFactory;
 use buzzingpixel\executive\controllers\ConsoleController;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
+use buzzingpixel\executive\services\CaseConversionService;
 use buzzingpixel\executive\services\ElevateSessionService;
 use buzzingpixel\executive\services\CliErrorHandlerService;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
@@ -93,6 +97,24 @@ return [
             ExecutiveDi::get(CliInstallService::class)
         );
     },
+    MakeCommandCommand::class => function () {
+        /** @var \EE_Config $config */
+        $config = ee()->config;
+        $templateLocation = $config->item('makeCommandTemplateLocation');
+        $commandNameSpace = $config->item('makeCommandNamespace');
+        $makeCommandDestination = $config->item('makeCommandDestination');
+
+        return new MakeCommandCommand(
+            new ConsoleOutput(),
+            ExecutiveDi::get(CliQuestionService::class),
+            ee()->lang,
+            ExecutiveDi::get(CaseConversionService::class),
+            ExecutiveDi::get(TemplateMakerService::class),
+            \is_string($templateLocation) ? $templateLocation : '',
+            \is_string($commandNameSpace) ? $commandNameSpace : '',
+            \is_string($makeCommandDestination) ? $makeCommandDestination : ''
+        );
+    },
 
     /**
      * Controllers
@@ -116,6 +138,9 @@ return [
     /**
      * Services
      */
+    CaseConversionService::class => function () {
+        return new CaseConversionService();
+    },
     CliArgumentsService::class => function () {
         $arguments = EXECUTIVE_RAW_ARGS;
         $arguments = \is_array($arguments) ? $arguments : [];
@@ -171,6 +196,12 @@ return [
             new EeDiFactory(),
             new ClosureFromCallableFactory(),
             new ReflectionFunctionFactory()
+        );
+    },
+    TemplateMakerService::class => function () {
+        return new TemplateMakerService(
+            new SplFileInfoFactory(),
+            new Filesystem()
         );
     },
 ];

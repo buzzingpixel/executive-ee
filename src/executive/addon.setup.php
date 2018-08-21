@@ -15,11 +15,11 @@ use BuzzingPixel\Executive\Command\TagCommand;
 use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\commands\ConfigCommand;
 use BuzzingPixel\Executive\Service\ConsoleService;
-use BuzzingPixel\Executive\Command\CommandCommand;
 use BuzzingPixel\Executive\Command\ScheduleCommand;
 use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\UserViewService;
 use BuzzingPixel\Executive\Command\MigrationCommand;
+use buzzingpixel\executive\commands\MakeCommandCommand;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use BuzzingPixel\Executive\Command\UserMigrationCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
@@ -110,7 +110,7 @@ return [
             'description' => lang('getConfigDescription'),
         ],
         'makeCommand' => [
-            'class' => CommandCommand::class,
+            'class' => MakeCommandCommand::class,
             'method' => 'make',
             'description' => lang('makeCommandDescription'),
         ],
