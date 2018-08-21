@@ -11,7 +11,7 @@ namespace buzzingpixel\executive\services;
 
 use EE_Lang;
 use Throwable;
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class CliErrorHandlerService
@@ -36,7 +36,7 @@ class CliErrorHandlerService
         0x4000 => 'E_USER_DEPRECATED',
     ];
 
-    /** @var ConsoleOutput $consoleOutput */
+    /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
 
     /** @var EE_Lang $lang */
@@ -44,11 +44,11 @@ class CliErrorHandlerService
 
     /**
      * CliErrorHandlerService constructor
-     * @param ConsoleOutput $consoleOutput
+     * @param OutputInterface $consoleOutput
      * @param EE_Lang $lang
      */
     public function __construct(
-        ConsoleOutput $consoleOutput,
+        OutputInterface $consoleOutput,
         EE_Lang $lang
     ) {
         $this->consoleOutput = $consoleOutput;

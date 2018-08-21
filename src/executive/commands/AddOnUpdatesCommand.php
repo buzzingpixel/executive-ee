@@ -10,7 +10,7 @@ namespace buzzingpixel\executive\commands;
 
 use EE_Lang;
 use EllisLab\ExpressionEngine\Service\Addon\Addon;
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use buzzingpixel\executive\services\CliQuestionService;
 use EllisLab\ExpressionEngine\Service\Addon\Factory as AddOnFactory;
 
@@ -22,7 +22,7 @@ class AddOnUpdatesCommand
     /** @var AddOnFactory $addOnFactory */
     private $addOnFactory;
 
-    /** @var ConsoleOutput $consoleOutput */
+    /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
 
     private $cliQuestionService;
@@ -33,13 +33,13 @@ class AddOnUpdatesCommand
     /**
      * AddOnUpdatesCommand constructor
      * @param AddOnFactory $addOnFactory
-     * @param ConsoleOutput $consoleOutput
+     * @param OutputInterface $consoleOutput
      * @param CliQuestionService $cliQuestionService
      * @param EE_Lang $lang
      */
     public function __construct(
         AddOnFactory $addOnFactory,
-        ConsoleOutput $consoleOutput,
+        OutputInterface $consoleOutput,
         CliQuestionService $cliQuestionService,
         EE_Lang $lang
     ) {

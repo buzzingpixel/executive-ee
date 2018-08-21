@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace buzzingpixel\executive\commands;
 
 use EE_Lang;
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use buzzingpixel\executive\services\CliInstallService;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
 use EllisLab\ExpressionEngine\Library\Filesystem\FilesystemException;
@@ -14,7 +14,7 @@ use EllisLab\ExpressionEngine\Library\Filesystem\FilesystemException;
  */
 class InstallExecutiveCommand
 {
-    /** @var ConsoleOutput $consoleOutput */
+    /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
 
     /** @var EE_Lang $lang */
@@ -31,14 +31,14 @@ class InstallExecutiveCommand
 
     /**
      * InstallExecutiveCommand constructor
-     * @param ConsoleOutput $consoleOutput
+     * @param OutputInterface $consoleOutput
      * @param EE_Lang $lang
      * @param array $executiveRawArgs
      * @param QueryBuilderFactory $queryBuilderFactory
      * @param CliInstallService $cliInstallService
      */
     public function __construct(
-        ConsoleOutput $consoleOutput,
+        OutputInterface $consoleOutput,
         EE_Lang $lang,
         array $executiveRawArgs,
         QueryBuilderFactory $queryBuilderFactory,

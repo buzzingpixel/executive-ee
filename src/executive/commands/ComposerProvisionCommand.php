@@ -6,8 +6,8 @@ namespace buzzingpixel\executive\commands;
 use Composer\Package\CompletePackage;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use buzzingpixel\executive\factories\FinderFactory;
+use Symfony\Component\Console\Output\OutputInterface;
 use Composer\Repository\InstalledFilesystemRepository;
 
 /**
@@ -15,7 +15,7 @@ use Composer\Repository\InstalledFilesystemRepository;
  */
 class ComposerProvisionCommand
 {
-    /** @var ConsoleOutput $consoleOutput */
+    /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
 
     /** @var InstalledFilesystemRepository $installedFilesystemRepository */
@@ -62,7 +62,7 @@ class ComposerProvisionCommand
 
     /**
      * ComposerProvisionCommand constructor
-     * @param ConsoleOutput $consoleOutput
+     * @param OutputInterface $consoleOutput
      * @param InstalledFilesystemRepository $installedFilesystemRepository
      * @param string $vendorPath
      * @param Filesystem $fileSystem
@@ -72,7 +72,7 @@ class ComposerProvisionCommand
      * @param array $installFromDownload
      */
     public function __construct(
-        ConsoleOutput $consoleOutput,
+        OutputInterface $consoleOutput,
         InstalledFilesystemRepository $installedFilesystemRepository,
         string $vendorPath,
         Filesystem $fileSystem,

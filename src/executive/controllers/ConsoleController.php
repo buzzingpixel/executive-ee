@@ -12,8 +12,8 @@ namespace buzzingpixel\executive\controllers;
 use EE_Lang;
 use ReflectionException;
 use buzzingpixel\executive\models\CommandModel;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use buzzingpixel\executive\services\CommandsService;
+use Symfony\Component\Console\Output\OutputInterface;
 use buzzingpixel\executive\services\RunCommandService;
 use buzzingpixel\executive\services\CliArgumentsService;
 use buzzingpixel\executive\exceptions\InvalidCommandException;
@@ -27,7 +27,7 @@ class ConsoleController
     /** @var CliArgumentsService $cliArgumentsService */
     private $cliArgumentsService;
 
-    /** @var ConsoleOutput $consoleOutput */
+    /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
 
     /** @var CommandsService $commandsService */
@@ -42,14 +42,14 @@ class ConsoleController
     /**
      * ConsoleController constructor
      * @param CliArgumentsService $cliArgumentsService
-     * @param ConsoleOutput $consoleOutput
+     * @param OutputInterface $consoleOutput
      * @param CommandsService $commandsService
      * @param EE_Lang $lang
      * @param RunCommandService $runCommandService
      */
     public function __construct(
         CliArgumentsService $cliArgumentsService,
-        ConsoleOutput $consoleOutput,
+        OutputInterface $consoleOutput,
         CommandsService $commandsService,
         EE_Lang $lang,
         RunCommandService $runCommandService
