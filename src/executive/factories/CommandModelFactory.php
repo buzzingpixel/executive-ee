@@ -12,7 +12,7 @@ namespace buzzingpixel\executive\factories;
 use buzzingpixel\executive\models\CommandModel;
 
 /**
- * Class Service
+ * Class CommandModelFactory
  */
 class CommandModelFactory
 {

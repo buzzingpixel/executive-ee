@@ -67,4 +67,6 @@ $lang = [
     'userCpSectionNotFound' => 'The requested User CP Section was not found.',
     'commandCallableNotSpecified' => "The command's callable was not found or not specified",
     'composerProvisionDescription' => 'Creates symlinks for EE and/or addons installed via Composer',
+    'youMustProvideAValue' => 'You must provide a value',
+    'addonShortName' => 'Add-on short name',
 ];

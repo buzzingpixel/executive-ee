@@ -20,7 +20,7 @@ use BuzzingPixel\Executive\Command\ScheduleCommand;
 use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\UserViewService;
 use BuzzingPixel\Executive\Command\MigrationCommand;
-use BuzzingPixel\Executive\Command\AddonUpdatesCommand;
+use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use BuzzingPixel\Executive\Command\UserMigrationCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
@@ -130,12 +130,12 @@ return [
             'description' => lang('makeTagDescription'),
         ],
         'runAddonUpdateMethod' => [
-            'class' => AddonUpdatesCommand::class,
+            'class' => AddOnUpdatesCommand::class,
             'method' => 'runAddonUpdateMethod',
             'description' => lang('runAddonUpdateMethodDescription'),
         ],
         'runAddonUpdates' => [
-            'class' => AddonUpdatesCommand::class,
+            'class' => AddOnUpdatesCommand::class,
             'method' => 'run',
             'description' => lang('runAddonUpdatesDescription'),
         ],

@@ -6,65 +6,95 @@
  * @license Apache-2.0
  */
 
-namespace BuzzingPixel\Executive\Command;
+namespace buzzingpixel\executive\commands;
 
-use buzzingpixel\executive\abstracts\BaseCommand;
-use EllisLab\ExpressionEngine\Service\Addon\Factory as EEAddonFactory;
-use EllisLab\ExpressionEngine\Service\Addon\Addon as EEAddon;
+use EE_Lang;
+use EllisLab\ExpressionEngine\Service\Addon\Addon;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use buzzingpixel\executive\services\CliQuestionService;
+use EllisLab\ExpressionEngine\Service\Addon\Factory as AddOnFactory;
 
 /**
- * Class Service
+ * Class AddOnUpdatesCommand
  */
-class AddonUpdatesCommand extends BaseCommand
+class AddOnUpdatesCommand
 {
-    /** @var EEAddonFactory $eeAddonFactory */
-    private $eeAddonFactory;
+    /** @var AddOnFactory $addOnFactory */
+    private $addOnFactory;
+
+    /** @var ConsoleOutput $consoleOutput */
+    private $consoleOutput;
+
+    private $cliQuestionService;
+
+    /** @var EE_Lang $lang */
+    private $lang;
 
     /**
-     * Initialize
+     * AddOnUpdatesCommand constructor
+     * @param AddOnFactory $addOnFactory
+     * @param ConsoleOutput $consoleOutput
+     * @param CliQuestionService $cliQuestionService
+     * @param EE_Lang $lang
      */
-    public function initCommand()
-    {
-        $this->eeAddonFactory = ee('Addon');
+    public function __construct(
+        AddOnFactory $addOnFactory,
+        ConsoleOutput $consoleOutput,
+        CliQuestionService $cliQuestionService,
+        EE_Lang $lang
+    ) {
+        $this->addOnFactory = $addOnFactory;
+        $this->consoleOutput = $consoleOutput;
+        $this->cliQuestionService = $cliQuestionService;
+        $this->lang = $lang;
     }
 
     /**
-     * Run a single add-on's update method (regardless if version is behind)
+     * Runs a single add-on's update method (regardless if version is behind)
      * @param string $addon
      */
-    public function runAddonUpdateMethod($addon)
+    public function runAddonUpdateMethod($addon): void
     {
         if ($addon === null) {
-            $this->consoleService->writeLn(
-                lang('addonMustBeSpecified:') . ' ' . '--addon=addon_name',
-                'red'
+            $addon = $this->cliQuestionService->ask(
+                '<fg=cyan>' .
+                $this->lang->line('addonShortName') .
+                ': </>'
+            );
+        }
+
+        /** @var Addon $addon */
+        $addOnInfo = $this->addOnFactory->get($addon);
+
+        if ($addOnInfo === null) {
+            $this->consoleOutput->writeln(
+                '<fg=red>' .
+                $this->lang->line('addonNotFound') .
+                '</>'
             );
             return;
         }
 
-        if ($this->eeAddonFactory->get($addon) === null) {
-            $this->consoleService->writeLn(lang('addonNotFound'), 'red');
+        if (! $addOnInfo->isInstalled()) {
+            $this->consoleOutput->writeln(
+                '<fg=red>' .
+                $this->lang->line('addonNotInstalled') .
+                '</>'
+            );
             return;
         }
 
-        /** @var EEAddon $addon */
-        $addonInfo = $this->eeAddonFactory->get($addon);
-
-        if (! $addonInfo->isInstalled()) {
-            $this->consoleService->writeLn(lang('addonNotInstalled'), 'red');
-            return;
-        }
-
-        $class = $addonInfo->getInstallerClass();
+        $class = $addOnInfo->getInstallerClass();
         $installed = ee()->addons->get_installed('modules', true);
 
-        $UPD = new $class;
-        $UPD->_ee_path = APPPATH;
-        $UPD->update($installed[$addon]['module_version']);
+        $upd = new $class;
+        $upd->_ee_path = APPPATH;
+        $upd->update($installed[$addon]['module_version']);
 
-        $this->consoleService->writeLn(
-            lang('addonUpdateRunSuccessfully'),
-            'green'
+        $this->consoleOutput->writeln(
+            '<fg=green>' .
+            $this->lang->line('addonUpdateRunSuccessfully') .
+            '</>'
         );
     }
 
@@ -73,8 +103,8 @@ class AddonUpdatesCommand extends BaseCommand
      */
     public function run()
     {
-        foreach ($this->eeAddonFactory->all() as $addon_info) {
-            /** @var EEAddon $addon_info */
+        foreach ($this->addOnFactory->all() as $addon_info) {
+            /** @var Addon $addon_info */
 
             if (! $addon_info->isInstalled()) {
                 continue;
@@ -173,9 +203,10 @@ class AddonUpdatesCommand extends BaseCommand
             }
         }
 
-        $this->consoleService->writeLn(
-            lang('addonsUpdatedSuccessfully'),
-            'green'
+        $this->consoleOutput->writeln(
+            '<fg=green>' .
+            $this->lang->line('addonsUpdatedSuccessfully') .
+            '</>'
         );
     }
 
@@ -186,7 +217,7 @@ class AddonUpdatesCommand extends BaseCommand
      */
     private function getModule($name)
     {
-        /** @var EEAddon $info */
+        /** @var Addon $info */
         $info = ee('Addon')->get($name);
 
         if (! $info->hasModule()) {
@@ -247,7 +278,7 @@ class AddonUpdatesCommand extends BaseCommand
      */
     private function getFieldtype($name)
     {
-        /** @var EEAddon $info */
+        /** @var Addon $info */
         $info = ee('Addon')->get($name);
 
         if (! $info->hasFieldtype()) {
@@ -297,7 +328,7 @@ class AddonUpdatesCommand extends BaseCommand
             return array();
         }
 
-        /** @var EEAddon $info */
+        /** @var Addon $info */
         $info = ee('Addon')->get($name);
 
         if (! $info->hasExtension()) {
@@ -369,7 +400,7 @@ class AddonUpdatesCommand extends BaseCommand
      */
     private function getPlugin($name)
     {
-        /** @var EEAddon $info */
+        /** @var Addon $info */
         $info = ee('Addon')->get($name);
 
         if (! $info->hasPlugin()) {

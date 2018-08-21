@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use buzzingpixel\executive\ExecutiveDi;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Input\ArgvInput;
 use buzzingpixel\executive\factories\EeDiFactory;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use buzzingpixel\executive\factories\FinderFactory;
@@ -17,13 +18,16 @@ use buzzingpixel\executive\services\MigrationsService;
 use buzzingpixel\executive\services\RunCommandService;
 use Composer\Repository\InstalledFilesystemRepository;
 use buzzingpixel\executive\services\CliInstallService;
+use buzzingpixel\executive\services\CliQuestionService;
+use buzzingpixel\executive\services\CliArgumentsService;
+use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use buzzingpixel\executive\factories\CommandModelFactory;
 use buzzingpixel\executive\controllers\ConsoleController;
-use \buzzingpixel\executive\services\CliArgumentsService;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
 use buzzingpixel\executive\services\ElevateSessionService;
 use buzzingpixel\executive\services\CliErrorHandlerService;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
+use buzzingpixel\executive\factories\ConsoleQuestionFactory;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
 use buzzingpixel\executive\controllers\RunMigrationsController;
 use buzzingpixel\executive\factories\ReflectionFunctionFactory;
@@ -33,6 +37,14 @@ return [
     /**
      * Commands
      */
+    AddOnUpdatesCommand::class => function () {
+        return new AddOnUpdatesCommand(
+            ee('Addon'),
+            new ConsoleOutput(),
+            ExecutiveDi::get(CliQuestionService::class),
+            ee()->lang
+        );
+    },
     ComposerProvisionCommand::class => function () {
         $composerApp = new Composer\Console\Application();
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -101,6 +113,17 @@ return [
     CliErrorHandlerService::class => function () {
         return new CliErrorHandlerService(
             new ConsoleOutput(),
+            ee()->lang
+        );
+    },
+    CliQuestionService::class => function () {
+        return new CliQuestionService(
+            (new Symfony\Component\Console\Application())
+                ->getHelperSet()
+                ->get('question'),
+            new ArgvInput(),
+            new ConsoleOutput(),
+            new ConsoleQuestionFactory(),
             ee()->lang
         );
     },

@@ -8,7 +8,7 @@ declare(strict_types=1);
  */
 
 use buzzingpixel\executive\ExecutiveDi;
-use \buzzingpixel\executive\controllers\ConsoleController;
+use buzzingpixel\executive\controllers\ConsoleController;
 use buzzingpixel\executive\services\ElevateSessionService;
 use buzzingpixel\executive\services\CliErrorHandlerService;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
