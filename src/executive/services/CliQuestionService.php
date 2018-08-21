@@ -33,6 +33,7 @@ class CliQuestionService
     /** @var ConsoleQuestionFactory $consoleQuestionFactory */
     private $consoleQuestionFactory;
 
+    /** @var EE_Lang $lang */
     private $lang;
 
     /**

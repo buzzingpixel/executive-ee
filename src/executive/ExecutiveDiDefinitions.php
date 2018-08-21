@@ -98,24 +98,6 @@ return [
             ExecutiveDi::get(CliInstallService::class)
         );
     },
-    MakeCommandCommand::class => function () {
-        /** @var \EE_Config $config */
-        $config = ee()->config;
-        $templateLocation = $config->item('makeCommandTemplateLocation');
-        $nameSpace = $config->item('makeCommandNamespace');
-        $destination = $config->item('makeCommandDestination');
-
-        return new MakeCommandCommand(
-            new ConsoleOutput(),
-            ExecutiveDi::get(CliQuestionService::class),
-            ee()->lang,
-            ExecutiveDi::get(CaseConversionService::class),
-            ExecutiveDi::get(TemplateMakerService::class),
-            \is_string($templateLocation) ? $templateLocation : '',
-            \is_string($nameSpace) ? $nameSpace : '',
-            \is_string($destination) ? $destination : ''
-        );
-    },
     MakeMigrationCommand::class => function () {
         /** @var \EE_Config $config */
         $config = ee()->config;

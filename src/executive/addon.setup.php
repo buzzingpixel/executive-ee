@@ -11,14 +11,12 @@
 use buzzingpixel\executive\ExecutiveDi;
 use EllisLab\ExpressionEngine\Core\Provider;
 use Composer\Package\CompletePackageInterface;
-use BuzzingPixel\Executive\Command\TagCommand;
 use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\commands\ConfigCommand;
 use BuzzingPixel\Executive\Service\ConsoleService;
 use BuzzingPixel\Executive\Command\ScheduleCommand;
 use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\UserViewService;
-use buzzingpixel\executive\commands\MakeCommandCommand;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use BuzzingPixel\Executive\Command\UserMigrationCommand;
 use buzzingpixel\executive\commands\MakeMigrationCommand;
@@ -109,11 +107,6 @@ return [
             'method' => 'get',
             'description' => lang('getConfigDescription'),
         ],
-        'makeCommand' => [
-            'class' => MakeCommandCommand::class,
-            'method' => 'make',
-            'description' => lang('makeCommandDescription'),
-        ],
         'makeMigration' => [
             'class' => MakeMigrationCommand::class,
             'method' => 'make',
@@ -123,11 +116,6 @@ return [
             'class' => UserMigrationCommand::class,
             'method' => 'runMigrations',
             'description' => lang('runMigrationsDescription'),
-        ],
-        'makeTag' => [
-            'class' => TagCommand::class,
-            'method' => 'make',
-            'description' => lang('makeTagDescription'),
         ],
         'runAddonUpdateMethod' => [
             'class' => AddOnUpdatesCommand::class,
