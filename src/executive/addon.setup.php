@@ -65,7 +65,7 @@ if (defined('REQ') && REQ === 'CONSOLE') {
 }
 
 // Return info about the add on for ExpressionEngine
-return array(
+return [
     'author' => $author['name'],
     'author_url' => $author['homepage'],
     'description' => $executive->getDescription(),
@@ -74,7 +74,7 @@ return array(
     'namespace' => '\\',
     'settings_exist' => true,
     'version' => EXECUTIVE_VER,
-    'services' => array(
+    'services' => [
         /**
          * Services
          */
@@ -82,67 +82,67 @@ return array(
             return new ConsoleService();
         },
         'CommandsService' => function () {
-            return new CommandsService(array(
+            return new CommandsService([
                 'eeAddonFactory' => ee('Addon'),
                 'eeConfigService' => ee()->config,
                 'consoleService' => ee('executive:ConsoleService'),
                 'queryBuilder' => ee('db'),
-            ));
+            ]);
         },
         'UserView' => function (Provider $addOn, $path = '') {
             return new UserViewService($path, $addOn);
         },
-    ),
-    'commands' => array(
-        'clearCaches' => array(
+    ],
+    'commands' => [
+        'clearCaches' => [
             'class' => CacheCommand::class,
             'method' => 'clearCaches',
             'description' => lang('clearCachesDescription'),
-        ),
-        'composerProvision' => array(
+        ],
+        'composerProvision' => [
             'class' => ComposerProvisionCommand::class,
             'method' => 'run',
             'description' => lang('composerProvisionDescription'),
-        ),
-        'getConfig' => array(
+        ],
+        'getConfig' => [
             'class' => ConfigCommand::class,
             'method' => 'get',
             'description' => lang('getConfigDescription'),
-        ),
-        'makeCommand' => array(
+        ],
+        'makeCommand' => [
             'class' => CommandCommand::class,
             'method' => 'make',
             'description' => lang('makeCommandDescription'),
-        ),
-        'makeMigration' => array(
+        ],
+        'makeMigration' => [
             'class' => MigrationCommand::class,
             'method' => 'make',
             'description' => lang('makeMigrationDescription'),
-        ),
-        'runMigrations' => array(
+        ],
+        'runMigrations' => [
             'class' => UserMigrationCommand::class,
             'method' => 'runMigrations',
             'description' => lang('runMigrationsDescription'),
-        ),
-        'makeTag' => array(
+        ],
+        'makeTag' => [
             'class' => TagCommand::class,
             'method' => 'make',
             'description' => lang('makeTagDescription'),
-        ),
-        'runAddonUpdateMethod' => array(
+        ],
+        'runAddonUpdateMethod' => [
             'class' => AddonUpdatesCommand::class,
             'method' => 'runAddonUpdateMethod',
             'description' => lang('runAddonUpdateMethodDescription'),
-        ),
-        'runAddonUpdates' => array(
+        ],
+        'runAddonUpdates' => [
             'class' => AddonUpdatesCommand::class,
             'method' => 'run',
             'description' => lang('runAddonUpdatesDescription'),
-        ),
-        'runSchedule' => array(
+        ],
+        'runSchedule' => [
             'class' => ScheduleCommand::class,
             'method' => 'run',
             'description' => lang('runScheduleDescription'),
-        ),
-    ),
-);
+        ],
+    ],
+];
