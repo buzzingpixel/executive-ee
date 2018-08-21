@@ -85,10 +85,7 @@ class RunCommandService
             }
 
             if (! $instantiatedClass) {
-                try {
-                    $instantiatedClass = new $class();
-                } catch (Throwable $e) {
-                }
+                $instantiatedClass = new $class();
             }
 
             if (method_exists($instantiatedClass, $method)) {
