@@ -10,6 +10,7 @@ declare(strict_types=1);
 use buzzingpixel\executive\ExecutiveDi;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\ArgvInput;
+use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\factories\EeDiFactory;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use buzzingpixel\executive\factories\FinderFactory;
@@ -42,6 +43,13 @@ return [
             ee('Addon'),
             new ConsoleOutput(),
             ExecutiveDi::get(CliQuestionService::class),
+            ee()->lang
+        );
+    },
+    CacheCommand::class => function () {
+        return new CacheCommand(
+            ee()->functions,
+            new ConsoleOutput(),
             ee()->lang
         );
     },

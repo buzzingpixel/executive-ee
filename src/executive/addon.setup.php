@@ -12,7 +12,7 @@ use buzzingpixel\executive\ExecutiveDi;
 use EllisLab\ExpressionEngine\Core\Provider;
 use Composer\Package\CompletePackageInterface;
 use BuzzingPixel\Executive\Command\TagCommand;
-use BuzzingPixel\Executive\Command\CacheCommand;
+use buzzingpixel\executive\commands\CacheCommand;
 use BuzzingPixel\Executive\Command\ConfigCommand;
 use BuzzingPixel\Executive\Service\ConsoleService;
 use BuzzingPixel\Executive\Command\CommandCommand;
