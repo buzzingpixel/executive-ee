@@ -23,6 +23,7 @@ use BuzzingPixel\Executive\Command\MigrationCommand;
 use BuzzingPixel\Executive\Command\AddonUpdatesCommand;
 use BuzzingPixel\Executive\Command\UserMigrationCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
+use buzzingpixel\executive\commands\ComposerProvisionCommand;
 
 $composerApp = new Composer\Console\Application();
 $oldCwd = getcwd();
@@ -97,6 +98,11 @@ return array(
             'class' => CacheCommand::class,
             'method' => 'clearCaches',
             'description' => lang('clearCachesDescription'),
+        ),
+        'composerProvision' => array(
+            'class' => ComposerProvisionCommand::class,
+            'method' => 'run',
+            'description' => lang('composerProvisionDescription'),
         ),
         'getConfig' => array(
             'class' => ConfigCommand::class,
