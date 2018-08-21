@@ -8,8 +8,7 @@ declare(strict_types=1);
  */
 
 use buzzingpixel\executive\ExecutiveDi;
-use BuzzingPixel\Executive\Service\ConsoleService;
-use BuzzingPixel\Executive\Controller\ConsoleController;
+use \buzzingpixel\executive\controllers\ConsoleController;
 use buzzingpixel\executive\services\ElevateSessionService;
 use buzzingpixel\executive\services\CliErrorHandlerService;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
@@ -56,27 +55,25 @@ class Executive_ext
     // @codingStandardsIgnoreStart
     public function core_boot(): void // @codingStandardsIgnoreEnd
     {
-        // Check for console request
         if (! defined('REQ') || REQ !== 'CONSOLE') {
             return;
         }
+
+        // Make sure the lang file is loaded
+        ee()->lang->loadfile('executive');
 
         /** @var ElevateSessionService $elevateSessionService */
         $elevateSessionService = ExecutiveDi::get(ElevateSessionService::class);
         $elevateSessionService->run();
 
-        // Make sure the lang file is loaded
-        ee()->lang->loadfile('executive');
-
         // Prevent timeout (hopefully)
         @set_time_limit(0);
 
-        // Get the console controller
         /** @var ConsoleController $consoleController */
-        $consoleController = ee('executive:ConsoleController');
+        $consoleController = ExecutiveDi::get(ConsoleController::class);
 
         // Run the console controller
-        $consoleController->runConsoleRequest();
+        $consoleController->run();
 
         // Make sure we exit here
         exit;

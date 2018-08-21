@@ -43,7 +43,7 @@ class CliErrorHandlerService
     private $lang;
 
     /**
-     * ComposerProvisionCommand constructor
+     * CliErrorHandlerService constructor
      * @param ConsoleOutput $consoleOutput
      * @param EE_Lang $lang
      */

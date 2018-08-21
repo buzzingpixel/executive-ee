@@ -8,13 +8,13 @@
 
 // @codingStandardsIgnoreStart
 
-$fileName = 'ee';
+$fileName = SELF;
 
 if (defined('REQ') && REQ === 'CONSOLE') {
     $fileName = basename($_SERVER['SCRIPT_FILENAME'], '.php');
 }
 
-$lang = array(
+$lang = [
     'notInstalled' => 'Executive is not installed. Please run "php ' . $fileName . ' install"',
     'executiveInstalled' => 'Executive has been installed',
     'usage:' => 'usage:',
@@ -65,4 +65,5 @@ $lang = array(
     'noCpSections' => 'No user CP sections have been set up.',
     'userCpSections' => 'User CP Sections',
     'userCpSectionNotFound' => 'The requested User CP Section was not found.',
-);
+    'commandCallableNotSpecified' => "The command's callable was not found or not specified",
+];

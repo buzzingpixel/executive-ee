@@ -32,7 +32,7 @@ class ElevateSessionService
     private $load;
 
     /**
-     * CliInstallService constructor
+     * ElevateSessionService constructor
      * @param QueryBuilderFactory $queryBuilderFactory
      * @param EE_Session $session
      * @param EE_Router $router

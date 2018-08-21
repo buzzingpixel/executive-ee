@@ -12,7 +12,6 @@ use buzzingpixel\executive\ExecutiveDi;
 use EllisLab\ExpressionEngine\Core\Provider;
 use Composer\Package\CompletePackageInterface;
 use BuzzingPixel\Executive\Command\TagCommand;
-use BuzzingPixel\Executive\Service\ArgsService;
 use BuzzingPixel\Executive\Command\CacheCommand;
 use BuzzingPixel\Executive\Command\ConfigCommand;
 use BuzzingPixel\Executive\Service\ConsoleService;
@@ -22,7 +21,6 @@ use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\UserViewService;
 use BuzzingPixel\Executive\Command\MigrationCommand;
 use BuzzingPixel\Executive\Command\AddonUpdatesCommand;
-use BuzzingPixel\Executive\Controller\ConsoleController;
 use BuzzingPixel\Executive\Command\UserMigrationCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 
@@ -77,18 +75,8 @@ return array(
     'version' => EXECUTIVE_VER,
     'services' => array(
         /**
-         * Controllers
-         */
-        'ConsoleController' => function () {
-            return new ConsoleController();
-        },
-
-        /**
          * Services
          */
-        'ArgsService' => function () {
-            return new ArgsService();
-        },
         'ConsoleService' => function () {
             return new ConsoleService();
         },
