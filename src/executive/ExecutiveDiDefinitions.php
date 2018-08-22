@@ -20,7 +20,6 @@ use buzzingpixel\executive\services\MigrationsService;
 use buzzingpixel\executive\services\RunCommandService;
 use Composer\Repository\InstalledFilesystemRepository;
 use buzzingpixel\executive\services\CliInstallService;
-use buzzingpixel\executive\commands\MakeCommandCommand;
 use buzzingpixel\executive\services\CliQuestionService;
 use buzzingpixel\executive\factories\SplFileInfoFactory;
 use buzzingpixel\executive\services\CliArgumentsService;
@@ -33,6 +32,7 @@ use buzzingpixel\executive\factories\QueryBuilderFactory;
 use buzzingpixel\executive\services\CaseConversionService;
 use buzzingpixel\executive\services\ElevateSessionService;
 use buzzingpixel\executive\services\CliErrorHandlerService;
+use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\factories\ConsoleQuestionFactory;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
@@ -96,6 +96,21 @@ return [
                 [],
             new QueryBuilderFactory(),
             ExecutiveDi::get(CliInstallService::class)
+        );
+    },
+    MakeFromTemplateCommand::class => function () {
+        /** @var \EE_Config $config */
+        $config = ee()->config;
+
+        $availableConfigurations = $config->item('classTemplateConfigurations');
+
+        return new MakeFromTemplateCommand(
+            new ConsoleOutput(),
+            ExecutiveDi::get(CliQuestionService::class),
+            ee()->lang,
+            ExecutiveDi::get(CaseConversionService::class),
+            ExecutiveDi::get(TemplateMakerService::class),
+            \is_array($availableConfigurations) ? $availableConfigurations : []
         );
     },
     MakeMigrationCommand::class => function () {

@@ -17,6 +17,7 @@ use BuzzingPixel\Executive\Service\ConsoleService;
 use BuzzingPixel\Executive\Command\ScheduleCommand;
 use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\UserViewService;
+use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use BuzzingPixel\Executive\Command\UserMigrationCommand;
 use buzzingpixel\executive\commands\MakeMigrationCommand;
@@ -106,6 +107,11 @@ return [
             'class' => ConfigCommand::class,
             'method' => 'get',
             'description' => lang('getConfigDescription'),
+        ],
+        'makeFromTemplate' => [
+            'class' => MakeFromTemplateCommand::class,
+            'method' => 'make',
+            'description' => lang('makeClassDescription'),
         ],
         'makeMigration' => [
             'class' => MakeMigrationCommand::class,
