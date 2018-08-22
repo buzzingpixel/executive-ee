@@ -80,9 +80,10 @@ $lang = [
     'fileExistsAtDestination' => 'File already exists at destination',
     'unknownTemplateMakerError' => 'An unknown template maker error occurred',
     'cannotCreateTemplateDirectory' => 'An error occurred trying to create the template\'s destination directory',
-    'specifyMakeMigrationNamespace' => 'You must specify $config[\'makeMigrationNamespace\'] = \'\some\\name\space\' in the config file',
-    'specifyMakeMigrationDestination' => 'You must specify $config[\'makeMigrationDestination\'] = \'/path/to/dest/directory\' in the config file',
-    'usingDefaultMigrationTemplate' => '$config[\'makeMigrationTemplateLocation\'] has not been set in the ' . PHP_EOL . 'config file so Executive\'s default template will be used',
+    'specifyMakeMigrationNamespace' => 'You must specify $config[\'migrationNamespace\'] = \'\some\\name\space\' in the config file',
+    'specifyMakeMigrationDestination' => 'You must specify $config[\'migrationDestination\'] = \'/path/to/dest/directory\' in the config file',
+    'usingDefaultMigrationTemplate' => '$config[\'migrationTemplateLocation\'] has not been set in the ' . PHP_EOL . 'config file so Executive\'s default template will be used',
     'migrationCreated' => 'Migration created',
     'sourceTemplateMissing' => 'The specified source template is missing',
+    'noClassTemplateConfigurationsAvailable' => 'There are no template configurations available. Set with $config[\'classTemplateConfigurations\']'
 ];

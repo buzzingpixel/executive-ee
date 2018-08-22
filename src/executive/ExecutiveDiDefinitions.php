@@ -101,9 +101,9 @@ return [
     MakeMigrationCommand::class => function () {
         /** @var \EE_Config $config */
         $config = ee()->config;
-        $templateLocation = $config->item('makeMigrationTemplateLocation');
-        $nameSpace = $config->item('makeMigrationNamespace');
-        $destination = $config->item('makeMigrationDestination');
+        $templateLocation = $config->item('migrationTemplateLocation');
+        $nameSpace = $config->item('migrationNamespace');
+        $destination = $config->item('migrationDestination');
 
         return new MakeMigrationCommand(
             new ConsoleOutput(),
