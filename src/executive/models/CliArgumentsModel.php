@@ -7,12 +7,12 @@ declare(strict_types=1);
  * @license Apache-2.0
  */
 
-namespace buzzingpixel\executive\services;
+namespace buzzingpixel\executive\models;
 
 /**
- * Class CliArgumentsService
+ * Class CliArgumentsModel
  */
-class CliArgumentsService
+class CliArgumentsModel
 {
     /** @var array $rawArguments */
     private $rawArguments = [];
@@ -21,7 +21,7 @@ class CliArgumentsService
     private $parsedArguments = [];
 
     /**
-     * CliArgumentsService constructor
+     * CliArgumentsModel constructor
      * @param array $rawArguments
      */
     public function __construct(
@@ -32,9 +32,10 @@ class CliArgumentsService
 
     /**
      * Sets raw arguments array
+     *
      * @param array $rawArguments
      * @param bool $omitFirst Defaults to true
-     * @return CliArgumentsService
+     * @return CliArgumentsModel
      */
     public function setRawArguments(
         array $rawArguments,

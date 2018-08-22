@@ -140,4 +140,36 @@ class CommandModel extends ModelAbstract
     {
         return $this->description;
     }
+
+    /** @var CliArgumentsModel $customCliArgumentsModel */
+    private $customCliArgumentsModel;
+
+    /**
+     * Sets a custom CLI Arguments Model
+     * @param CliArgumentsModel $model
+     * @return CommandModel
+     */
+    public function setCustomCliArgumentsModel(CliArgumentsModel $model): self
+    {
+        $this->customCliArgumentsModel = $model;
+        return $this;
+    }
+
+    /**
+     * Checks if there's a custom CLI Arguments Model
+     * @return bool
+     */
+    public function hasCustomCliArgumentsModel(): bool
+    {
+        return $this->customCliArgumentsModel !== null;
+    }
+
+    /**
+     * Gets custom CLI Arguments Model
+     * @return CliArgumentsModel
+     */
+    public function getCustomCliArgumentsModel(): CliArgumentsModel
+    {
+        return $this->customCliArgumentsModel;
+    }
 }

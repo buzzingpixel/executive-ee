@@ -14,6 +14,7 @@ use ReflectionException;
 use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\models\CommandModel;
 use buzzingpixel\executive\factories\EeDiFactory;
+use buzzingpixel\executive\models\CliArgumentsModel;
 use buzzingpixel\executive\factories\ReflectionFunctionFactory;
 use buzzingpixel\executive\factories\ClosureFromCallableFactory;
 
@@ -22,8 +23,8 @@ use buzzingpixel\executive\factories\ClosureFromCallableFactory;
  */
 class RunCommandService
 {
-    /** @var CliArgumentsService $cliArgumentsService */
-    private $cliArgumentsService;
+    /** @var CliArgumentsModel $cliArgumentsModel */
+    private $cliArgumentsModel;
 
     /** @var ExecutiveDi $executiveDi */
     private $executiveDi;
@@ -38,20 +39,20 @@ class RunCommandService
 
     /**
      * RunCommandService constructor
-     * @param CliArgumentsService $cliArgumentsService
+     * @param CliArgumentsModel $cliArgumentsModel
      * @param ExecutiveDi $executiveDi
      * @param EeDiFactory $eeDiFactory
      * @param ClosureFromCallableFactory $closureFromCallableFactory
      * @param ReflectionFunctionFactory $reflectionFunctionFactory
      */
     public function __construct(
-        CliArgumentsService $cliArgumentsService,
+        CliArgumentsModel $cliArgumentsModel,
         ExecutiveDi $executiveDi,
         EeDiFactory $eeDiFactory,
         ClosureFromCallableFactory $closureFromCallableFactory,
         ReflectionFunctionFactory $reflectionFunctionFactory
     ) {
-        $this->cliArgumentsService = $cliArgumentsService;
+        $this->cliArgumentsModel = $cliArgumentsModel;
         $this->executiveDi = $executiveDi;
         $this->eeDiFactory = $eeDiFactory;
         $this->closureFromCallableFactory = $closureFromCallableFactory;
@@ -99,10 +100,14 @@ class RunCommandService
 
         $params = [];
 
+        $cliArgumentsModel = $this->cliArgumentsModel;
+
+        if ($commandModel->hasCustomCliArgumentsModel()) {
+            $cliArgumentsModel = $commandModel->getCustomCliArgumentsModel();
+        }
+
         foreach ($reflector->getParameters() as $parameter) {
-            $params[] = $this->cliArgumentsService->getArgument(
-                $parameter->name
-            );
+            $params[] = $cliArgumentsModel->getArgument($parameter->name);
         }
 
         \call_user_func_array($callable, $params);

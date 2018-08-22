@@ -63,10 +63,6 @@ class CommandsService
             function (Addon $addOn) {
                 $provider = $addOn->getProvider();
 
-                if (! $addOn->isInstalled()) {
-                    return false;
-                }
-
                 $commands = $provider->get('commands');
                 $commands = \is_array($commands) ? $commands : null;
 
@@ -76,7 +72,7 @@ class CommandsService
 
                 return $commands;
             },
-            $this->addOnFactory->all()
+            $this->addOnFactory->installed()
         );
 
         $providerCommands = array_filter($providerCommands, function ($i) {

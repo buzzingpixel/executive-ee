@@ -92,4 +92,5 @@ $lang = [
     'usingDefaultTemplate' => 'The template configuration has not set "templateLocation" so Executive\'s default template will be used',
     'usingDefaultClassNameToReplace' => 'The template configuration has not set "classNameToReplace" so Executive will search for and replace the class name "ClassTemplate"',
     'classCreated' => 'The class was created',
+    'runningCommand' => 'Running command',
 ];

@@ -14,13 +14,12 @@ use Composer\Package\CompletePackageInterface;
 use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\commands\ConfigCommand;
 use BuzzingPixel\Executive\Service\ConsoleService;
-use BuzzingPixel\Executive\Command\ScheduleCommand;
-use BuzzingPixel\Executive\Service\CommandsService;
 use BuzzingPixel\Executive\Service\UserViewService;
-use buzzingpixel\executive\commands\MakeFromTemplateCommand;
+use buzzingpixel\executive\commands\RunScheduleCommand;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use BuzzingPixel\Executive\Command\UserMigrationCommand;
 use buzzingpixel\executive\commands\MakeMigrationCommand;
+use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
 
@@ -80,14 +79,6 @@ return [
         'ConsoleService' => function () {
             return new ConsoleService();
         },
-        'CommandsService' => function () {
-            return new CommandsService([
-                'eeAddonFactory' => ee('Addon'),
-                'eeConfigService' => ee()->config,
-                'consoleService' => ee('executive:ConsoleService'),
-                'queryBuilder' => ee('db'),
-            ]);
-        },
         'UserView' => function (Provider $addOn, $path = '') {
             return new UserViewService($path, $addOn);
         },
@@ -134,7 +125,7 @@ return [
             'description' => lang('runAddonUpdatesDescription'),
         ],
         'runSchedule' => [
-            'class' => ScheduleCommand::class,
+            'class' => RunScheduleCommand::class,
             'method' => 'run',
             'description' => lang('runScheduleDescription'),
         ],

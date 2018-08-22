@@ -15,14 +15,16 @@ use buzzingpixel\executive\factories\EeDiFactory;
 use buzzingpixel\executive\commands\ConfigCommand;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use buzzingpixel\executive\factories\FinderFactory;
+use buzzingpixel\executive\services\ScheduleService;
 use buzzingpixel\executive\services\CommandsService;
+use buzzingpixel\executive\models\CliArgumentsModel;
 use buzzingpixel\executive\services\MigrationsService;
 use buzzingpixel\executive\services\RunCommandService;
 use Composer\Repository\InstalledFilesystemRepository;
 use buzzingpixel\executive\services\CliInstallService;
+use buzzingpixel\executive\commands\RunScheduleCommand;
 use buzzingpixel\executive\services\CliQuestionService;
 use buzzingpixel\executive\factories\SplFileInfoFactory;
-use buzzingpixel\executive\services\CliArgumentsService;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use buzzingpixel\executive\services\TemplateMakerService;
 use buzzingpixel\executive\factories\CommandModelFactory;
@@ -36,6 +38,8 @@ use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\factories\ConsoleQuestionFactory;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
+use buzzingpixel\executive\factories\ScheduleItemModelFactory;
+use buzzingpixel\executive\factories\CliArgumentsModelFactory;
 use buzzingpixel\executive\controllers\RunMigrationsController;
 use buzzingpixel\executive\factories\ReflectionFunctionFactory;
 use buzzingpixel\executive\factories\ClosureFromCallableFactory;
@@ -131,13 +135,24 @@ return [
             \is_string($destination) ? $destination : ''
         );
     },
+    RunScheduleCommand::class => function () {
+        // Let's try not to run out of time
+        @set_time_limit(0);
+
+        return new RunScheduleCommand(
+            ee()->lang,
+            new ConsoleOutput(),
+            ExecutiveDi::get(ScheduleService::class),
+            ExecutiveDi::get(RunCommandService::class)
+        );
+    },
 
     /**
      * Controllers
      */
     ConsoleController::class => function () {
         return new ConsoleController(
-            ExecutiveDi::get(CliArgumentsService::class),
+            ExecutiveDi::get(CliArgumentsModel::class),
             new ConsoleOutput(),
             ExecutiveDi::get(CommandsService::class),
             ee()->lang,
@@ -152,15 +167,19 @@ return [
     },
 
     /**
+     * Models
+     */
+    CliArgumentsModel::class => function () {
+        $arguments = EXECUTIVE_RAW_ARGS;
+        $arguments = \is_array($arguments) ? $arguments : [];
+        return new CliArgumentsModel($arguments);
+    },
+
+    /**
      * Services
      */
     CaseConversionService::class => function () {
         return new CaseConversionService();
-    },
-    CliArgumentsService::class => function () {
-        $arguments = EXECUTIVE_RAW_ARGS;
-        $arguments = \is_array($arguments) ? $arguments : [];
-        return new CliArgumentsService($arguments);
     },
     CliInstallService::class => function () {
         // Manually include non-auto-loaded dependencies
@@ -207,11 +226,21 @@ return [
     },
     RunCommandService::class => function () {
         return new RunCommandService(
-            ExecutiveDi::get(CliArgumentsService::class),
+            ExecutiveDi::get(CliArgumentsModel::class),
             new ExecutiveDi(),
             new EeDiFactory(),
             new ClosureFromCallableFactory(),
             new ReflectionFunctionFactory()
+        );
+    },
+    ScheduleService::class => function () {
+        return new ScheduleService(
+            ee()->config,
+            ee('Addon'),
+            ExecutiveDi::get(CommandsService::class),
+            new ScheduleItemModelFactory(),
+            new QueryBuilderFactory(),
+            new CliArgumentsModelFactory()
         );
     },
     TemplateMakerService::class => function () {

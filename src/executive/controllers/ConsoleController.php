@@ -15,7 +15,7 @@ use buzzingpixel\executive\models\CommandModel;
 use buzzingpixel\executive\services\CommandsService;
 use Symfony\Component\Console\Output\OutputInterface;
 use buzzingpixel\executive\services\RunCommandService;
-use buzzingpixel\executive\services\CliArgumentsService;
+use buzzingpixel\executive\models\CliArgumentsModel;
 use buzzingpixel\executive\exceptions\InvalidCommandException;
 use buzzingpixel\executive\exceptions\InvalidCommandGroupException;
 
@@ -24,8 +24,8 @@ use buzzingpixel\executive\exceptions\InvalidCommandGroupException;
  */
 class ConsoleController
 {
-    /** @var CliArgumentsService $cliArgumentsService */
-    private $cliArgumentsService;
+    /** @var CliArgumentsModel $cliArgumentsModel */
+    private $cliArgumentsModel;
 
     /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
@@ -41,20 +41,20 @@ class ConsoleController
 
     /**
      * ConsoleController constructor
-     * @param CliArgumentsService $cliArgumentsService
+     * @param CliArgumentsModel $cliArgumentsModel
      * @param OutputInterface $consoleOutput
      * @param CommandsService $commandsService
      * @param EE_Lang $lang
      * @param RunCommandService $runCommandService
      */
     public function __construct(
-        CliArgumentsService $cliArgumentsService,
+        CliArgumentsModel $cliArgumentsModel,
         OutputInterface $consoleOutput,
         CommandsService $commandsService,
         EE_Lang $lang,
         RunCommandService $runCommandService
     ) {
-        $this->cliArgumentsService = $cliArgumentsService;
+        $this->cliArgumentsModel = $cliArgumentsModel;
         $this->consoleOutput = $consoleOutput;
         $this->commandsService = $commandsService;
         $this->lang = $lang;
@@ -71,7 +71,7 @@ class ConsoleController
     {
         $groups = $this->commandsService->getCommandGroups();
 
-        $group = $this->cliArgumentsService->getArgument('group');
+        $group = $this->cliArgumentsModel->getArgument('group');
 
         if ($group === null) {
             $this->listCommands($groups);
@@ -84,7 +84,7 @@ class ConsoleController
             );
         }
 
-        $command = $this->cliArgumentsService->getArgument('command');
+        $command = $this->cliArgumentsModel->getArgument('command');
 
         if ($command === null) {
             $this->listCommands([$group => $groupModels]);
