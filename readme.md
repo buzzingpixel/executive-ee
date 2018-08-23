@@ -22,7 +22,6 @@ Executive also provides an interface for you to create custom commands and sched
     - [ChannelDesigner](docs/channel-designer.md)
     - [ExtensionDesigner](docs/extension-designer.md)
     - [LayoutDesigner](docs/layout-designer.md)
-- [User Class Autoloading](docs/user-class-autoloding.md)
 - [Custom Commands](docs/custom-commands.md)
 - [Addon Comands](docs/addon-commands.md)
 - [Schedule](docs/schedule.md)
