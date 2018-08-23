@@ -9,7 +9,7 @@
 
 ## Installing Or Updating
 
-Executive 3.x and newer is designed to work only with Composer dependency management. If you know what you're doing (and you probably do if you're using Executive), you can modify these instructions or the sample front controller files to suite your purposes. However, this is a guide to installing Executive with Composer will be your starting point:
+Executive 3.x and newer is designed to work only with Composer dependency management. If you know what you're doing (and you probably do if you're using Executive), you can modify these instructions or the sample front controller files to suite your purposes. However, this guide to installing Executive with Composer will be your starting point:
 
 1. If you do not yet have composer set up in your project, copy the `composer.json` file from `install-support` to the top level of your project
     - You should modify some of the obvious sample values in the `composer.json` file
@@ -33,7 +33,7 @@ To update Executive to the latest point release of the same major version:
     - Of course, you could also just run `composer update` to update any and all of your project's composer dependencies
 2. From the root of your project, run `php ee executive runAddonUpdates`
 
-To update Executive to a new major release, say from 2.x to 3.x, update your composer.json requirements for Executive from `^3.0` to `^4.0` then run through the update instructions from above.
+To update Executive to a new major release, say from 3.x to 4.x, update your composer.json requirements for Executive from `^3.0` to `^4.0` then run through the update instructions from above.
 
 ## Note
 
