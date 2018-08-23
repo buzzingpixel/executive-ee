@@ -109,12 +109,12 @@ class Executive_ext
             return;
         }
 
-        call_user_func_array(
-            array(
-                new $row->class(),
-                $row->method,
-            ),
-            $args
-        );
+        try {
+            $class = ExecutiveDi::get($row->class);
+        } catch (\Throwable $e) {
+            $class = new $row->class();
+        }
+
+        call_user_func_array([$class, $row->method], $args);
     }
 }
