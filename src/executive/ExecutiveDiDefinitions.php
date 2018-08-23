@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use buzzingpixel\executive\ExecutiveDi;
 use Symfony\Component\Filesystem\Filesystem;
+use buzzingpixel\executive\models\RouteModel;
 use Symfony\Component\Console\Input\ArgvInput;
 use buzzingpixel\executive\services\ViewService;
 use buzzingpixel\executive\commands\CacheCommand;
@@ -208,6 +209,22 @@ return [
         $arguments = EXECUTIVE_RAW_ARGS;
         $arguments = \is_array($arguments) ? $arguments : [];
         return new CliArgumentsModel($arguments);
+    },
+    RouteModel::SINGLETON_DI_NAME => function () {
+        /** @var EE_Session $session */
+        $session = ee()->session;
+
+        $class = $session->cache('Executive', RouteModel::SINGLETON_DI_NAME);
+
+        if ($class) {
+            return $class;
+        }
+
+        $class = new RouteModel();
+
+        $session->set_cache('Executive', RouteModel::SINGLETON_DI_NAME, $class);
+
+        return $class;
     },
 
     /**
