@@ -6,17 +6,16 @@
  * @license Apache-2.0
  */
 
-namespace BuzzingPixel\Executive\SchemaDesign;
+namespace buzzingpixel\executive\services;
 
-use BuzzingPixel\Executive\BaseComponent;
 use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
-use EllisLab\ExpressionEngine\Model\Addon\Extension as ExtensionModel;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
+use EllisLab\ExpressionEngine\Model\Addon\Extension as ExtensionModel;
 
 /**
- * Class ExtensionDesigner
+ * Class ExtensionDesignerService
  */
-class ExtensionDesigner extends BaseComponent
+class ExtensionDesignerService
 {
     /** @var ModelFacade $modelFacade */
     private $modelFacade;
@@ -25,12 +24,16 @@ class ExtensionDesigner extends BaseComponent
     private $queryBuilder;
 
     /**
-     * Initialize class
+     * ExtensionDesignerService constructor
+     * @param ModelFacade $modelFacade
+     * @param QueryBuilder $queryBuilder
      */
-    protected function init()
-    {
-        $this->modelFacade = ee('Model');
-        $this->queryBuilder = ee('db');
+    public function __construct(
+        ModelFacade $modelFacade,
+        QueryBuilder $queryBuilder
+    ) {
+        $this->modelFacade = $modelFacade;
+        $this->queryBuilder = $queryBuilder;
     }
 
     /** @var string $class */
@@ -38,10 +41,11 @@ class ExtensionDesigner extends BaseComponent
 
     /**
      * Set the extension class to call
+     *
      * @param string $str
-     * @return $this
+     * @return ExtensionDesignerService
      */
-    public function extClass($str)
+    public function extClass($str): self
     {
         $this->extClass = $str;
         return $this;
@@ -52,10 +56,11 @@ class ExtensionDesigner extends BaseComponent
 
     /**
      * Set the extension method to call
+     *
      * @param string $str
-     * @return $this
+     * @return ExtensionDesignerService
      */
-    public function extMethod($str)
+    public function extMethod($str): self
     {
         $this->extMethod = $str;
         return $this;
@@ -66,10 +71,11 @@ class ExtensionDesigner extends BaseComponent
 
     /**
      * Set the hook the extension should run on
+     *
      * @param string $str
-     * @return $this
+     * @return ExtensionDesignerService
      */
-    public function extHook($str)
+    public function extHook($str): self
     {
         $this->extHook = $str;
         return $this;
@@ -80,10 +86,11 @@ class ExtensionDesigner extends BaseComponent
 
     /**
      * Set the hook the extension should run on
+     *
      * @param int $int
-     * @return $this
+     * @return ExtensionDesignerService
      */
-    public function extPriority($int)
+    public function extPriority($int): self
     {
         $this->extPriority = (int) $int;
         return $this;
@@ -93,7 +100,7 @@ class ExtensionDesigner extends BaseComponent
      * Add the extension
      * @throws \Exception
      */
-    public function add()
+    public function add(): void
     {
         $this->checkPropertiesSet();
 
@@ -126,7 +133,7 @@ class ExtensionDesigner extends BaseComponent
      * Remove extension
      * @throws \Exception
      */
-    public function remove()
+    public function remove(): void
     {
         $this->checkPropertiesSet();
 
@@ -158,7 +165,7 @@ class ExtensionDesigner extends BaseComponent
      * Check properties set
      * @throws \Exception
      */
-    private function checkPropertiesSet()
+    private function checkPropertiesSet(): void
     {
         if (! $this->extClass) {
             throw new \Exception(lang('extClassRequired'));

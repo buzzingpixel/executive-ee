@@ -31,13 +31,16 @@ use buzzingpixel\executive\factories\CommandModelFactory;
 use buzzingpixel\executive\commands\MakeMigrationCommand;
 use buzzingpixel\executive\controllers\ConsoleController;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
+use buzzingpixel\executive\services\LayoutDesignerService;
 use buzzingpixel\executive\services\CaseConversionService;
 use buzzingpixel\executive\services\ElevateSessionService;
 use buzzingpixel\executive\services\CliErrorHandlerService;
+use buzzingpixel\executive\services\ChannelDesignerService;
 use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\factories\ConsoleQuestionFactory;
 use buzzingpixel\executive\commands\RunUserMigrationsCommand;
+use buzzingpixel\executive\services\ExtensionDesignerService;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
 use buzzingpixel\executive\factories\ScheduleItemModelFactory;
 use buzzingpixel\executive\factories\CliArgumentsModelFactory;
@@ -197,9 +200,10 @@ return [
     CaseConversionService::class => function () {
         return new CaseConversionService();
     },
+    ChannelDesignerService::class => function () {
+        return new ChannelDesignerService(ee('Model'));
+    },
     CliInstallService::class => function () {
-        // Manually include non-auto-loaded dependencies
-        include_once __DIR__ . '/upd.executive.php';
         return new CliInstallService(new Executive_upd());
     },
     CliErrorHandlerService::class => function () {
@@ -233,6 +237,15 @@ return [
             ee()->router,
             ee()->load
         );
+    },
+    ExtensionDesignerService::class => function () {
+        return new ExtensionDesignerService(
+            ee('Model'),
+            ee('db')
+        );
+    },
+    LayoutDesignerService::class => function () {
+        return new LayoutDesignerService(ee('Model'));
     },
     MigrationsService::class => function () {
         return new MigrationsService(

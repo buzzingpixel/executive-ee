@@ -6,22 +6,21 @@
  * @license Apache-2.0
  */
 
-namespace BuzzingPixel\Executive\SchemaDesign;
+namespace buzzingpixel\executive\services;
 
-use BuzzingPixel\Executive\BaseComponent;
-use EllisLab\ExpressionEngine\Model\Channel\ChannelLayout;
-use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
-use EllisLab\ExpressionEngine\Model\Site\Site as SiteModel;
-use EllisLab\ExpressionEngine\Model\Channel\Channel as ChannelModel;
-use EllisLab\ExpressionEngine\Model\Channel\ChannelField as ChannelFieldModel;
-use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
-use EllisLab\ExpressionEngine\Model\Channel\Display\DefaultChannelLayout;
 use EllisLab\ExpressionEngine\Model\Member\MemberGroup;
+use EllisLab\ExpressionEngine\Model\Channel\ChannelLayout;
+use EllisLab\ExpressionEngine\Model\Site\Site as SiteModel;
+use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
+use EllisLab\ExpressionEngine\Model\Channel\Channel as ChannelModel;
+use EllisLab\ExpressionEngine\Model\Channel\Display\DefaultChannelLayout;
+use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
+use EllisLab\ExpressionEngine\Model\Channel\ChannelField as ChannelFieldModel;
 
 /**
- * Class LayoutDesigner
+ * Class LayoutDesignerService
  */
-class LayoutDesigner extends BaseComponent
+class LayoutDesignerService
 {
     /** @var ModelFacade $modelFacade */
     private $modelFacade;
@@ -40,11 +39,12 @@ class LayoutDesigner extends BaseComponent
     );
 
     /**
-     * Initialize class
+     * LayoutDesignerService constructor
+     * @param ModelFacade $modelFacade
      */
-    protected function init()
+    public function __construct(ModelFacade $modelFacade)
     {
-        $this->modelFacade = ee('Model');
+        $this->modelFacade = $modelFacade;
 
         $fields = $this->modelFacade->get('ChannelField')->all();
 
@@ -72,9 +72,9 @@ class LayoutDesigner extends BaseComponent
     /**
      * Set the site name
      * @param string $str
-     * @return self
+     * @return LayoutDesignerService
      */
-    public function siteName($str)
+    public function siteName($str): self
     {
         $this->siteName = $str;
         return $this;
@@ -86,9 +86,9 @@ class LayoutDesigner extends BaseComponent
     /**
      * Set the channel
      * @param string $str
-     * @return self
+     * @return LayoutDesignerService
      */
-    public function channel($str)
+    public function channel($str): self
     {
         $this->channel = $str;
         return $this;
@@ -100,9 +100,9 @@ class LayoutDesigner extends BaseComponent
     /**
      * Set the layout name
      * @param string $str
-     * @return self
+     * @return LayoutDesignerService
      */
-    public function layoutName($str)
+    public function layoutName($str): self
     {
         $this->layoutName = $str;
         return $this;
@@ -114,9 +114,9 @@ class LayoutDesigner extends BaseComponent
     /**
      * Add member group
      * @param string $str
-     * @return self
+     * @return LayoutDesignerService
      */
-    public function addMemberGroup($str)
+    public function addMemberGroup($str): self
     {
         $this->addMemberGroups[] = $str;
         return $this;
@@ -128,9 +128,9 @@ class LayoutDesigner extends BaseComponent
     /**
      * Remove member group
      * @param string $str
-     * @return self
+     * @return LayoutDesignerService
      */
-    public function removeMemberGroup($str)
+    public function removeMemberGroup($str): self
     {
         $this->removeMemberGroups[] = $str;
         return $this;
@@ -142,9 +142,9 @@ class LayoutDesigner extends BaseComponent
     /**
      * Set the tab to add fields to
      * @param string $str
-     * @return self
+     * @return LayoutDesignerService
      */
-    public function tab($str)
+    public function tab($str): self
     {
         $this->tab = $str;
         return $this;
@@ -156,9 +156,9 @@ class LayoutDesigner extends BaseComponent
     /**
      * Remove a tab
      * @param string $str
-     * @return self
+     * @return LayoutDesignerService
      */
-    public function removeTab($str)
+    public function removeTab($str): self
     {
         $this->removeTabs[] = $str;
         return $this;
@@ -170,9 +170,9 @@ class LayoutDesigner extends BaseComponent
     /**
      * Set whether the current working tab is visible
      * @param bool $val
-     * @return self
+     * @return LayoutDesignerService
      */
-    public function tabIsVisible($val = true)
+    public function tabIsVisible($val = true): self
     {
         $this->tabVisibility[$this->tab] = $val;
         return $this;
@@ -187,9 +187,9 @@ class LayoutDesigner extends BaseComponent
     /**
      * Add field to current tab
      * @param string $str
-     * @return self
+     * @return LayoutDesignerService
      */
-    public function addField($str)
+    public function addField($str): self
     {
         $this->currentField = $str;
         $this->tabFields[$this->tab][] = $str;
@@ -202,9 +202,9 @@ class LayoutDesigner extends BaseComponent
     /**
      * Set whether the current field is visible
      * @param bool $val
-     * @return self
+     * @return LayoutDesignerService
      */
-    public function fieldIsVisible($val = true)
+    public function fieldIsVisible($val = true): self
     {
         $this->fieldVisibility[$this->currentField] = $val;
         return $this;
@@ -216,9 +216,9 @@ class LayoutDesigner extends BaseComponent
     /**
      * Set whether the current field is collapsed
      * @param bool $val
-     * @return self
+     * @return LayoutDesignerService
      */
-    public function fieldIsCollapsed($val = true)
+    public function fieldIsCollapsed($val = true): self
     {
         $this->fieldCollapsed[$this->currentField] = $val;
         return $this;
@@ -228,7 +228,7 @@ class LayoutDesigner extends BaseComponent
      * Save schema design
      * @throws \Exception
      */
-    public function save()
+    public function save(): void
     {
         // Set required items
         $this->setSiteModel();
@@ -246,7 +246,7 @@ class LayoutDesigner extends BaseComponent
      * Set site model
      * @throws \Exception
      */
-    private function setSiteModel()
+    private function setSiteModel(): void
     {
         if (! $this->siteName) {
             throw new \Exception('Site name not defined');
@@ -269,7 +269,7 @@ class LayoutDesigner extends BaseComponent
      * Set Channel Model
      * @throws \Exception
      */
-    private function setChannelModel()
+    private function setChannelModel(): void
     {
         if (! $this->channel) {
             throw new \Exception('Channel not defined');
@@ -293,7 +293,7 @@ class LayoutDesigner extends BaseComponent
      * Set layout model
      * @throws \Exception
      */
-    private function setLayoutModel()
+    private function setLayoutModel(): void
     {
         if (! $this->layoutName) {
             throw new \Exception('Layout name not defined');
@@ -323,7 +323,7 @@ class LayoutDesigner extends BaseComponent
     /**
      * Process tabs and fields
      */
-    private function processTabsAndFields()
+    private function processTabsAndFields(): void
     {
         // Start variables
         $placedFieldIds = array();
@@ -367,9 +367,7 @@ class LayoutDesigner extends BaseComponent
                 $fieldIdStr = $fieldName;
 
                 // Get the field ID
-                $fieldId = isset($this->fieldNameToIdMap[$fieldName]) ?
-                    $this->fieldNameToIdMap[$fieldName] :
-                    null;
+                $fieldId = $this->fieldNameToIdMap[$fieldName] ?? null;
 
                 // Set the field string
                 if ($fieldId) {
@@ -409,7 +407,7 @@ class LayoutDesigner extends BaseComponent
             $tabId = $layoutTab['id'];
 
             // If we're supposed to remove this tab, let's stop
-            if (in_array($layoutTab['name'], $this->removeTabs, true)) {
+            if (\in_array($layoutTab['name'], $this->removeTabs, true)) {
                 continue;
             }
 
@@ -454,9 +452,7 @@ class LayoutDesigner extends BaseComponent
                 $fieldIdStr = $field['field'];
 
                 // Get the field name
-                $fieldName = isset($this->fieldIdStrToNameMap[$fieldIdStr]) ?
-                    $this->fieldIdStrToNameMap[$fieldIdStr] :
-                    $fieldIdStr;
+                $fieldName = $this->fieldIdStrToNameMap[$fieldIdStr] ?? $fieldIdStr;
 
                 // If the field is required, make sure it is visible
                 if (isset($this->requiredFieldMap[$fieldIdStr]) &&
@@ -546,7 +542,7 @@ class LayoutDesigner extends BaseComponent
     /**
      * Process remove member groups
      */
-    private function processMemberGroups()
+    private function processMemberGroups(): void
     {
         // Get the member groups
         /** @var ModelCollection $memberGroups */
@@ -558,7 +554,7 @@ class LayoutDesigner extends BaseComponent
         foreach ($memberGroups as $memberGroup) {
             /** @var MemberGroup $memberGroup */
 
-            if (in_array(
+            if (\in_array(
                 $memberGroup->getProperty('group_title'),
                 $this->removeMemberGroups,
                 true
@@ -606,7 +602,7 @@ class LayoutDesigner extends BaseComponent
             foreach ($thisMemberGroups as $memberGroup) {
                 /** @var MemberGroup $memberGroup */
 
-                if (in_array(
+                if (\in_array(
                     $memberGroup->getProperty('group_title'),
                     $this->addMemberGroups,
                     true

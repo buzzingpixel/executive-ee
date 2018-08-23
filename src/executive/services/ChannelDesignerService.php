@@ -6,29 +6,29 @@
  * @license Apache-2.0
  */
 
-namespace BuzzingPixel\Executive\SchemaDesign;
+namespace buzzingpixel\executive\services;
 
 use Exception;
-use BuzzingPixel\Executive\BaseComponent;
 use EllisLab\ExpressionEngine\Model\Channel\ChannelField;
 use EllisLab\ExpressionEngine\Model\Site\Site as SiteModel;
 use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
 
 /**
- * Class ChannelDesigner
+ * Class ChannelDesignerService
  */
-class ChannelDesigner extends BaseComponent
+class ChannelDesignerService
 {
     /** @var ModelFacade $modelFacade */
     private $modelFacade;
 
     /**
-     * Initialize class
+     * ChannelDesignerService constructor
+     * @param ModelFacade $modelFacade
      */
-    protected function init()
+    public function __construct(ModelFacade $modelFacade)
     {
-        $this->modelFacade = ee('Model');
+        $this->modelFacade = $modelFacade;
     }
 
     /** @var string $siteName */
@@ -37,9 +37,9 @@ class ChannelDesigner extends BaseComponent
     /**
      * Set the site name
      * @param string $str
-     * @return self
+     * @return ChannelDesignerService
      */
-    public function siteName($str)
+    public function siteName($str): self
     {
         $this->siteName = $str;
         return $this;
@@ -52,9 +52,9 @@ class ChannelDesigner extends BaseComponent
      * Add status
      * @param string $status
      * @param string $color
-     * @return self
+     * @return ChannelDesignerService
      */
-    public function addStatus($status, $color = '000000')
+    public function addStatus($status, $color = '000000'): self
     {
         $this->statuses[$status] = $color;
         return $this;
@@ -66,9 +66,9 @@ class ChannelDesigner extends BaseComponent
     /**
      * Remove a status
      * @param $status
-     * @return $this
+     * @return ChannelDesignerService
      */
-    public function removeStatus($status)
+    public function removeStatus($status): self
     {
         $this->removeStatuses[] = $status;
         return $this;
@@ -80,9 +80,9 @@ class ChannelDesigner extends BaseComponent
     /**
      * Add field
      * @param array $fieldArray
-     * @return self
+     * @return ChannelDesignerService
      */
-    public function addField($fieldArray)
+    public function addField($fieldArray): self
     {
         $this->fields[] = $fieldArray;
         return $this;
@@ -94,9 +94,9 @@ class ChannelDesigner extends BaseComponent
     /**
      * Remove field
      * @param $fieldName
-     * @return $this
+     * @return ChannelDesignerService
      */
-    public function removeField($fieldName)
+    public function removeField($fieldName): self
     {
         $this->removeFields[] = $fieldName;
         return $this;
@@ -108,9 +108,9 @@ class ChannelDesigner extends BaseComponent
     /**
      * Add channel name
      * @param string $str
-     * @return self
+     * @return ChannelDesignerService
      */
-    public function channelName($str)
+    public function channelName($str): self
     {
         $this->channelName = $str;
         return $this;
@@ -122,9 +122,9 @@ class ChannelDesigner extends BaseComponent
     /**
      * Add channel title
      * @param string $str
-     * @return self
+     * @return ChannelDesignerService
      */
-    public function channelTitle($str)
+    public function channelTitle($str): self
     {
         $this->channelTitle = $str;
         return $this;
@@ -136,9 +136,9 @@ class ChannelDesigner extends BaseComponent
     /**
      * Set extended channel properties
      * @param array $properties
-     * @return self
+     * @return ChannelDesignerService
      */
-    public function extendedChannelProperties($properties)
+    public function extendedChannelProperties($properties): self
     {
         $this->extendedChannelProperties = $properties;
         return $this;
@@ -148,7 +148,7 @@ class ChannelDesigner extends BaseComponent
      * Save schema design
      * @throws Exception
      */
-    public function save()
+    public function save(): void
     {
         $this->setSiteModel();
         $this->addUpdateStatuses();
@@ -163,7 +163,7 @@ class ChannelDesigner extends BaseComponent
      * Set site model
      * @throws Exception
      */
-    private function setSiteModel()
+    private function setSiteModel(): void
     {
         if (! $this->siteName) {
             throw new Exception('Site name not defined');
@@ -182,7 +182,7 @@ class ChannelDesigner extends BaseComponent
     /**
      * Add or update statuses
      */
-    private function addUpdateStatuses()
+    private function addUpdateStatuses(): void
     {
         if (! $this->statuses) {
             return;
@@ -222,7 +222,7 @@ class ChannelDesigner extends BaseComponent
     /**
      * Add or update fields
      */
-    private function addUpdateFields()
+    private function addUpdateFields(): void
     {
         if (! $this->fields) {
             return;
@@ -276,7 +276,7 @@ class ChannelDesigner extends BaseComponent
     /**
      * Add or update channel
      */
-    private function addOrUpdateChannel()
+    private function addOrUpdateChannel(): void
     {
         if (! $this->channelName) {
             return;
@@ -331,7 +331,7 @@ class ChannelDesigner extends BaseComponent
      * @param ModelCollection $existingFields
      * @return ModelCollection
      */
-    private function getCustomFieldsCollection($existingFields = null)
+    private function getCustomFieldsCollection($existingFields = null): ModelCollection
     {
         $fieldShortNames = array();
 
@@ -355,7 +355,7 @@ class ChannelDesigner extends BaseComponent
 
         if ($existingFields) {
             foreach ($existingFields as $field) {
-                if (in_array($field->field_name, $this->removeFields, false)) {
+                if (\in_array($field->field_name, $this->removeFields, false)) {
                     continue;
                 }
 
@@ -375,7 +375,7 @@ class ChannelDesigner extends BaseComponent
      * @param ModelCollection $existingStatuses
      * @return ModelCollection
      */
-    private function getStatusCollection($existingStatuses = null)
+    private function getStatusCollection($existingStatuses = null): ModelCollection
     {
         $requiredStatuses = array(
             'open',
@@ -402,7 +402,7 @@ class ChannelDesigner extends BaseComponent
 
         if ($existingStatuses) {
             foreach ($existingStatuses as $status) {
-                if (in_array($status->status, $this->removeStatuses, false)) {
+                if (\in_array($status->status, $this->removeStatuses, false)) {
                     continue;
                 }
 
