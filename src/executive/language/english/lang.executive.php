@@ -16,7 +16,7 @@ if (defined('REQ') && REQ === 'CONSOLE') {
 }
 
 $lang = [
-    'notInstalled' => 'Executive is not installed. Please run "php ' . $fileName . ' install"',
+    'notInstalled' => 'Executive is not installed. Please run "php ' . $fileName . ' executive install"',
     'executiveInstalled' => 'Executive has been installed',
     'usage:' => 'usage:',
     'usageExample' => 'php ' . $fileName . ' [group] [command] [--argument=value] [--argument2=value2]',

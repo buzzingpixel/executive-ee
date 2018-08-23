@@ -71,9 +71,10 @@ class InstallExecutiveCommand
 
         $args = $this->executiveRawArgs;
 
-        $requestingInstall = isset($args[1]) &&
-            $args[1] === 'install' &&
-            \count($args) < 3;
+        $requestingInstall = isset($args[1], $args[2]) &&
+            $args[1] === 'executive' &&
+            $args[2] === 'install' &&
+            \count($args) < 4;
 
         if (! $requestingInstall) {
             $this->consoleOutput->writeln(

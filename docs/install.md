@@ -24,7 +24,7 @@ Executive 3.x and newer is designed to work only with Composer dependency manage
     - One trick is to commit a `.env.example` file with the correct values for a local dev environment so developers can duplicate this file to get started quickly
 6. CD to your project's root directory and run `php ee executive composerProvision`
     - This will symlink Executive's files into the locations EE expects them to be
-7. Now run `php ee install` to install Executive
+7. Now run `php ee executive install` to install Executive
     - You could also install it from the EE control panel as any other add-on in EE, but where's the fun in that?
 
 To update Executive to the latest point release of the same major version:
