@@ -72,7 +72,10 @@ class MakeMigrationCommand
         $this->templateMakerService = $templateMakerService;
         $this->templateLocation = $templateLocation;
         $this->migrationNameSpace = $migrationNameSpace;
-        $this->migrationDestination = $migrationDestination;
+        $this->migrationDestination = rtrim(
+            rtrim($migrationDestination, '/'),
+            DIRECTORY_SEPARATOR
+        );
     }
 
     /**
