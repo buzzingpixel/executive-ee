@@ -108,4 +108,7 @@ $lang = [
     'followingMigrationHasntRun' => 'The following migration hasn\'t ben run yet',
     'followingMigrationsHaventRun' => 'The following migrations haven\'t been run yet',
     'listMigrationsDescription' => 'Lists migrations that have not yet been run',
+    'viewFileNotFound' => 'View file not found: {{filePath}}',
+    'pleaseSetCpViewsBasePath' => 'Please set the config base path to your control panel views directory: `$config[\'cpViewsBasePath\'] = \'/path/to/views/directory\'`',
+    'pleaseSetView' => 'Please call the method `setView(\'my/view/file/path\')` before calling the render method',
 ];

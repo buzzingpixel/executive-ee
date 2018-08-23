@@ -10,6 +10,7 @@ declare(strict_types=1);
 use buzzingpixel\executive\ExecutiveDi;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\ArgvInput;
+use buzzingpixel\executive\services\ViewService;
 use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\factories\EeDiFactory;
 use buzzingpixel\executive\commands\ConfigCommand;
@@ -291,6 +292,22 @@ return [
         return new TemplateMakerService(
             new SplFileInfoFactory(),
             new Filesystem()
+        );
+    },
+    ViewService::class => function () {
+        /** @var \EE_Config $config */
+        $config = ee()->config;
+        $viewsBasePath = $config->item('cpViewsBasePath');
+
+        return new ViewService(
+            ee('executive:Provider'),
+            \is_string($viewsBasePath) ? $viewsBasePath : ''
+        );
+    },
+    ViewService::INTERNAL_DI_NAME => function () {
+        return new ViewService(
+            ee('executive:Provider'),
+            __DIR__ . '/views'
         );
     },
 ];

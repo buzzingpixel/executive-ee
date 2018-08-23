@@ -7,12 +7,16 @@ declare(strict_types=1);
  * @license Apache-2.0
  */
 
+use DI\NotFoundException;
+use DI\DependencyException;
 use buzzingpixel\executive\ExecutiveDi;
 use EllisLab\ExpressionEngine\Library\CP\Table;
+use buzzingpixel\executive\services\ViewService;
 use EllisLab\ExpressionEngine\Service\URL\URLFactory;
-use EllisLab\ExpressionEngine\Service\View\ViewFactory;
 use EllisLab\ExpressionEngine\Service\Alert\AlertCollection;
 use EllisLab\ExpressionEngine\Core\Request as RequestService;
+use buzzingpixel\executive\exceptions\InvalidViewConfigurationException;
+use buzzingpixel\executive\exceptions\DependencyInjectionBuilderException;
 
 /**
  * Class Executive_mcp
@@ -30,23 +34,30 @@ class Executive_mcp
     /** @var URLFactory $urlFactory */
     private $urlFactory;
 
-    /** @var ViewFactory $viewFactory */
-    private $viewFactory;
+    /** @var ViewService $viewService */
+    private $viewService;
 
     /**
      * Executive_mcp constructor
+     * @throws NotFoundException
+     * @throws DependencyException
+     * @throws DependencyInjectionBuilderException
      */
     public function __construct()
     {
         $this->configService = ee()->config;
         $this->requestService = ee('Request');
         $this->urlFactory = ee('CP/URL');
-        $this->viewFactory = ee('View');
+
+        $this->viewService = ExecutiveDi::get(
+            ViewService::INTERNAL_DI_NAME
+        );
     }
 
     /**
      * Executive's control panel method
      * @return array
+     * @throws InvalidViewConfigurationException
      */
     public function index(): array
     {
@@ -73,11 +84,11 @@ class Executive_mcp
                 ->asIssue()
                 ->now();
 
-            return array(
+            return [
                 'heading' => lang('userCpSectionNotFound'),
-                'body' => $this->viewFactory->make('executive:CP/AlertOnly')
+                'body' => $this->viewService->setView('CP/AlertOnly')
                     ->render(),
-            );
+            ];
         }
 
         $pageKey = $this->requestService->get('page');
@@ -98,19 +109,21 @@ class Executive_mcp
 
     /**
      * Shows available sections
+     * @return array
+     * @throws InvalidViewConfigurationException
      */
     private function showAvailableSections(): array
     {
         /** @var Table $table */
         $table = ee('CP/Table');
 
-        $table->setColumns(array(
+        $table->setColumns([
             '',
-        ));
+        ]);
 
         $table->setNoResultsText('noCpSections');
 
-        $data = array();
+        $data = [];
 
         $sections = $this->configService->item('cpSections') ?: [];
 
@@ -119,23 +132,21 @@ class Executive_mcp
                 continue;
             }
 
-            $data[][] = array(
+            $data[][] = [
                 'content' => $section['index']['title'],
-                'href' => $this->urlFactory
-                    ->make('addons/settings/executive', array(
-                        'section' => $sectionHandle
-                    ))
-            );
+                'href' => $this->urlFactory->make('addons/settings/executive', [
+                    'section' => $sectionHandle
+                ])
+            ];
         }
 
         $table->setData($data);
 
-        return array(
+        return [
             'heading' => lang('userCpSections'),
-            'body' => $this->viewFactory->make('executive:CP/Index')
-                ->render(array(
-                    'table' => $table->viewData(),
-                ))
-        );
+            'body' => $this->viewService->setView('CP/Index')->render([
+                'table' => $table->viewData(),
+            ])
+        ];
     }
 }

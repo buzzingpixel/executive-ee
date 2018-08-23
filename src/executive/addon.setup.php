@@ -14,7 +14,6 @@ use EllisLab\ExpressionEngine\Core\Provider;
 use Composer\Package\CompletePackageInterface;
 use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\commands\ConfigCommand;
-use BuzzingPixel\Executive\Service\UserViewService;
 use buzzingpixel\executive\commands\RunScheduleCommand;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use buzzingpixel\executive\commands\MakeMigrationCommand;
@@ -74,11 +73,8 @@ return [
     'settings_exist' => true,
     'version' => EXECUTIVE_VER,
     'services' => [
-        /**
-         * Services
-         */
-        'UserView' => function (Provider $addOn, $path = '') {
-            return new UserViewService($path, $addOn);
+        'Provider' => function (Provider $provider) {
+            return $provider;
         },
     ],
     'commands' => [
