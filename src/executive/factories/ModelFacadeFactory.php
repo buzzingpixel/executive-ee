@@ -20,7 +20,7 @@ class ModelFacadeFactory
      * Gets an instance of the model facade
      * @return ModelFacade
      */
-    public function get(): ModelFacade
+    public function make(): ModelFacade
     {
         return ee('Model');
     }
