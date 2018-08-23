@@ -22,6 +22,7 @@ use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
 use buzzingpixel\executive\commands\RunUserMigrationsCommand;
+use buzzingpixel\executive\commands\ListUserMigrationsCommand;
 
 $composerApp = new Composer\Console\Application();
 $oldCwd = getcwd();
@@ -95,6 +96,11 @@ return [
             'class' => ConfigCommand::class,
             'method' => 'get',
             'description' => lang('getConfigDescription'),
+        ],
+        'listMigrations' => [
+            'class' => ListUserMigrationsCommand::class,
+            'method' => 'run',
+            'description' => lang('listMigrationsDescription'),
         ],
         'makeFromTemplate' => [
             'class' => MakeFromTemplateCommand::class,

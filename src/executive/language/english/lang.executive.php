@@ -105,4 +105,7 @@ $lang = [
     'tagMethodNotSet' => 'Tag method was not set in tag configuration for `{exp:executive:user:{{tag}}}`',
     'tagClassNotFound' => 'Tag class was not found for `{exp:executive:user:{{tag}}}`',
     'tagMethodNotFound' => 'Tag method was not found for `{exp:executive:user:{{tag}}}`',
+    'followingMigrationHasntRun' => 'The following migration hasn\'t ben run yet',
+    'followingMigrationsHaventRun' => 'The following migrations haven\'t been run yet',
+    'listMigrationsDescription' => 'Lists migrations that have not yet been run',
 ];

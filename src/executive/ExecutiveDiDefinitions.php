@@ -42,6 +42,7 @@ use buzzingpixel\executive\factories\ConsoleQuestionFactory;
 use buzzingpixel\executive\commands\RunUserMigrationsCommand;
 use buzzingpixel\executive\services\ExtensionDesignerService;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
+use buzzingpixel\executive\commands\ListUserMigrationsCommand;
 use buzzingpixel\executive\factories\ScheduleItemModelFactory;
 use buzzingpixel\executive\factories\CliArgumentsModelFactory;
 use buzzingpixel\executive\controllers\RunMigrationsController;
@@ -104,6 +105,20 @@ return [
                 [],
             new QueryBuilderFactory(),
             ExecutiveDi::get(CliInstallService::class)
+        );
+    },
+    ListUserMigrationsCommand::class => function () {
+        /** @var \EE_Config $config */
+        $config = ee()->config;
+        $nameSpace = $config->item('migrationNamespace');
+        $destination = $config->item('migrationDestination');
+
+        return new ListUserMigrationsCommand(
+            new ConsoleOutput(),
+            ee()->lang,
+            ExecutiveDi::get(MigrationsService::class),
+            \is_string($nameSpace) ? $nameSpace : '',
+            \is_string($destination) ? $destination : ''
         );
     },
     MakeFromTemplateCommand::class => function () {
