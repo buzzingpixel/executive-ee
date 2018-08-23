@@ -1,26 +1,27 @@
 # Layout Designer
 
-Migration classes have access to Executive's `LayoutDesigner` class. This class is designed to be user friendly and easy to use for anyone. It handles all the heavy lifting of interfacing with EE's models and services to create channel layouts.
+Migration classes have access to Executive's `LayoutDesignerService`. This service is designed to be user friendly and easy to use for anyone. It handles all the heavy lifting of interfacing with EE's models and services to create channel layouts.
 
 ```php
 <?php
+declare(strict_types=1);
 
-namespace User\Migration;
+namespace myapp\migrations;
 
-use BuzzingPixel\Executive\Abstracts\BaseMigration;
+use buzzingpixel\executive\abstracts\MigrationAbstract;
 
 /**
  * Class m2017_09_04_161128_SchemaDesignerTesting
  */
-class m2017_09_04_161128_SchemaDesignerTesting extends BaseMigration
+class m2017_09_04_161128_SchemaDesignerTesting extends MigrationAbstract
 {
     /**
-     * Run migration
-     * @throws \Exception
+     * Runs the migration
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
-        $this->layoutDesigner->channel('test')
+        $this->layoutDesignerFactory->make()
+            ->channel('test')
             ->layoutName('Test Default Layout')
             ->addMemberGroup('Super Admin')
             ->addMemberGroup('My Custom Member Group')
@@ -39,6 +40,8 @@ class m2017_09_04_161128_SchemaDesignerTesting extends BaseMigration
                 ->addField('status')
                 ->tabIsVisible(false)
             ->save();
+        
+        return true;
     }
 }
 ```
