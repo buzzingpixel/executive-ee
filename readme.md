@@ -33,6 +33,8 @@ Executive also provides an interface for you to create custom commands and sched
 
 ## Videos
 
+Note, these videos are from Executive 1, but the general concepts should still be valid.
+
 - [Installing and Basic Usage](https://vimeo.com/231915582)
 - [Migrations](https://vimeo.com/231917905)
 - [Commands and Scheduling](https://vimeo.com/231919679)
