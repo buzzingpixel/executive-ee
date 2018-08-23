@@ -37,6 +37,7 @@ use buzzingpixel\executive\services\CliErrorHandlerService;
 use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\factories\ConsoleQuestionFactory;
+use buzzingpixel\executive\commands\RunUserMigrationsCommand;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
 use buzzingpixel\executive\factories\ScheduleItemModelFactory;
 use buzzingpixel\executive\factories\CliArgumentsModelFactory;
@@ -144,6 +145,21 @@ return [
             new ConsoleOutput(),
             ExecutiveDi::get(ScheduleService::class),
             ExecutiveDi::get(RunCommandService::class)
+        );
+    },
+    RunUserMigrationsCommand::class => function () {
+        /** @var \EE_Config $config */
+        $config = ee()->config;
+        $nameSpace = $config->item('migrationNamespace');
+        $destination = $config->item('migrationDestination');
+
+        return new RunUserMigrationsCommand(
+            new ConsoleOutput(),
+            ee()->lang,
+            ExecutiveDi::get(MigrationsService::class),
+            \is_string($nameSpace) ? $nameSpace : '',
+            \is_string($destination) ? $destination : '',
+            new ExecutiveDi()
         );
     },
 

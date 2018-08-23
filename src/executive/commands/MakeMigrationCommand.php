@@ -40,8 +40,8 @@ class MakeMigrationCommand
     /** @var string $migrationNameSpace */
     private $migrationNameSpace;
 
-    /** @var string $makeMigrationDestination */
-    private $makeMigrationDestination;
+    /** @var string $migrationDestination */
+    private $migrationDestination;
 
     /**
      * CacheCommand constructor
@@ -52,7 +52,7 @@ class MakeMigrationCommand
      * @param TemplateMakerService $templateMakerService
      * @param string $templateLocation
      * @param string $migrationNameSpace
-     * @param string $makeMigrationDestination
+     * @param string $migrationDestination
      */
     public function __construct(
         OutputInterface $consoleOutput,
@@ -62,7 +62,7 @@ class MakeMigrationCommand
         TemplateMakerService $templateMakerService,
         string $templateLocation,
         string $migrationNameSpace,
-        string $makeMigrationDestination
+        string $migrationDestination
     ) {
         $this->consoleOutput = $consoleOutput;
         $this->cliQuestionService = $cliQuestionService;
@@ -71,7 +71,7 @@ class MakeMigrationCommand
         $this->templateMakerService = $templateMakerService;
         $this->templateLocation = $templateLocation;
         $this->migrationNameSpace = $migrationNameSpace;
-        $this->makeMigrationDestination = $makeMigrationDestination;
+        $this->migrationDestination = $migrationDestination;
     }
 
     /**
@@ -87,17 +87,17 @@ class MakeMigrationCommand
 
             $this->consoleOutput->writeln(
                 '<fg=red>' .
-                $this->lang->line('specifyMakeMigrationNamespace') .
+                $this->lang->line('specifyMigrationNamespace') .
                 '</>'
             );
         }
 
-        if (! $this->makeMigrationDestination) {
+        if (! $this->migrationDestination) {
             $hasBlockingErrors = true;
 
             $this->consoleOutput->writeln(
                 '<fg=red>' .
-                $this->lang->line('specifyMakeMigrationDestination') .
+                $this->lang->line('specifyMigrationDestination') .
                 '</>'
             );
         }
@@ -140,7 +140,7 @@ class MakeMigrationCommand
 
         $name = $namePrefix . '_' . $name;
 
-        $destination = $this->makeMigrationDestination . DIRECTORY_SEPARATOR .
+        $destination = $this->migrationDestination . DIRECTORY_SEPARATOR .
             $name . '.php';
 
         $proceed = $this->cliQuestionService->ask(

@@ -13,15 +13,14 @@ use EllisLab\ExpressionEngine\Core\Provider;
 use Composer\Package\CompletePackageInterface;
 use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\commands\ConfigCommand;
-use BuzzingPixel\Executive\Service\ConsoleService;
 use BuzzingPixel\Executive\Service\UserViewService;
 use buzzingpixel\executive\commands\RunScheduleCommand;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
-use BuzzingPixel\Executive\Command\UserMigrationCommand;
 use buzzingpixel\executive\commands\MakeMigrationCommand;
 use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
+use buzzingpixel\executive\commands\RunUserMigrationsCommand;
 
 $composerApp = new Composer\Console\Application();
 $oldCwd = getcwd();
@@ -76,9 +75,6 @@ return [
         /**
          * Services
          */
-        'ConsoleService' => function () {
-            return new ConsoleService();
-        },
         'UserView' => function (Provider $addOn, $path = '') {
             return new UserViewService($path, $addOn);
         },
@@ -110,7 +106,7 @@ return [
             'description' => lang('makeMigrationDescription'),
         ],
         'runMigrations' => [
-            'class' => UserMigrationCommand::class,
+            'class' => RunUserMigrationsCommand::class,
             'method' => 'runMigrations',
             'description' => lang('runMigrationsDescription'),
         ],

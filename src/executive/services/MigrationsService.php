@@ -61,7 +61,7 @@ class MigrationsService
      */
     public function setMigrationsDir(string $dir): self
     {
-        $this->migrationsDir = $dir;
+        $this->migrationsDir = rtrim(rtrim($dir, '/'), DIRECTORY_SEPARATOR);
         return $this;
     }
 
