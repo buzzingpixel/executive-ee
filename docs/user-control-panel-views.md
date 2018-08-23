@@ -7,17 +7,19 @@ $config['cpSections'] = array(
     'myCpSection' => array(
         'index' => array(
             'title' => 'My CP Section',
-            'class' => '\User\CP\MyCpSection',
-            'method' => 'myMethod'
+            'class' => \myapp\controllers\mycpsection\IndexController::class,
+            'method' => 'display'
         ),
         'anotherCpPage' => array(
             'title' => 'Another CP Section',
-            'class' => '\User\CP\MyCpSection',
+            'class' => \myapp\controllers\mycpsection\AnotherCpPageController::class,
             'method' => 'anotherMethod'
         ),
     ),
 );
 ```
+
+When preparing the class, Executive will first try to get the class from the [Dependency Injector](dependency-injection.md). This way, you can have fully dependency injected and unit tested code. If you have not defined the class in the dependency injector config, Executive will fall back to trying to new up the class.
 
 Note that each section should have an `index` key. A section's index class/method is invoked by the following URL format:
 
@@ -27,14 +29,37 @@ To call a particular page within a section, use the following format:
 
 `admin.php?/cp/addons/settings/executive&section=myCpSection&page=anotherCpPage`
 
-Visiting Executive's Control Panel index page will list the available CP sections with a link to the index. What that page looks like, including sidebar links, subsections, whatever, is entirely up to you. It's just like any add-on view.
+Visiting Executive's Control Panel index page will list the available CP sections with a link to the index.
+
+What your individual pages look like, including sidebar links, subsections, whatever, is entirely up to you. Your defined class methods are being called right from Executive's MCP class and the return of your class method is what is returned in Executive's MCP method.
 
 ## View files
 
-Observe the following exception to the above statement that it's "just like any add-on view". You should use Executive's `UserView`, instead of `ee('View')` so that ExpressionEngine will look in `system/user/View` for your view file. Call it like this:
+To use EE's view service with your view files, you will need to tell Executive where your view files are at with the config file setting:
 
 ```php
-ee('executive:UserView', 'path/to/my/viewfile')->render(array(
-    'myVar' => 'MyVal'
-))
+$config['cpViewsBasePath'] = APP_DIR . '/src/views';
+```
+
+Then get Executive's slightly modified version of EE's view service:
+
+```php
+use buzzingpixel\executive\ExecutiveDi;
+use buzzingpixel\executive\services\ViewService;
+
+$viewService = ExecutiveDi::get(ViewService::class);
+```
+
+You should inject the view service into your class with the [dependency injector](dependency-injection.md). But however you do it, Executive's extension of the EE view service mostly works like EE's but observer the following: Before calling the `render()` method, make sure you set the view you want to use with the `->setView('my/view/file')` method.
+
+
+```php
+use buzzingpixel\executive\ExecutiveDi;
+use buzzingpixel\executive\services\ViewService;
+
+$viewService = ExecutiveDi::get(ViewService::class);
+
+$renderedTemplate = $viewService->setView('CP/Index')->render([
+    'myVar' => 'myVal',
+])
 ```
