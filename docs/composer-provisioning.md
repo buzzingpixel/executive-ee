@@ -10,7 +10,7 @@ Well, EE expects its directories to be in certain locations. And it expects add-
 
 The command to run is simple. And once you've composer required Executive and have the front controller set up, you can (and will need to) run the provisioning command before Executive is installed. The command will symlink Executive's directories into the place ExpressionEngine expects them to be. The command to run is:
 
-```sh
+```shell
 php ee executive composerProvision
 ```
 
