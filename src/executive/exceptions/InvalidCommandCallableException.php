@@ -9,7 +9,7 @@ use Throwable;
 /**
  * Class InvalidCommandCallable
  */
-class InvalidCommandCallable extends Exception
+class InvalidCommandCallableException extends Exception
 {
     /**
      * InvalidCommandCallable constructor

@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace buzzingpixel\executive\models;
 
 use buzzingpixel\executive\abstracts\ModelAbstract;
-use buzzingpixel\executive\exceptions\InvalidCommandCallable;
+use buzzingpixel\executive\exceptions\InvalidCommandCallableException;
 
 /**
  * Class CommandModel
@@ -45,11 +45,12 @@ class CommandModel extends ModelAbstract
 
     /**
      * Default callable called when a command's callable is not found
-     * @throws InvalidCommandCallable
+     *
+     * @throws InvalidCommandCallableException
      */
     public static function commandCallableNotSpecified(): void
     {
-        throw new InvalidCommandCallable(lang('commandCallableNotSpecified'));
+        throw new InvalidCommandCallableException(lang('commandCallableNotSpecified'));
     }
 
     /**
