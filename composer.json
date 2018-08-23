@@ -37,7 +37,13 @@
         "psr-4": {
             "BuzzingPixel\\Executive\\": "src/executive",
             "buzzingpixel\\executive\\": "src/executive"
-        }
+        },
+        "classmap": [
+            "src/executive/ext.executive.php",
+            "src/executive/mcp.executive.php",
+            "src/executive/mod.executive.php",
+            "src/executive/upd.executive.php"
+        ]
     },
     "extra": {
         "handle": "executive",
