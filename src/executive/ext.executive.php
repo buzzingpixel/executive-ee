@@ -80,6 +80,18 @@ class Executive_ext
     }
 
     /**
+     * Runs routing if applicable
+     * @param string $uri
+     * @return mixed
+     */
+    // @codingStandardsIgnoreStart
+    public function core_template_route(string $uri) // @codingStandardsIgnoreEnd
+    {
+        var_dump($uri);
+        die;
+    }
+
+    /**
      * Routes user extensions
      * @param string $name
      * @param array $args
