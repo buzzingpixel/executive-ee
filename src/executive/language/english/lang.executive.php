@@ -98,4 +98,10 @@ $lang = [
     'migrationReportedFalse' => 'The migration {{class}} reported that it did not run successfully',
     'runningMigration' => 'Running migration {{class}}',
     'migrationRanSuccessfully' => 'The migration ran successfully',
+    'tagNameNotSet' => 'The tag name has not been set. Executive user tags are construct as `{exp:executive:user:my_tag_name}`',
+    'tagConfigNotFound' => 'Tag config was not found for the the tag `{exp:executive:user:{{tag}}}`',
+    'tagClassNotSet' => 'Tag class was not set in tag configuration for `{exp:executive:user:{{tag}}}`',
+    'tagMethodNotSet' => 'Tag method was not set in tag configuration for `{exp:executive:user:{{tag}}}`',
+    'tagClassNotFound' => 'Tag class was not found for `{exp:executive:user:{{tag}}}`',
+    'tagMethodNotFound' => 'Tag method was not found for `{exp:executive:user:{{tag}}}`',
 ];
