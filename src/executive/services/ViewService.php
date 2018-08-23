@@ -14,6 +14,17 @@ use EllisLab\ExpressionEngine\Service\View\View;
 use buzzingpixel\executive\exceptions\InvalidViewConfigurationException;
 
 /**
+ * When running provisioning or installation from the command line
+ * before EE is actually booted up, the View class will not be available.
+ * But because we're calling ::class off this class for dependency injection,
+ * we're gonna have a bad time
+ */
+if (! class_exists(View::class)) {
+    require \dirname(__DIR__, 2) .  DIRECTORY_SEPARATOR . 'stubs' .
+        DIRECTORY_SEPARATOR . 'ExpressionEngineViewStub.php';
+}
+
+/**
  * Class ViewService
  */
 class ViewService extends View
