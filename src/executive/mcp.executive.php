@@ -6,13 +6,12 @@
  * @license Apache-2.0
  */
 
-namespace BuzzingPixel\Executive;
-
+use buzzingpixel\executive\ExecutiveDi;
 use EllisLab\ExpressionEngine\Library\CP\Table;
 use EllisLab\ExpressionEngine\Service\URL\URLFactory;
-use EllisLab\ExpressionEngine\Core\Request as RequestService;
 use EllisLab\ExpressionEngine\Service\View\ViewFactory;
-use EllisLab\ExpressionEngine\Service\Alert\AlertCollection as AlertCollection;
+use EllisLab\ExpressionEngine\Service\Alert\AlertCollection;
+use EllisLab\ExpressionEngine\Core\Request as RequestService;
 
 /**
  * Class Executive_mcp
@@ -45,9 +44,10 @@ class Executive_mcp
     }
 
     /**
-     * Executive index page
+     * Executive's control panel method
+     * @return array
      */
-    public function index()
+    public function index(): array
     {
         // Get controller param
         $section = $this->requestService->get('section');
@@ -57,9 +57,9 @@ class Executive_mcp
             return $this->showAvailableSections();
         }
 
-        $sections = $this->configService->item('cpSections') ?: array();
+        $sections = $this->configService->item('cpSections') ?: [];
 
-        $sectionConfig = isset($sections[$section]) ? $sections[$section] : null;
+        $sectionConfig = $sections[$section] ?? null;
 
         if (! $sectionConfig) {
             /** @var AlertCollection $eeAlertCollection */
@@ -86,15 +86,19 @@ class Executive_mcp
             $page = $pageKey;
         }
 
-        $class = new $sectionConfig[$page]['class'];
+        try {
+            $class = ExecutiveDi::get($sectionConfig[$page]['class']);
+        } catch (\Throwable $e) {
+            $class = new $sectionConfig[$page]['class'];
+        }
 
         return $class->{$sectionConfig[$page]['method']}();
     }
 
     /**
-     * Show available sections
+     * Shows available sections
      */
-    public function showAvailableSections()
+    private function showAvailableSections(): array
     {
         /** @var Table $table */
         $table = ee('CP/Table');
@@ -107,7 +111,7 @@ class Executive_mcp
 
         $data = array();
 
-        $sections = $this->configService->item('cpSections') ?: array();
+        $sections = $this->configService->item('cpSections') ?: [];
 
         foreach ($sections as $sectionHandle => $section) {
             if (! isset($section['index']['title'])) {
