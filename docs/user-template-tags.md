@@ -25,4 +25,4 @@ To use the template tag, use the following template syntax:
 {/exp:executive:user:another_tag}
 ```
 
-When preparing the tag class, Executive will first try to get the class from the [Dependency Injector](dependency-injection.md). This way, you can have fully dependency injected and unit tested code. If you have not defined the class in the dependency injector config, Executive will fall back to trying to new up the class.
+When preparing the class, Executive will first try to get the class from the [Dependency Injector](dependency-injection.md). This way, you can have fully dependency injected and unit tested code. If you have not defined the class in the dependency injector config, Executive will fall back to trying to new up the class.
