@@ -1,4 +1,5 @@
 <?php // @codingStandardsIgnoreStart
+declare(strict_types=1);
 
 // @codingStandardsIgnoreEnd
 
