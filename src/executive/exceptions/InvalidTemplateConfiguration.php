@@ -12,7 +12,7 @@ use Throwable;
 class InvalidTemplateConfiguration extends Exception
 {
     /**
-     * InvalidCommandGroupException constructor
+     * InvalidTemplateConfiguration constructor
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous

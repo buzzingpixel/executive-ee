@@ -12,7 +12,7 @@ use Throwable;
 class InvalidCommandCallable extends Exception
 {
     /**
-     * InvalidCommandGroupException constructor
+     * InvalidCommandCallable constructor
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous

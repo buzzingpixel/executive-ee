@@ -7,12 +7,12 @@ use Exception;
 use Throwable;
 
 /**
- * Class InvalidCommandCallable
+ * Class InvalidMigrationException
  */
 class InvalidMigrationException extends Exception
 {
     /**
-     * InvalidCommandGroupException constructor
+     * InvalidMigrationException constructor
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous
