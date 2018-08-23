@@ -122,6 +122,7 @@ class ExtensionDesignerService
             'class' => 'Executive_ext',
             'method' => "userExtensionRouting__{$this->queryBuilder->insert_id()}",
             'hook' => $this->extHook,
+            'settings' => '',
             'priority' => $this->extPriority,
             'version' => EXECUTIVE_VER,
             'enabled' => 'y',
