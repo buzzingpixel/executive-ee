@@ -17,7 +17,7 @@ return array(
             'description' => lang('myCoolCommandDescription'),
         ),
         'anotherCommand' => array(
-            'class' => 'addonhandle:AnotherCommandClass',
+            'class' => 'my_cool_addon:AnotherCommandClass',
             'method' => 'run',
             'description' => lang('myCoolCommandDescription'),
         ),
