@@ -8,6 +8,7 @@ declare(strict_types=1);
  */
 
 use buzzingpixel\executive\ExecutiveDi;
+use buzzingpixel\executive\models\RouteModel;
 use buzzingpixel\executive\exceptions\InvalidTagException;
 
 /**
@@ -15,6 +16,22 @@ use buzzingpixel\executive\exceptions\InvalidTagException;
  */
 class Executive
 {
+    /** @var EE_Template $template */
+    private $template;
+
+    /** @var EE_Lang $lang */
+    private $lang;
+
+    /** @var EE_Config */
+    private $config;
+
+    public function __construct()
+    {
+        $this->template = ee()->TMPL;
+        $this->lang = ee()->lang;
+        $this->config = ee()->config;
+    }
+
     /**
      * User tag
      * @return string
@@ -22,59 +39,53 @@ class Executive
      */
     public function user(): string
     {
-        /** @var \EE_Template $templateService */
-        $templateService = ee()->TMPL;
-
-        if (! isset($templateService->tagparts[2])) {
-            ee()->lang->loadfile('executive');
-            throw new InvalidTagException(lang('tagNameNotSet'));
+        if (! isset($this->template->tagparts[2])) {
+            $this->lang->loadfile('executive');
+            throw new InvalidTagException($this->lang->line('tagNameNotSet'));
         }
 
-        /** @var \EE_Config $configService */
-        $configService = ee()->config;
-
         /** @var array $tagConf */
-        $tagConf = $configService->item($templateService->tagparts[2], 'tags');
+        $tagConf = $this->config->item($this->template->tagparts[2], 'tags');
 
         if (! \is_array($tagConf)) {
-            ee()->lang->loadfile('executive');
+            $this->lang->loadfile('executive');
             throw new InvalidTagException(
                 str_replace(
                     '{{tag}}',
-                    $templateService->tagparts[2],
-                    lang('tagConfigNotFound')
+                    $this->template->tagparts[2],
+                    $this->lang->line('tagConfigNotFound')
                 )
             );
         }
 
         if (! isset($tagConf['class'])) {
-            ee()->lang->loadfile('executive');
+            $this->lang->loadfile('executive');
             throw new InvalidTagException(
                 str_replace(
                     '{{tag}}',
-                    $templateService->tagparts[2],
+                    $this->template->tagparts[2],
                     lang('tagClassNotSet')
                 )
             );
         }
 
         if (! isset($tagConf['method'])) {
-            ee()->lang->loadfile('executive');
+            $this->lang->loadfile('executive');
             throw new InvalidTagException(
                 str_replace(
                     '{{tag}}',
-                    $templateService->tagparts[2],
+                    $this->template->tagparts[2],
                     lang('tagMethodNotSet')
                 )
             );
         }
 
         if (! class_exists($tagConf['class'])) {
-            ee()->lang->loadfile('executive');
+            $this->lang->loadfile('executive');
             throw new InvalidTagException(
                 str_replace(
                     '{{tag}}',
-                    $templateService->tagparts[2],
+                    $this->template->tagparts[2],
                     lang('tagClassNotFound')
                 )
             );
@@ -87,16 +98,58 @@ class Executive
         }
 
         if (! method_exists($class, $tagConf['method'])) {
-            ee()->lang->loadfile('executive');
+            $this->lang->loadfile('executive');
             throw new InvalidTagException(
                 str_replace(
                     '{{tag}}',
-                    $templateService->tagparts[2],
-                    lang('tagMethodNotFound')
+                    $this->template->tagparts[2],
+                    $this->lang->line('tagMethodNotFound')
                 )
             );
         }
 
         return $class->{$tagConf['method']}();
+    }
+
+    /**
+     * Route pair tag
+     * @return string
+     */
+    // @codingStandardsIgnoreStart
+    public function route_pair(): string // @codingStandardsIgnoreEnd
+    {
+        if (! $name = $this->template->fetch_param('name')) {
+            return '';
+        }
+
+        try {
+            /** @var RouteModel $routeModel */
+            $routeModel = ExecutiveDi::get(RouteModel::SINGLETON_DI_NAME);
+        } catch (Throwable $e) {
+            return '';
+        }
+
+        $pair = $routeModel->getPair($name);
+
+        if (! is_array($pair)) {
+            return '';
+        }
+
+        if ($namespace = $this->template->fetch_param('namespace')) {
+            $newPair = [];
+
+            foreach ($pair as $key => $varSet) {
+                foreach ($varSet as $var => $val) {
+                    $newPair[$key][$namespace . ':' . $var] = $val;
+                }
+            }
+
+            $pair = $newPair;
+        }
+
+        return $this->template->parse_variables(
+            $this->template->tagdata,
+            $pair
+        );
     }
 }
