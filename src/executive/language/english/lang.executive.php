@@ -111,4 +111,9 @@ $lang = [
     'viewFileNotFound' => 'View file not found: {{filePath}}',
     'pleaseSetCpViewsBasePath' => 'Please set the config base path to your control panel views directory: `$config[\'cpViewsBasePath\'] = \'/path/to/views/directory\'`',
     'pleaseSetView' => 'Please call the method `setView(\'my/view/file/path\')` before calling the render method',
+    'routeClassNotSet' => '`class` has not been set for route key {{routeKey}}',
+    'routeMethodNotSet' => '`method` has not been set for route key {{routeKey}}',
+    'routeClassNotFound' => '`class` not found for route key {{routeKey}}',
+    'routeClassCouldNotBeConstructed' => '`class` could not be constructed for {{routeKey}}',
+    'routeMethodNotFound' => '`method` could not be found for {{routeKey}}'
 ];

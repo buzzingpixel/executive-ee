@@ -15,6 +15,7 @@ use buzzingpixel\executive\services\ViewService;
 use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\factories\EeDiFactory;
 use buzzingpixel\executive\commands\ConfigCommand;
+use buzzingpixel\executive\services\RoutingService;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use buzzingpixel\executive\factories\FinderFactory;
 use buzzingpixel\executive\services\ScheduleService;
@@ -284,6 +285,24 @@ return [
         return new MigrationsService(
             ee('Filesystem'),
             new QueryBuilderFactory()
+        );
+    },
+    RoutingService::class => function () {
+        /** @var \EE_Config $config */
+        $config = ee()->config;
+        $routes = $config->item('routes');
+
+        /** @var \EE_Loader $loader */
+        $loader = ee()->load;
+        $loader->library('template', null, 'TMPL');
+
+        return new RoutingService(
+            ExecutiveDi::get(RouteModel::SINGLETON_DI_NAME),
+            \is_array($routes) ? $routes : [],
+            ee()->lang,
+            new ExecutiveDi(),
+            ee()->TMPL,
+            ee()->config
         );
     },
     RunCommandService::class => function () {
