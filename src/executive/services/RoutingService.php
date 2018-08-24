@@ -133,6 +133,10 @@ class RoutingService
             $this->routeModel->getVariables()
         );
 
+        if (! $this->routeModel->getTemplate()) {
+            return [];
+        }
+
         return explode('/', $this->routeModel->getTemplate());
     }
 
