@@ -40,6 +40,9 @@ class RoutingService
     /** @var EE_Config $config */
     private $config;
 
+    /** @var bool $anyRouteMatched */
+    private $anyRouteMatched = false;
+
     /**
      * RoutingService constructor
      * @param RouteModel $routeModel
@@ -80,6 +83,14 @@ class RoutingService
         $after = $this->routes[':after'] ?? null;
         $catch = $this->routes[':catch'] ?? null;
 
+        if ($after) {
+            unset($this->routes[':after']);
+        }
+
+        if ($catch) {
+            unset($this->routes[':catch']);
+        }
+
         if (isset($this->routes[':before'])) {
             $this->runRule($uri, ':before', $this->routes[':before']);
 
@@ -106,7 +117,7 @@ class RoutingService
             }
         }
 
-        if ($catch) {
+        if (! $this->anyRouteMatched && $catch) {
             $this->runRule($uri, ':catch', $catch);
 
             if ($this->routeModel->getStop()) {
@@ -164,41 +175,48 @@ class RoutingService
         }
 
         $regex = ltrim(rtrim($rule === ':home' ? '' : $rule, '/'), '/');
+        $match = [];
 
-        if (strpos($regex, ':') !== false) {
-            $regex = str_replace(
-                [
-                    ':any',
-                    ':num',
-                    ':year',
-                    ':month',
-                    ':day',
-                    '/:pagination',
-                    ':pagination',
-                    '/:all',
-                ],
-                [
-                    '([^/]+)',
-                    '(\d+)',
-                    '(\d{4})',
-                    '(\d{2})',
-                    '(\d{2})',
-                    '((?:/P\d+)?)',
-                    '((?:/P\d+)?)',
-                    '((?:/.*)?)',
-                    '(\d+)',
-                ],
-                $regex
-            );
+        if (! \in_array($regex, [
+            ':before',
+            ':after',
+            ':catch'
+        ])) {
+            if (strpos($regex, ':') !== false) {
+                $regex = str_replace(
+                    [
+                        ':any',
+                        ':num',
+                        ':year',
+                        ':month',
+                        ':day',
+                        '/:pagination',
+                        ':pagination',
+                        '/:all',
+                    ],
+                    [
+                        '([^/]+)',
+                        '(\d+)',
+                        '(\d{4})',
+                        '(\d{2})',
+                        '(\d{2})',
+                        '((?:/P\d+)?)',
+                        '((?:/P\d+)?)',
+                        '((?:/.*)?)',
+                        '(\d+)',
+                    ],
+                    $regex
+                );
+            }
+
+            if (! preg_match('#^' . trim($regex, '/') . '$#', $uri, $match)) {
+                return;
+            }
+
+            array_shift($match);
+
+            $this->anyRouteMatched = true;
         }
-
-        $regex = '#^' . trim($regex, '/') . '$#';
-
-        if (! preg_match($regex, $uri, $match)) {
-            return;
-        }
-
-        array_shift($match);
 
         try {
             $class = $this->executiveDi->getDefinition($params['class']);
@@ -233,10 +251,7 @@ class RoutingService
             );
         }
 
-        $arguments = array_merge(
-            [$this->routeModel],
-            $match
-        );
+        $arguments = array_merge([$this->routeModel], $match);
 
         \call_user_func_array([$class, $method], $arguments);
     }
