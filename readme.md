@@ -23,6 +23,7 @@ Executive also provides an interface for you to create custom commands and sched
     - [ExtensionDesigner](docs/extension-designer.md)
     - [LayoutDesigner](docs/layout-designer.md)
 - [Dependency Injection](docs/dependency-injection.md)
+- [Custom Routing](docs/custom-routing.md)
 - [Custom Commands](docs/custom-commands.md)
 - [Addon Comands](docs/addon-commands.md)
 - [Schedule](docs/schedule.md)

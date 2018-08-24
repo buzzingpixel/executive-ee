@@ -70,6 +70,12 @@ class RouteModel extends ModelAbstract
         return $this;
     }
 
+    public function setVariables(array $vars): self
+    {
+        $this->variables = array_merge($this->variables, $vars);
+        return $this;
+    }
+
     public function getVariable(string $name)
     {
         return $this->variables[$name] ?? null;

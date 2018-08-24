@@ -144,7 +144,7 @@ class RoutingService
             $this->routeModel->getVariables()
         );
 
-        if (! $this->routeModel->getTemplate()) {
+        if (! $this->routeModel->hasTemplate()) {
             return [];
         }
 
@@ -203,7 +203,6 @@ class RoutingService
                         '((?:/P\d+)?)',
                         '((?:/P\d+)?)',
                         '((?:/.*)?)',
-                        '(\d+)',
                     ],
                     $regex
                 );
