@@ -290,7 +290,7 @@ return [
     RoutingService::class => function () {
         /** @var \EE_Config $config */
         $config = ee()->config;
-        $routes = $config->item('routes');
+        $routes = $config->item('customRoutes');
 
         /** @var \EE_Loader $loader */
         $loader = ee()->load;
