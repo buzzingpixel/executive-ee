@@ -1,40 +1,16 @@
 # Out of the Box Commands
 
-## runSchedule
+## clearCaches
 
-`php ee executive runSchedule`
+`php ee executive clearCaches`
 
-This will run any commands that you have scheduled to run in your config file, or other add-on developers have scheduled to run on their add-on.
+Clears ExpressionEngine caches.  Optionally specify type: --type=page (default: "all").
 
-## makeCommand
+## composerProvision
 
-`php ee executive makeCommand --description=MyCommandDescription`
+`php ee executive composerProvision`
 
-Makes a command class skeleton class in the `system/user/Command` directory for you to write a custom command for your site.
-
-## makeMigration
-
-`php ee executive makeMigration --description=MyMigrationDescription`
-
-Makes a migration skeleton class in `system/user/Migration` for you to write a custom migration for your site.
-
-## runMigrations
-
-`php ee executive runMigrations`
-
-Runs any user migrations that have not been run yet. As long as you are using the command line tool to create the migrations so that they are named in proper sequence, they will be run in the order they were created.
-
-## runAddonUpdates
-
-`php ee executive runAddonUpdates`
-
-This will run updates for any add-ons that need to be updated.
-
-## runAddonUpdateMethod
-
-`php ee executive runAddonUpdateMethod --addon=addon_name`
-
-Run's an add-on's `update` method in the add-on's `upd` file/class.
+Creates symlinks for EE and/or addons installed via Composer. Learn more about this command with the [more in-depth documentation](composer-provisioning.md).
 
 ## getConfig
 
@@ -42,8 +18,56 @@ Run's an add-on's `update` method in the add-on's `upd` file/class.
 
 Get any ExpressionEngine config item. The `--index=item` argument is optional.
 
-## clearCaches
+## listMigrations
 
-`php ee executive clearCaches`
+`php ee executive listMigrations`
 
-Clears ExpressionEngine caches.  Optionally specify type: --type=page (default: "all")
+Lists migrations that have not yet been run. Requires [migrations configuration](migrations.md).
+
+## makeFromTemplate
+
+`php ee executive makeFromTemplate`
+
+Makes a class from a template based on user config. Config example:
+
+```php
+$config['classTemplateConfigurations'] = [
+    'service' => [
+        'namespace' => 'myapp\services', // required
+        'destination' => APP_DIR . '/src/services', // required
+        'classNameSuffix' => 'Service', // optional
+        'templateLocation' => APP_DIR . '/src/services/Template.php', // optional, defaults to Executive's sample template
+        'classNameToReplace' => 'Template', // optional
+    ],
+];
+```
+
+## makeMigration
+
+`php ee executive makeMigration`
+
+Make a migration class. Requires [migrations configuration](migrations.md).
+
+## runMigrations
+
+`php ee executive runMigrations`
+
+Runs any migrations that have not been run yet. As long as you are using the command line tool to create the migrations so that they are named in proper sequence, they will be run in the order they were created.
+
+## runAddonUpdateMethod
+
+`php ee executive runAddonUpdateMethod --addon=addon_name`
+
+Run's an add-on's `update` method in the add-on's `upd` file/class.
+
+## runAddonUpdates
+
+`php ee executive runAddonUpdates`
+
+This will run updates for any add-ons that need to be updated.
+
+## runSchedule
+
+`php ee executive runSchedule`
+
+This will run any commands that you have [scheduled](schedule.md) to run in your config file, or other add-on developers have scheduled to run on their add-ons.

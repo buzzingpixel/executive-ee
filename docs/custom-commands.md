@@ -1,19 +1,15 @@
 # Custom Commands
 
-Custom commands per site in Executive are pretty cool. The quick explanation is that you create a class in the `system/user/*` directory that extends `\BuzzingPixel\Executive\Abstracts\BaseCommand`, give it a method, then define the command in your config file. It will then be available on the Executive command line.
-
-Executive includes a command to create a skeleton of the command for you:
-
-`php ee executive makeCommand --description=MyCommandDescription`
-
-After you've written your command, just add your command to the config file:
+A custom command is a class method that can be run from the command line. Available commands are defined in the EE config file:
 
 ```php
-$config['commands'] = array(
-    'testCommand' => array(
-        'class' => '\User\Command\TestCommand',
-        'method' => 'testMethod',
-        'description' => 'This is a test description',
-    ),
-);
+$config['commands'] = [
+    'testCommand' => [
+        'class' => myapp\commands\SampleCommand::class,
+        'method' => 'sampleMethod',
+        'description' => 'This is a sample description',
+    ],
+];
 ```
+
+When preparing the command to run, Executive will first try to get the command from the [Dependency Injector](dependency-injection.md). This way, you can have fully dependency injected and unit tested code. If you have not defined the class in the dependency injector config, Executive will fall back to trying to new up the class.

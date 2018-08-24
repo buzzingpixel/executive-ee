@@ -1,6 +1,6 @@
 # Addon Schedule
 
-Add-ons can schedule commands to run at particular intervals. You add the schedule to your addon.setup file.
+Add-ons can schedule commands to run at particular intervals by adding the schedule to the add-on's addon.setup file.
 
 ```php
 <?php
@@ -12,7 +12,7 @@ return array(
     'version' => '2.3.4',
     'commands' => array(
         'myCoolCommand' => array(
-            'class' => '\SmithAndCo\MyCoolAddon\Command\MyCoolCommand',
+            'class' => \SmithAndCo\MyCoolAddon\Command\MyCoolCommand::class,
             'method' => 'run',
             'description' => lang('myCoolCommandDescription'),
         ),

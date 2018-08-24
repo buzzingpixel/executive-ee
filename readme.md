@@ -1,27 +1,29 @@
 <div align="center">
-    <h1>Executive: A CLI for ExpressionEngine</h1>
+    <h1>Executive: A Development Toolbox for ExpressionEngine</h1>
 </div>
 
-## Executive 2.x requires EE 4
+## Executive requires EE 4
 
-Because of the changes required to the ChannelDesigner class that were backwards incompatible with EE 3, Executive has been updated to 2.x and requires EE 4.
+Executive 3.x and newer requires ExpressionEngine 4 or newer.
 
 ## About Executive for ExpressionEngine
 
-Executive provides a command line interface into ExpressionEngine, custom migrations, custom class auto-loading, developer defined extensions per/project, developer template tags per/project, and custom control panel sections per/project. You can run commands as you're developing, log in to your server via SSH and run commands, run commands on deploy, schedule commands to run at certain intervals, and more.
+Executive provides a command line interface into ExpressionEngine, provides a framework for completely custom development,  provides migrations, developer defined extensions per/project, developer template tags per/project, and custom control panel sections per/project. You can run commands as you're developing, log in to your server via SSH and run commands, run commands on deploy, schedule commands to run at certain intervals, and more.
 
-Executive also provides an interface for you to create custom commands and schedules per-site, and an interface for developers to provide commands from their add-ons.
+Executive also provides an interface for you to create custom commands and schedules per-project, and an interface for developers to provide commands from their add-ons.
 
 ## Docs
 
 - [Notes on EE 4](docs/ee4.md)
-- [Installing](install.md)
+- [Installing](docs/install.md)
 - [Out of the Box Commands](docs/out-of-box-commands.md)
+- [Composer Provisioning](docs/composer-provisioning.md)
 - [Migrations](docs/migrations.md)
     - [ChannelDesigner](docs/channel-designer.md)
-    - [LayoutDesigner](docs/layout-designer.md)
     - [ExtensionDesigner](docs/extension-designer.md)
-- [User Class Autoloading](docs/user-class-autoloding.md)
+    - [LayoutDesigner](docs/layout-designer.md)
+- [Dependency Injection](docs/dependency-injection.md)
+- [Custom Routing](docs/custom-routing.md)
 - [Custom Commands](docs/custom-commands.md)
 - [Addon Comands](docs/addon-commands.md)
 - [Schedule](docs/schedule.md)
@@ -31,6 +33,8 @@ Executive also provides an interface for you to create custom commands and sched
 - [User Control Panel Views](docs/user-control-panel-views.md)
 
 ## Videos
+
+Note, these videos are from Executive 1, but the general concepts should still be valid.
 
 - [Installing and Basic Usage](https://vimeo.com/231915582)
 - [Migrations](https://vimeo.com/231917905)

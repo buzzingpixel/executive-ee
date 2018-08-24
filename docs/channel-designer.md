@@ -1,25 +1,26 @@
 # Channel Designer
 
-Migration classes have access to Executive's `ChannelDesigner` class. This class is designed to be user friendly and easy to use for anyone. It handles all the heavy lifting of interfacing with EE's models and services to create or update all the things. Here's a brief example of the channel designer in use in a migration class.
+`MigrationAbstract` classes have access to Executive's `ChannelDesignerService`. This service is designed to be user friendly and easy to use for anyone. It handles all the heavy lifting of interfacing with EE's models and services to create or update all the things. Here's a brief example of the channel designer in use in a migration class.
 
 ```php
 <?php
+declare(strict_types=1);
 
-namespace User\Migration;
+namespace myapp\migrations;
 
-use BuzzingPixel\Executive\Abstracts\BaseMigration;
+use buzzingpixel\executive\abstracts\MigrationAbstract;
 
 /**
  * Class m2017_08_31_151615_ChannelDesignerTest
  */
-class m2017_08_31_151615_ChannelDesignerTest extends BaseMigration
+class m2017_08_31_151615_ChannelDesignerTest extends MigrationAbstract
 {
     /**
-     * Run migration
+     * Runs the migration
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
-        $this->channelDesigner
+        $this->channelDesignerFactory->make()
             ->addField(array(
                 'field_name' => 'test_field_1',
                 'field_label' => 'Test Field 1',
@@ -36,6 +37,8 @@ class m2017_08_31_151615_ChannelDesignerTest extends BaseMigration
             ->channelName('my_test_channel')
             ->channelTitle('My Test Channel')
             ->save();
+        
+        return true;
     }
 }
 ```

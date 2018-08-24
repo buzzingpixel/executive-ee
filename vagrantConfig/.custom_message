@@ -1,2 +1,0 @@
-echo '';
-echo 'Use `dbBackup` to initiate back up of databases to `localStorage/dbBackups`';

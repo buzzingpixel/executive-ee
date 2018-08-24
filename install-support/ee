@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+define('SELF', basename(__FILE__));
+define('FCPATH', __DIR__.'/');
+define('REQ', 'CONSOLE');
+define('EXECUTIVE_RAW_ARGS', $argv ?: array());
+$_SERVER['SERVER_NAME'] = null;
+$_SERVER['REMOTE_ADDR'] = null;
+$routing['directory'] = '';
+$routing['controller'] = 'ee';
+$routing['function'] = 'index';
+require __DIR__ . DIRECTORY_SEPARATOR . 'EEFrontController.php';
