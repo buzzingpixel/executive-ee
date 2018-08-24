@@ -7,11 +7,16 @@ declare(strict_types=1);
  * @license Apache-2.0
  */
 
+use DI\NotFoundException;
+use DI\DependencyException;
 use buzzingpixel\executive\ExecutiveDi;
+use buzzingpixel\executive\services\RoutingService;
 use buzzingpixel\executive\controllers\ConsoleController;
 use buzzingpixel\executive\services\ElevateSessionService;
 use buzzingpixel\executive\services\CliErrorHandlerService;
+use buzzingpixel\executive\exceptions\InvalidRouteConfiguration;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
+use buzzingpixel\executive\exceptions\DependencyInjectionBuilderException;
 
 /**
  * Class Executive_ext
@@ -83,12 +88,29 @@ class Executive_ext
      * Runs routing if applicable
      * @param string $uri
      * @return mixed
+     * @throws NotFoundException
+     * @throws DependencyException
+     * @throws InvalidRouteConfiguration
+     * @throws DependencyInjectionBuilderException
      */
     // @codingStandardsIgnoreStart
     public function core_template_route(string $uri) // @codingStandardsIgnoreEnd
     {
-        var_dump($uri);
-        die;
+        /** @var EE_Extensions $extensions */
+        $extensions = ee()->extensions;
+
+        /** @var RoutingService $routingService */
+        $routingService = ExecutiveDi::get(RoutingService::class);
+
+        $result = $routingService->routeUri($uri);
+
+        if (! $result) {
+            return $extensions->last_call;
+        }
+
+        $extensions->end_script = true;
+
+        return $result;
     }
 
     /**
