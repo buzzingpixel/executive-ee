@@ -1,6 +1,6 @@
 {
     "name": "buzzingpixel/executive-ee",
-    "version": "3.0.0",
+    "version": "3.0.0-b.1",
     "description": "An ExpressionEngine toolkit that provides a CLI, migrations, command scheduling, custom extensions, custom template tags, custom CP views, and more!",
     "type": "ee-add-on",
     "authors": [
@@ -20,7 +20,6 @@
         "php": ">=7.1",
         "ext-json": "*",
         "ext-zip": "*",
-        "buzzingpixel/datamodel": "^1.2.0",
         "composer/composer": "^1.7",
         "php-di/php-di": "^6.0",
         "filp/whoops": "^2.2",

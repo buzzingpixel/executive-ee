@@ -4,45 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5aceafabca5a0f9f19dd7d95fb6ed71c",
+    "content-hash": "54f8e051758b9177565a9f37c7b13628",
     "packages": [
-        {
-            "name": "buzzingpixel/datamodel",
-            "version": "1.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/buzzingpixel/datamodel.git",
-                "reference": "96f53655dc0717e2f5b04f49e7cdeb60779f71b5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/datamodel/zipball/96f53655dc0717e2f5b04f49e7cdeb60779f71b5",
-                "reference": "96f53655dc0717e2f5b04f49e7cdeb60779f71b5",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "BuzzingPixel\\DataModel\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "TJ Draper",
-                    "email": "tj@buzzingpixel.com",
-                    "homepage": "https://buzzingpixel.com"
-                }
-            ],
-            "description": "Data modeling",
-            "time": "2017-08-22T03:45:56+00:00"
-        },
         {
             "name": "composer/ca-bundle",
             "version": "1.1.2",
@@ -304,16 +267,16 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "e1809da56ce1bd1b547a752936817341ac244d8e"
+                "reference": "e37cbd80da64afe314c72de8d2d2fec0e40d9373"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/e1809da56ce1bd1b547a752936817341ac244d8e",
-                "reference": "e1809da56ce1bd1b547a752936817341ac244d8e",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/e37cbd80da64afe314c72de8d2d2fec0e40d9373",
+                "reference": "e37cbd80da64afe314c72de8d2d2fec0e40d9373",
                 "shasum": ""
             },
             "require": {
@@ -344,7 +307,7 @@
                 "Xdebug",
                 "performance"
             ],
-            "time": "2018-08-16T10:54:23+00:00"
+            "time": "2018-08-23T12:00:19+00:00"
         },
         {
             "name": "filp/whoops",
