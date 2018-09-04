@@ -137,6 +137,11 @@ class ComposerProvisionCommand
 
         foreach ($this->installFromDownload as $downloadAddon) {
             $this->provisionAddonFromDownload($downloadAddon);
+
+            // Work around a stupid throttling issue with GitHub
+            // and probably others. Apparently waiting one second between
+            // requests is a common throttling threshold
+            sleep(1);
         }
 
         $this->processGitIgnores();
