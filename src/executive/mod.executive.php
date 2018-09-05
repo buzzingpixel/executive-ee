@@ -34,10 +34,10 @@ class Executive
 
     /**
      * User tag
-     * @return string
+     * @return mixed
      * @throws InvalidTagException
      */
-    public function user(): string
+    public function user()
     {
         if (! isset($this->template->tagparts[2])) {
             $this->lang->loadfile('executive');
