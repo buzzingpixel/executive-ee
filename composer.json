@@ -1,6 +1,6 @@
 {
     "name": "buzzingpixel/executive-ee",
-    "version": "3.0.0-b.2",
+    "version": "3.0.0-b.3",
     "description": "An ExpressionEngine toolkit that provides a CLI, migrations, command scheduling, custom extensions, custom template tags, custom CP views, and more!",
     "type": "ee-add-on",
     "authors": [
