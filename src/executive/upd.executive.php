@@ -45,7 +45,7 @@ class Executive_upd
             new QueryBuilderFactory();
 
         $this->runMigrationsController = $runMigrationsController ?:
-            ExecutiveDi::get(RunMigrationsController::class);
+            ExecutiveDi::make(RunMigrationsController::class);
     }
 
     /**

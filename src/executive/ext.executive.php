@@ -46,7 +46,7 @@ class Executive_ext
         $configService->set_item('disable_csrf_protection', 'y');
 
         /** @var CliErrorHandlerService $cliErrorHandlerService */
-        $cliErrorHandlerService = ExecutiveDi::get(
+        $cliErrorHandlerService = ExecutiveDi::make(
             CliErrorHandlerService::class
         );
 
@@ -68,14 +68,14 @@ class Executive_ext
         ee()->lang->loadfile('executive');
 
         /** @var ElevateSessionService $elevateSessionService */
-        $elevateSessionService = ExecutiveDi::get(ElevateSessionService::class);
+        $elevateSessionService = ExecutiveDi::make(ElevateSessionService::class);
         $elevateSessionService->run();
 
         // Prevent timeout (hopefully)
         @set_time_limit(0);
 
         /** @var ConsoleController $consoleController */
-        $consoleController = ExecutiveDi::get(ConsoleController::class);
+        $consoleController = ExecutiveDi::make(ConsoleController::class);
 
         // Run the console controller
         $consoleController->run();
@@ -100,7 +100,7 @@ class Executive_ext
         $extensions = ee()->extensions;
 
         /** @var RoutingService $routingService */
-        $routingService = ExecutiveDi::get(RoutingService::class);
+        $routingService = ExecutiveDi::make(RoutingService::class);
 
         $result = $routingService->routeUri($uri);
 
@@ -144,7 +144,7 @@ class Executive_ext
         }
 
         try {
-            $class = ExecutiveDi::get($row->class);
+            $class = ExecutiveDi::make($row->class);
         } catch (\Throwable $e) {
             $class = new $row->class();
         }

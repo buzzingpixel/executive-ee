@@ -92,7 +92,7 @@ class Executive
         }
 
         try {
-            $class = ExecutiveDi::get($tagConf['class']);
+            $class = ExecutiveDi::make($tagConf['class']);
         } catch (\Throwable $e) {
             $class = new $tagConf['class']();
         }

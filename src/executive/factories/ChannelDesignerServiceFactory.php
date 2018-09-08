@@ -29,6 +29,6 @@ class ChannelDesignerServiceFactory
      */
     public function make(): ChannelDesignerService
     {
-        return ExecutiveDi::get(ChannelDesignerService::class);
+        return ExecutiveDi::make(ChannelDesignerService::class);
     }
 }

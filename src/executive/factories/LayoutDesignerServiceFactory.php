@@ -29,6 +29,6 @@ class LayoutDesignerServiceFactory
      */
     public function make(): LayoutDesignerService
     {
-        return ExecutiveDi::get(LayoutDesignerService::class);
+        return ExecutiveDi::make(LayoutDesignerService::class);
     }
 }

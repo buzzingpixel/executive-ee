@@ -212,6 +212,9 @@ return [
         return new CliArgumentsModel($arguments);
     },
     RouteModel::SINGLETON_DI_NAME => function () {
+        // TODO: So php-di caches classes by default with the get() method
+        // TODO: and you have to use make() to get new instances so
+        // TODO: this all may be unnecessary. But needs testing.
         /** @var EE_Session $session */
         $session = ee()->session;
 

@@ -55,7 +55,7 @@ if (defined('REQ') && REQ === 'CONSOLE') {
     ee()->lang->loadfile('executive');
 
     /** @noinspection PhpUnhandledExceptionInspection */
-    $exit = ExecutiveDi::get(InstallExecutiveCommand::class)->run();
+    $exit = ExecutiveDi::make(InstallExecutiveCommand::class)->run();
 
     if ($exit) {
         exit();

@@ -29,6 +29,6 @@ class ExtensionDesignerServiceFactory
      */
     public function make(): ExtensionDesignerService
     {
-        return ExecutiveDi::get(ExtensionDesignerService::class);
+        return ExecutiveDi::make(ExtensionDesignerService::class);
     }
 }
