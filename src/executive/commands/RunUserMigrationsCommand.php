@@ -135,7 +135,7 @@ class RunUserMigrationsCommand
         $className = "{$this->migrationNamespace}\\{$migrationClassName}";
 
         try {
-            $class = $this->executiveDi->getDefinition($className);
+            $class = $this->executiveDi->makeFromDefinition($className);
         } catch (Throwable $e) {
             $class = new $className();
         }

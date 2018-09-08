@@ -84,13 +84,8 @@ class ExecutiveDi
     }
 
     /**
-     * Gets a definition
-     * @param string $def
-     * @return mixed
-     * @throws DependencyInjectionBuilderException
-     */
-
-    /**
+     * Resolves a dependency (if a dependency has already been resolved, then
+     * that same instance of the dependency will be returned)
      * @param string $def
      * @return mixed
      * @throws NotFoundException
@@ -103,15 +98,42 @@ class ExecutiveDi
     }
 
     /**
-     * Gets a definition
+     * Resolves a dependency with a new instance of that dependency every time
      * @param string $def
      * @return mixed
      * @throws NotFoundException
      * @throws DependencyException
      * @throws DependencyInjectionBuilderException
      */
-    public function getDefinition(string $def)
+    public static function make(string $def)
+    {
+        return self::diContainer()->make($def);
+    }
+
+    /**
+     * Resolves a dependency (if a dependency has already been resolved, then
+     * that same instance of the dependency will be returned)
+     * @param string $def
+     * @return mixed
+     * @throws NotFoundException
+     * @throws DependencyException
+     * @throws DependencyInjectionBuilderException
+     */
+    public function getFromDefinition(string $def)
     {
         return self::get($def);
+    }
+
+    /**
+     * Resolves a dependency with a new instance of that dependency every time
+     * @param string $def
+     * @return mixed
+     * @throws NotFoundException
+     * @throws DependencyException
+     * @throws DependencyInjectionBuilderException
+     */
+    public function makeFromDefinition(string $def)
+    {
+        return self::make($def);
     }
 }

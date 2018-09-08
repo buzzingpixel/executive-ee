@@ -49,7 +49,7 @@ class Executive_mcp
         $this->requestService = ee('Request');
         $this->urlFactory = ee('CP/URL');
 
-        $this->viewService = ExecutiveDi::get(
+        $this->viewService = ExecutiveDi::make(
             ViewService::INTERNAL_DI_NAME
         );
     }
@@ -99,7 +99,7 @@ class Executive_mcp
         }
 
         try {
-            $class = ExecutiveDi::get($sectionConfig[$page]['class']);
+            $class = ExecutiveDi::make($sectionConfig[$page]['class']);
         } catch (\Throwable $e) {
             $class = new $sectionConfig[$page]['class'];
         }

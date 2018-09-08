@@ -218,7 +218,7 @@ class RoutingService
         }
 
         try {
-            $class = $this->executiveDi->getDefinition($params['class']);
+            $class = $this->executiveDi->makeFromDefinition($params['class']);
         } catch (Throwable $e) {
             $class = $params['class'];
 

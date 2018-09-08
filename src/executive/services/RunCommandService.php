@@ -74,7 +74,9 @@ class RunCommandService
             $instantiatedClass = null;
 
             try {
-                $instantiatedClass = $this->executiveDi->getDefinition($class);
+                $instantiatedClass = $this->executiveDi->makeFromDefinition(
+                    $class
+                );
             } catch (Throwable $e) {
             }
 
