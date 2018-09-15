@@ -10,10 +10,12 @@ declare(strict_types=1);
 use DI\NotFoundException;
 use DI\DependencyException;
 use buzzingpixel\executive\ExecutiveDi;
+use EllisLab\ExpressionEngine\Core\Request;
 use buzzingpixel\executive\services\RoutingService;
 use buzzingpixel\executive\controllers\ConsoleController;
 use buzzingpixel\executive\services\ElevateSessionService;
 use buzzingpixel\executive\services\CliErrorHandlerService;
+use buzzingpixel\executive\exceptions\InvalidActionException;
 use buzzingpixel\executive\exceptions\InvalidRouteConfiguration;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 use buzzingpixel\executive\exceptions\DependencyInjectionBuilderException;
@@ -32,7 +34,7 @@ class Executive_ext
 
     /**
      * session_start extension
-     * @throws \Exception
+     * @throws Exception
      */
     // @codingStandardsIgnoreStart
     public function sessions_start(): void // @codingStandardsIgnoreEnd
@@ -41,7 +43,7 @@ class Executive_ext
             return;
         }
 
-        /** @var \EE_Config $configService */
+        /** @var EE_Config $configService */
         $configService = ee()->config;
         $configService->set_item('disable_csrf_protection', 'y');
 
@@ -55,17 +57,114 @@ class Executive_ext
 
     /**
      * core_boot extension
-     * @throws \Exception
+     * @throws Exception
      */
     // @codingStandardsIgnoreStart
     public function core_boot(): void // @codingStandardsIgnoreEnd
     {
+        /** @var EE_Lang $lang */
+        $lang = ee()->lang;
+
         if (! defined('REQ') || REQ !== 'CONSOLE') {
+            /**
+             * Note a CLI request, check to see if action request
+             */
+
+            /** @var Request $request */
+            $request = ee('Request');
+
+            /** @var EE_Config $config */
+            $config = ee()->config;
+
+            $actionKey = $request->post('action') ?: $request->get('action');
+
+            if ($actionKey === null) {
+                return;
+            }
+
+            $actions = $config->item('actions');
+
+            if (! is_array($actions) || ! $config->item('actions')) {
+                $lang->loadfile('executive');
+                throw new InvalidActionException(
+                    $lang->line('noActionsSpecified')
+                );
+            }
+
+            if (! isset($actions[$actionKey])) {
+                $lang->loadfile('executive');
+                throw new InvalidActionException(
+                    str_replace(
+                        '{{action}}',
+                        $actionKey,
+                        $lang->line('actionConfigNotFound')
+                    )
+                );
+            }
+
+            $actionConfig = $actions[$actionKey];
+
+            if (! isset($actionConfig['class'])) {
+                $lang->loadfile('executive');
+                throw new InvalidActionException(
+                    str_replace(
+                        '{{action}}',
+                        $actionKey,
+                        $lang->line('actionClassNotSet')
+                    )
+                );
+            }
+
+            if (! isset($actionConfig['method'])) {
+                $lang->loadfile('executive');
+                throw new InvalidActionException(
+                    str_replace(
+                        '{{action}}',
+                        $actionKey,
+                        $lang->line('actionMethodNotSet')
+                    )
+                );
+            }
+
+            if (! class_exists($actionConfig['class'])) {
+                $lang->loadfile('executive');
+                throw new InvalidActionException(
+                    str_replace(
+                        '{{action}}',
+                        $actionKey,
+                        lang('actionClassNotFound')
+                    )
+                );
+            }
+
+            try {
+                $class = ExecutiveDi::make($actionConfig['class']);
+            } catch (\Throwable $e) {
+                $class = new $actionConfig['class']();
+            }
+
+            if (! method_exists($class, $actionConfig['method'])) {
+                $lang->loadfile('executive');
+                throw new InvalidActionException(
+                    str_replace(
+                        '{{action}}',
+                        $actionKey,
+                        $lang->line('actionMethodNotFound')
+                    )
+                );
+            }
+
+            $class->{$actionConfig['method']}();
+
             return;
         }
 
+        /**
+         * This is a CLI request
+         */
+
         // Make sure the lang file is loaded
-        ee()->lang->loadfile('executive');
+        $lang->loadfile('executive');
 
         /** @var ElevateSessionService $elevateSessionService */
         $elevateSessionService = ExecutiveDi::make(ElevateSessionService::class);
@@ -74,11 +173,19 @@ class Executive_ext
         // Prevent timeout (hopefully)
         @set_time_limit(0);
 
-        /** @var ConsoleController $consoleController */
-        $consoleController = ExecutiveDi::make(ConsoleController::class);
+        // Run the console controller and catch any errors that bubble up
+        try {
+            /** @var ConsoleController $consoleController */
+            $consoleController = ExecutiveDi::make(ConsoleController::class);
+            $consoleController->run();
+        } catch (Throwable $e) {
+            /** @var CliErrorHandlerService $cliErrorHandlerService */
+            $cliErrorHandlerService = ExecutiveDi::make(
+                CliErrorHandlerService::class
+            );
 
-        // Run the console controller
-        $consoleController->run();
+            $cliErrorHandlerService->exceptionHandler($e);
+        }
 
         // Make sure we exit here
         exit;
@@ -145,7 +252,7 @@ class Executive_ext
 
         try {
             $class = ExecutiveDi::make($row->class);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $class = new $row->class();
         }
 
