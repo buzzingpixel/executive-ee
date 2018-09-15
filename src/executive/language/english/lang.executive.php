@@ -115,5 +115,11 @@ $lang = [
     'routeMethodNotSet' => '`method` has not been set for route key {{routeKey}}',
     'routeClassNotFound' => '`class` not found for route key {{routeKey}}',
     'routeClassCouldNotBeConstructed' => '`class` could not be constructed for {{routeKey}}',
-    'routeMethodNotFound' => '`method` could not be found for {{routeKey}}'
+    'routeMethodNotFound' => '`method` could not be found for {{routeKey}}',
+    'actionClassNotSet' => 'Action class was not set in action configuration for `{{action}}`',
+    'actionMethodNotSet' => 'Action method was not set in action configuration for `{{action}}`',
+    'actionClassNotFound' => 'Action class was not found for `{{action}}`',
+    'actionMethodNotFound' => 'Action method was not found for `{{action}}`',
+    'noActionsSpecified' => 'No actions have been specified in config',
+    'actionConfigNotFound' => 'Action config not found for `{{action}}`',
 ];
