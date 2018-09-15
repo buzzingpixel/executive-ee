@@ -56,7 +56,7 @@ class CliErrorHandlerService
     }
 
     /**
-     * Runs the installation
+     * Registers error handling for the CLI
      */
     public function register(): void
     {

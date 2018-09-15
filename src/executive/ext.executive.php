@@ -173,11 +173,19 @@ class Executive_ext
         // Prevent timeout (hopefully)
         @set_time_limit(0);
 
-        /** @var ConsoleController $consoleController */
-        $consoleController = ExecutiveDi::make(ConsoleController::class);
+        // Run the console controller and catch any errors that bubble up
+        try {
+            /** @var ConsoleController $consoleController */
+            $consoleController = ExecutiveDi::make(ConsoleController::class);
+            $consoleController->run();
+        } catch (Throwable $e) {
+            /** @var CliErrorHandlerService $cliErrorHandlerService */
+            $cliErrorHandlerService = ExecutiveDi::make(
+                CliErrorHandlerService::class
+            );
 
-        // Run the console controller
-        $consoleController->run();
+            $cliErrorHandlerService->exceptionHandler($e);
+        }
 
         // Make sure we exit here
         exit;
