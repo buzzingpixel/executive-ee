@@ -1,8 +1,13 @@
 {
-    "name": "buzzingpixel/executive-ee",
-    "version": "3.0.0-b.5",
-    "description": "An ExpressionEngine toolkit that provides a CLI, migrations, command scheduling, custom extensions, custom template tags, custom CP views, and more!",
     "type": "ee-add-on",
+    "extra": {
+        "handle": "executive",
+        "systemPath": "src/executive",
+        "version": "3.0.0-b.6"
+    },
+    "name": "buzzingpixel/executive-ee",
+    "version": "3.0.0-b.6",
+    "description": "An ExpressionEngine toolkit that provides a CLI, migrations, command scheduling, custom extensions, custom template tags, custom CP views, and more!",
     "authors": [
         {
             "name": "TJ Draper",
@@ -43,9 +48,5 @@
             "src/executive/mod.executive.php",
             "src/executive/upd.executive.php"
         ]
-    },
-    "extra": {
-        "handle": "executive",
-        "systemPath": "src/executive"
     }
 }
