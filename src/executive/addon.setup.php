@@ -23,6 +23,9 @@ use buzzingpixel\executive\commands\ComposerProvisionCommand;
 use buzzingpixel\executive\commands\RunUserMigrationsCommand;
 use buzzingpixel\executive\commands\ListUserMigrationsCommand;
 
+// Edge case and weirdness with composer
+getenv('HOME') || putenv('HOME=' . APP_DIR);
+
 $composerApp = new Composer\Console\Application();
 $oldCwd = getcwd();
 chdir(APP_DIR);
@@ -33,7 +36,7 @@ $installedFilesystemRepository = $repositoryManager->getLocalRepository();
 /** @var CompletePackageInterface $executive */
 $executive = $installedFilesystemRepository->findPackage(
     'buzzingpixel/executive-ee',
-    '>0'
+    '*'
 );
 
 $author = $executive->getAuthors()[0];
@@ -43,7 +46,7 @@ chdir($oldCwd);
 
 // Define constants
 defined('EXECUTIVE_NAME') || define('EXECUTIVE_NAME', 'Executive');
-defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', $executive->getPrettyVersion());
+defined('EXECUTIVE_VER') || define('EXECUTIVE_VER', $extra['version']);
 defined('EXECUTIVE_PATH') || define('EXECUTIVE_PATH', realpath(__DIR__));
 defined('EXECUTIVE_MIGRATION_FILES_PATH') ||
     define('EXECUTIVE_MIGRATION_FILES_PATH', __DIR__ . '/migrations');
