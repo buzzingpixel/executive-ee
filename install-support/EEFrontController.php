@@ -67,7 +67,11 @@ if (PHP_SAPI === 'cli' && defined('EXECUTIVE_RAW_ARGS')) {
             ExecutiveDi::get(ComposerProvisionCommand::class)->run();
             exit();
         } catch (Exception $e) {
-            exit("\033[31m" . $e->getMessage() . "\n");
+            exit(
+                "\033[31m" . $e->getMessage() . "\n" .
+                'File: ' . $e->getFile() . "\n" .
+                'Line: ' . $e->getLine() . "\n"
+            );
         }
     }
 }
