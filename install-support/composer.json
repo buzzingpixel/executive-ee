@@ -2,7 +2,7 @@
     "name": "your-vendor-name/your-project-name",
     "description": "A cool ExpressionEngine Website",
     "license": "proprietary",
-    "homepage": "https://cool-websitecom",
+    "homepage": "https://cool-website.com",
     "type": "project",
     "require": {
         "buzzingpixel/executive-ee": "^3.0"
