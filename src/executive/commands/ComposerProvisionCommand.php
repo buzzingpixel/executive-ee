@@ -154,31 +154,37 @@ class ComposerProvisionCommand
     private function cleanUpPreviousProvisioning(): void
     {
         $toRemove = [];
+        $systemUserAddons = DIRECTORY_SEPARATOR . $this->systemUserAddons;
+        $themesUser = DIRECTORY_SEPARATOR . $this->themesUser;
 
-        $finder = $this->finderFactory->make()
-            ->directories()
-            ->in(DIRECTORY_SEPARATOR . $this->systemUserAddons)
-            ->filter(function ($file) {
+        if ($this->fileSystem->exists($systemUserAddons)) {
+            $finder = $this->finderFactory->make()
+                ->directories()
+                ->in($systemUserAddons)
+                ->filter(function ($file) {
+                    /** @var SplFileInfo $file */
+                    return $file->isLink();
+                });
+
+            foreach ($finder as $file) {
                 /** @var SplFileInfo $file */
-                return $file->isLink();
-            });
-
-        foreach ($finder as $file) {
-            /** @var SplFileInfo $file */
-            $toRemove[] = $file->getPathname();
+                $toRemove[] = $file->getPathname();
+            }
         }
 
-        $finder = $this->finderFactory->make()
-            ->directories()
-            ->in(DIRECTORY_SEPARATOR . $this->themesUser)
-            ->filter(function ($file) {
-                /** @var SplFileInfo $file */
-                return $file->isLink();
-            });
+        if ($this->fileSystem->exists($themesUser)) {
+            $finder = $this->finderFactory->make()
+                ->directories()
+                ->in(DIRECTORY_SEPARATOR . $this->themesUser)
+                ->filter(function ($file) {
+                    /** @var SplFileInfo $file */
+                    return $file->isLink();
+                });
 
-        foreach ($finder as $file) {
-            /** @var SplFileInfo $file */
-            $toRemove[] = $file->getPathname();
+            foreach ($finder as $file) {
+                /** @var SplFileInfo $file */
+                $toRemove[] = $file->getPathname();
+            }
         }
 
         if (! $toRemove) {
