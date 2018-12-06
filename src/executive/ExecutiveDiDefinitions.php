@@ -72,6 +72,9 @@ return [
         );
     },
     ComposerProvisionCommand::class => function () {
+        // Edge case and weirdness with composer
+        getenv('HOME') || putenv('HOME=' . APP_DIR);
+
         $composerApp = new Composer\Console\Application();
         /** @noinspection PhpUnhandledExceptionInspection */
         $composer = $composerApp->getComposer();
