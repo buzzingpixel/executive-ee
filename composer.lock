@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "51391c461c017e3007aa4aa90031fd99",
+    "content-hash": "285a93d75f08a5f6a0107699d1a28de3",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -1639,32 +1639,6 @@
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
             "time": "2018-11-27T12:50:30+00:00"
-        },
-        {
-            "name": "tjdraper/expressionengine",
-            "version": "4.3.4.1",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:tjdraper/expressionengine.git",
-                "reference": "a9219e85b0f1b12676cba3c55b22097bc2cba3f3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tjdraper/expressionengine/zipball/a9219e85b0f1b12676cba3c55b22097bc2cba3f3",
-                "reference": "a9219e85b0f1b12676cba3c55b22097bc2cba3f3",
-                "shasum": ""
-            },
-            "type": "ee",
-            "extra": {
-                "systemEEDir": "src/system/ee",
-                "themesEEDir": "src/themes/ee"
-            },
-            "description": "ExpressionEngine - dependency managed",
-            "support": {
-                "source": "https://github.com/tjdraper/expressionengine/tree/4.3.4.1",
-                "issues": "https://github.com/tjdraper/expressionengine/issues"
-            },
-            "time": "2018-08-18T22:43:11+00:00"
         }
     ],
     "aliases": [],
