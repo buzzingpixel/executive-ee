@@ -3,22 +3,16 @@
     "extra": {
         "handle": "executive",
         "systemPath": "src/executive",
-        "version": "3.0.0-b.6"
+        "version": "3.0.0-b.7"
     },
     "name": "buzzingpixel/executive-ee",
-    "version": "3.0.0-b.6",
+    "version": "3.0.0-b.7",
     "description": "An ExpressionEngine toolkit that provides a CLI, migrations, command scheduling, custom extensions, custom template tags, custom CP views, and more!",
     "authors": [
         {
             "name": "TJ Draper",
             "email": "tj@buzzingpixel.com",
             "homepage": "https://buzzingpixel.com"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:tjdraper/expressionengine.git"
         }
     ],
     "require": {
