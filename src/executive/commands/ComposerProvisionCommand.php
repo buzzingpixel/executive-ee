@@ -66,6 +66,9 @@ class ComposerProvisionCommand
     /** @var bool $eeProvisioned */
     private $eeProvisioned = false;
 
+    /** @var string $provisionEEVersion */
+    private $provisionEEVersionTag;
+
     /**
      * ComposerProvisionCommand constructor
      * @param OutputInterface $consoleOutput
@@ -76,6 +79,7 @@ class ComposerProvisionCommand
      * @param string $publicDir
      * @param array $extraEEAddons
      * @param array $installFromDownload
+     * @param string $provisionEEVersionTag
      */
     public function __construct(
         OutputInterface $consoleOutput,
@@ -85,7 +89,8 @@ class ComposerProvisionCommand
         FinderFactory $finderFactory,
         string $publicDir,
         array $extraEEAddons,
-        array $installFromDownload
+        array $installFromDownload,
+        string $provisionEEVersionTag
     ) {
         $this->consoleOutput = $consoleOutput;
         $this->installedFilesystemRepository = $installedFilesystemRepository;
@@ -94,6 +99,7 @@ class ComposerProvisionCommand
         $this->finderFactory = $finderFactory;
         $this->extraEEAddons = $extraEEAddons;
         $this->installFromDownload = $installFromDownload;
+        $this->provisionEEVersionTag = $provisionEEVersionTag;
 
         $publicDir = rtrim(rtrim($publicDir, '/'), DIRECTORY_SEPARATOR);
 
@@ -144,11 +150,15 @@ class ComposerProvisionCommand
             sleep(1);
         }
 
-        $this->processGitIgnores();
-
         $this->consoleOutput->writeln(
             '<fg=green>Composer Provisioning Complete</>'
         );
+
+        if ($this->provisionEEVersionTag) {
+            $this->processEEOfficial();
+        }
+
+        $this->processGitIgnores();
     }
 
     private function cleanUpPreviousProvisioning(): void
@@ -207,6 +217,99 @@ class ComposerProvisionCommand
                 $this->processEE($package);
                 break;
         }
+    }
+
+    private function processEEOfficial(): void
+    {
+        $isWin = strpos(PHP_OS, 'WIN') === 0;
+
+        $this->consoleOutput->writeln(
+            '<comment>Provisioning ExpressionEngine from official repo...</comment>'
+        );
+
+        $path = $this->vendorPath . '/expressionengine-provision';
+        $installPath = $path . '/ee';
+        $zipFile = $path . '/ee.zip';
+
+        $path = $this->processPathForPlatform($path);
+        $installPath = $this->processPathForPlatform($installPath);
+        $zipFile = $this->processPathForPlatform($zipFile);
+
+        $this->fileSystem->mkdir($path);
+
+        if ($this->fileSystem->exists($zipFile)) {
+            $this->fileSystem->remove($zipFile);
+        }
+
+        $installPathExists = $this->fileSystem->exists($installPath);
+
+        if ($isWin && $installPathExists) {
+            $this->fileSystem->remove($installPath);
+        }
+
+        if (! $isWin && $installPathExists) {
+            exec('rm -rf ' . $installPath);
+        }
+
+        $url = 'https://github.com/ExpressionEngine/ExpressionEngine/archive/';
+        $url .= $this->provisionEEVersionTag . '.zip';
+
+        $this->fileSystem->appendToFile($zipFile, fopen($url, 'rb'));
+
+        $zipHandler = new \ZipArchive();
+        $zipHandler->open($zipFile);
+        $zipHandler->extractTo($installPath);
+        $zipHandler->close();
+
+        $unzippedPath = $this->processPathForPlatform(
+            $path . '/ee/ExpressionEngine-' . $this->provisionEEVersionTag
+        );
+
+        $fromSysPath = $this->processPathForPlatform(
+            $unzippedPath . '/system/ee'
+        );
+
+        $toSysPath = $this->processPathForPlatform(
+            $this->systemPath . '/ee'
+        );
+
+        $this->consoleOutput->writeln(
+            '<comment>Symlinking ' .
+            $fromSysPath .
+            ' to ' .
+            $toSysPath .
+            '</comment>'
+        );
+
+        if ($this->fileSystem->exists($toSysPath)) {
+            $this->fileSystem->remove($toSysPath);
+        }
+
+        $this->fileSystem->symlink(realpath($fromSysPath), $toSysPath, true);
+
+        $fromThemePath = $this->processPathForPlatform(
+            $unzippedPath . '/themes/ee'
+        );
+
+        $toThemePath = $this->processPathForPlatform(
+            $this->themesPath . '/ee'
+        );
+
+        $this->consoleOutput->writeln(
+            '<comment>Symlinking ' .
+            $fromThemePath .
+            ' to ' .
+            $toThemePath .
+            '</comment>'
+        );
+
+        if ($this->fileSystem->exists($toThemePath)) {
+            $this->fileSystem->remove($toThemePath);
+        }
+
+        $this->fileSystem->symlink(realpath($fromThemePath), $toThemePath, true);
+
+        $this->eeProvisioned = true;
     }
 
     /**
@@ -580,7 +683,7 @@ class ComposerProvisionCommand
             $hasBlockingErrors = true;
             $this->consoleOutput->writeln(
                 '<fg=red>EE Add-On in composer.json extra block does not have' .
-                ' not have a "systemPath" set</>'
+                ' a "systemPath" set</>'
             );
         }
 

@@ -38,3 +38,7 @@ To update Executive to a new major release, say from 3.x to 4.x, update your com
 ## Note
 
 Because ExpressionEngine expects add-on files to be in a particular location, you have to run `php ee executive composerProvision` whenever you deploy to new environments or any time the symlinks to Executive's directories in the `vendor` directory are not where EE expects them to be.
+
+## Also note
+
+The `EEFrontController.php` file defines a constant that disables EE install mode. In order to install EE, or update it, you must temporarily set that constant to `true`. Be sure to set it back to `false` when you're done updating EE for safety purposes.

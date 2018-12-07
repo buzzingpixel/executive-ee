@@ -26,6 +26,9 @@ define('SYSPATH', $basePath . $sep . 'system' . $sep);
 define('SYSDIR', basename(SYSPATH));
 define('DEBUG', getenv('DEV_MODE') === 'true' ? 1 : 0);
 
+// To run the EE installer and/or perform updates, set to true
+define('INSTALL_MODE', false);
+
 // Set up debugging
 $query = [];
 $isCpJsRequest = false;
