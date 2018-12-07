@@ -34,6 +34,7 @@ use buzzingpixel\executive\factories\CommandModelFactory;
 use buzzingpixel\executive\commands\MakeMigrationCommand;
 use buzzingpixel\executive\controllers\ConsoleController;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
+use buzzingpixel\executive\commands\SyncTemplatesCommand;
 use buzzingpixel\executive\services\LayoutDesignerService;
 use buzzingpixel\executive\services\CaseConversionService;
 use buzzingpixel\executive\services\ElevateSessionService;
@@ -190,6 +191,9 @@ return [
             \is_string($destination) ? $destination : '',
             new ExecutiveDi()
         );
+    },
+    SyncTemplatesCommand::class => function () {
+        return new SyncTemplatesCommand();
     },
 
     /**

@@ -17,6 +17,7 @@ use buzzingpixel\executive\commands\ConfigCommand;
 use buzzingpixel\executive\commands\RunScheduleCommand;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use buzzingpixel\executive\commands\MakeMigrationCommand;
+use buzzingpixel\executive\commands\SyncTemplatesCommand;
 use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
@@ -130,6 +131,11 @@ return [
             'class' => RunScheduleCommand::class,
             'method' => 'run',
             'description' => lang('runScheduleDescription'),
+        ],
+        'syncTemplates' => [
+            'class' => SyncTemplatesCommand::class,
+            'method' => 'run',
+            'description' => lang('runSyncTemplatesDescription'),
         ],
     ],
 ];

@@ -122,4 +122,5 @@ $lang = [
     'actionMethodNotFound' => 'Action method was not found for `{{action}}`',
     'noActionsSpecified' => 'No actions have been specified in config',
     'actionConfigNotFound' => 'Action config not found for `{{action}}`',
+    'runSyncTemplatesDescription' => 'Syncs templates with file system',
 ];
