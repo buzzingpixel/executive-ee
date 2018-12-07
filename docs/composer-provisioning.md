@@ -4,7 +4,7 @@ One of the really cool features new in Executive 3.x is Composer provisioning. E
 
 ## What is this provisioning?
 
-Well, EE expects its directories to be in certain locations. And it expects add-ons to have directories in certain locations as well. If we want to manage these as composer dependencies, then we'll need to do a little symlinking from Composer's `vendor` directory into the correct locations. Executive calls that "Composer Provisioning".
+EE expects its directories to be in certain locations. And it expects add-ons to have directories in certain locations as well. If we want to manage these as composer dependencies, then we'll need to do a little symlinking from Composer's `vendor` directory into the correct locations. Executive calls that "Composer Provisioning".
 
 ## The command
 
@@ -16,7 +16,7 @@ php ee executive composerProvision
 
 ## Add-on support for provisioning
 
-Obviously Executive supports composer provisioning. And it does so the same way any add-on can: by setting the composer.json `type` key to "ee-add-on" and by setting up some configuration in its composer.json `extra` object. The keys `handle` and `systemPath` are required. `themePath` is optional, and should be set if the add-on has front-end theme assets that should be available. Here's a sample:
+Executive, as an add-on, is provisioned by the same command seen above (obviously). And it does so the same way any add-on can: by setting the composer.json `type` key to "ee-add-on" and by setting up some configuration in its composer.json `extra` object. The keys `handle` and `systemPath` are required. `themePath` is optional, and should be set if the add-on has front-end theme assets that should be available. Here's a sample:
 
 ```json
 {
@@ -39,25 +39,45 @@ Obviously Executive supports composer provisioning. And it does so the same way 
 
 ## Provisioning ExpressionEngine Itself
 
-Yes, you can use Composer to keep the entirety of ExpressionEngine's codebase out of your codebase! Some things to keep in mind:
+Yes, you can use Composer to keep the entirety of ExpressionEngine's codebase out of your codebase! This is optional, but it's so great.
 
-- It is ILLEGAL and against ExpressionEngine's terms of service to put ExpressionEngine in a publicly accessible repository. So you must keep ExpressionEngine in a private repository.
-- Anywhere that needs to run `composer install` or `composer update` will need to have access to the private repository. This can be done with ssh keys or GitHub api keys.
-- Any time ExpressionEngine is updated, you'll need to download the update and update your private repository.
-    - This also includes updating the version number in the composer.json file you're keeping in your private repository
-    - And tagging the release in your private repository
-- But all this is much easier to manage EE in a separate single repository and `composer update` projects on an as-needed or desired basis
+### Using the official open source repository
 
-So what does Executive require to provision EE? Well, composer require from your private repository of course. And in that private repository, the composer.json file should have the following configurations set in the `extra` object.
+To provision using the open source repository, all you need to do is provide a release tag name in the composer.json `extra` object like this:
+
+```json
+{
+    "name": "myproject",
+    "require": {
+        "buzzingpixel/executive-ee": "^3.0"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
+    },
+    "extra": {
+        "provisionEEVersionTag": "5.0.1"
+    }
+}
+```
+
+As long as the tag is a valid tag name from the official ExpressionEngine repository, Executive will download EE from that tag and provision EE at that tag version. Here is the EE tags page for you to reference: https://github.com/ExpressionEngine/ExpressionEngine/tags
+
+### Provisioning from your own fork of EE
+
+You can also provision from you own repository of EE. Here are some notes on doing that:
+
+Any environment that needs to run `composer install` or `composer update` will need to have access to the repository. If it is a private repo, this can be done with ssh keys or GitHub api keys.
+
+`composer require` EE from your repository. And in that private repository, the composer.json file should have the following configurations set in the `extra` object.
 
 - `systemEEDir`
 - `themesEEDir`
 
-And it must have `type` set to "ee". Here's an example of my composer.json file for ExpressionEngine:
+And it must have `type` set to "ee". Here's an example of a composer.json file for ExpressionEngine:
 
 ```json
 {
-    "name": "tjdraper/expressionengine",
+    "name": "myuri/expressionengine",
     "description": "ExpressionEngine - dependency managed",
     "version": "4.3.4",
     "type": "ee",
@@ -143,7 +163,7 @@ Example:
 
 ### `installFromDownload`
 
-Some add-ons may be out on Github, but may not have a composer.json file. Or they may be available as a public zip download somewhere else. Well this headache inducing situation can be cured with this configuration option. As long as it's a zip file at a public URL, Executive can handle managing it for you. It will download the zip, unzip it into the `vendor` directory, and symlink the directories you specify. `systemPath` and `themePath` should be relative to the expanded zip contents so you may want to download the file, unzip and inspect it, then set the configuration for Executive. Here's an example of the composer configuration.
+Some add-ons may be out on Github, but may not have a composer.json file. Or they may be available as a public zip download somewhere else. This headache inducing situation can be cured with this configuration option. As long as it's a zip file at a public URL, Executive can handle managing it for you. It will download the zip, unzip it into the `vendor` directory, and symlink the directories you specify. `systemPath` and `themePath` should be relative to the expanded zip contents so you may want to download the file, unzip and inspect it, then set the configuration for Executive. Here's an example of the composer configuration.
 
 ```json
 {

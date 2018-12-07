@@ -26,6 +26,9 @@ define('SYSPATH', $basePath . $sep . 'system' . $sep);
 define('SYSDIR', basename(SYSPATH));
 define('DEBUG', getenv('DEV_MODE') === 'true' ? 1 : 0);
 
+// To run the EE installer and/or perform updates, set to true
+define('INSTALL_MODE', false);
+
 // Set up debugging
 $query = [];
 $isCpJsRequest = false;
@@ -67,7 +70,11 @@ if (PHP_SAPI === 'cli' && defined('EXECUTIVE_RAW_ARGS')) {
             ExecutiveDi::get(ComposerProvisionCommand::class)->run();
             exit();
         } catch (Exception $e) {
-            exit("\033[31m" . $e->getMessage() . "\n");
+            exit(
+                "\033[31m" . $e->getMessage() . "\n" .
+                'File: ' . $e->getFile() . "\n" .
+                'Line: ' . $e->getLine() . "\n"
+            );
         }
     }
 }

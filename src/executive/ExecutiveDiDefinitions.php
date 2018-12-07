@@ -72,6 +72,9 @@ return [
         );
     },
     ComposerProvisionCommand::class => function () {
+        // Edge case and weirdness with composer
+        getenv('HOME') || putenv('HOME=' . APP_DIR);
+
         $composerApp = new Composer\Console\Application();
         /** @noinspection PhpUnhandledExceptionInspection */
         $composer = $composerApp->getComposer();
@@ -81,15 +84,20 @@ return [
 
         $package = $composer->getPackage();
 
+        $extra = $package->getExtra();
+
+        $provisionEEVersionTag = (string) ($extra['provisionEEVersionTag'] ?? '');
+
         return new ComposerProvisionCommand(
             new ConsoleOutput(),
             $installedFilesystemRepository,
             rtrim($composer->getConfig()->get('vendor-dir'), DIRECTORY_SEPARATOR),
             new Filesystem(),
             new FinderFactory(),
-            $package->getExtra()['publicDir'] ?? 'public',
-            $package->getExtra()['eeAddOns'] ?? [],
-            $package->getExtra()['installFromDownload'] ?? []
+            $extra['publicDir'] ?? 'public',
+            $extra['eeAddOns'] ?? [],
+            $extra['installFromDownload'] ?? [],
+            $provisionEEVersionTag
         );
     },
     ConfigCommand::class => function () {

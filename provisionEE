@@ -1,0 +1,63 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+
+$tag = '5.0.1';
+
+// Set up composer
+$sep = DIRECTORY_SEPARATOR;
+$basePath = __DIR__;
+$vendorAutoload = $basePath . $sep . 'vendor' . $sep . 'autoload.php';
+if (file_exists($vendorAutoload)) {
+    require_once $vendorAutoload;
+}
+
+use Symfony\Component\Filesystem\Filesystem;
+
+$isWin = strpos(PHP_OS, 'WIN') === 0;
+
+function processPathForPlatform(string $path): string
+{
+    $newPath = '';
+
+    foreach (explode('/', $path) as $namePart) {
+        if (! $namePart) {
+            continue;
+        }
+
+        if (! $newPath) {
+            $newPath = $namePart;
+            continue;
+        }
+
+        $newPath .= DIRECTORY_SEPARATOR . $namePart;
+    }
+
+    return $newPath;
+}
+
+$fileSystem = new Filesystem();
+
+$path = processPathForPlatform(__DIR__ . '/libraries');
+$zipFile = processPathForPlatform($path . '/ee.zip');
+$unzipPath = processPathForPlatform($path . '/ee');
+$url = 'https://github.com/ExpressionEngine/ExpressionEngine/archive/' . $tag . '.zip';
+
+if (file_exists($zipFile)) {
+    $fileSystem->remove($zipFile);
+}
+
+if (is_dir($unzipPath)) {
+    exec(
+        $isWin ?
+            "rmdir {$unzipPath} /s /q" :
+            "rm -rf {$unzipPath}"
+    );
+}
+
+$fileSystem->appendToFile($zipFile, fopen($url, 'rb'));
+
+$zipHandler = new \ZipArchive();
+$zipHandler->open($zipFile);
+$zipHandler->extractTo($unzipPath);
+$zipHandler->close();
