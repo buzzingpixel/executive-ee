@@ -55,6 +55,7 @@ use buzzingpixel\executive\controllers\RunMigrationsController;
 use buzzingpixel\executive\factories\ReflectionFunctionFactory;
 use buzzingpixel\executive\factories\ClosureFromCallableFactory;
 use buzzingpixel\executive\services\queue\GetNextQueueItemService;
+use buzzingpixel\executive\services\queue\MarkQueueItemAsRunService;
 use buzzingpixel\executive\services\queue\MarkAsStoppedDueToErrorService;
 use buzzingpixel\executive\services\templatesync\SyncTemplatesFromFilesService;
 use buzzingpixel\executive\services\templatesync\DeleteSnippetsNotOnDiskService;
@@ -360,6 +361,9 @@ return [
     },
     MarkAsStoppedDueToErrorService::class => function () {
         return new MarkAsStoppedDueToErrorService(new QueryBuilderFactory());
+    },
+    MarkQueueItemAsRunService::class => function () {
+        return new MarkQueueItemAsRunService(new QueryBuilderFactory());
     },
     MigrationsService::class => function () {
         return new MigrationsService(

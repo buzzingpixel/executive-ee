@@ -15,6 +15,7 @@ use buzzingpixel\executive\models\ActionQueueItemModel;
 use buzzingpixel\executive\services\queue\AddToQueueService;
 use buzzingpixel\executive\exceptions\InvalidActionQueueModel;
 use buzzingpixel\executive\services\queue\GetNextQueueItemService;
+use buzzingpixel\executive\services\queue\MarkQueueItemAsRunService;
 use buzzingpixel\executive\services\queue\MarkAsStoppedDueToErrorService;
 
 class QueueApi
@@ -49,5 +50,12 @@ class QueueApi
         /** @var MarkAsStoppedDueToErrorService $service */
         $service = $this->di->getFromDefinition(MarkAsStoppedDueToErrorService::class);
         $service->markAsStoppedDueToError($model);
+    }
+
+    public function markItemAsRun(ActionQueueItemModel $model): void
+    {
+        /** @var MarkQueueItemAsRunService $service */
+        $service = $this->di->getFromDefinition(MarkQueueItemAsRunService::class);
+        $service->markQueueItemAsRun($model);
     }
 }
