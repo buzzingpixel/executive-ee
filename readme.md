@@ -14,7 +14,7 @@ Executive also provides an interface for you to create custom commands and sched
 
 ## Docs
 
-- [Notes on EE 4](docs/ee4.md)
+- [Notes on EE 4+](docs/ee4.md)
 - [Installing](docs/install.md)
 - [Out of the Box Commands](docs/out-of-box-commands.md)
 - [Composer Provisioning](docs/composer-provisioning.md)
