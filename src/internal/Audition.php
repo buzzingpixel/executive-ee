@@ -39,8 +39,13 @@ class Audition
         //
         // ExecutiveDi::get(QueueApi::class)->addToQueue($actionQueueModel);
 
+        // // Get next queue item
+        // var_dump(ExecutiveDi::get(QueueApi::class)->getNextQueueItem());
+        // die;
+
         // Get next queue item
-        var_dump(ExecutiveDi::get(QueueApi::class)->getNextQueueItem());
-        die;
+        ExecutiveDi::get(QueueApi::class)->markAsStoppedDueToError(
+            ExecutiveDi::get(QueueApi::class)->getNextQueueItem()
+        );
     }
 }
