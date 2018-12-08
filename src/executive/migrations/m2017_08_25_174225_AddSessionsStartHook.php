@@ -11,15 +11,8 @@ namespace buzzingpixel\executive\migrations;
 
 use buzzingpixel\executive\abstracts\MigrationAbstract;
 
-/**
- * Class m2017_08_25_174225_AddSessionsStartHook
- */
 class m2017_08_25_174225_AddSessionsStartHook extends MigrationAbstract
 {
-    /**
-     * Runs the migration
-     * @return bool
-     */
     public function safeUp(): bool
     {
         $query = (int) $this->queryBuilderFactory->make()
@@ -45,10 +38,6 @@ class m2017_08_25_174225_AddSessionsStartHook extends MigrationAbstract
         return true;
     }
 
-    /**
-     * Reverses the migration
-     * @return bool
-     */
     public function safeDown(): bool
     {
         $this->queryBuilderFactory->make()->delete('extensions', [

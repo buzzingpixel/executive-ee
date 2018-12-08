@@ -11,15 +11,8 @@ namespace buzzingpixel\executive\migrations;
 
 use buzzingpixel\executive\abstracts\MigrationAbstract;
 
-/**
- * Class m2018_08_20_082226_DropBatchCols
- */
 class m2018_08_20_082226_DropBatchCols extends MigrationAbstract
 {
-    /**
-     * Runs the migration
-     * @return bool
-     */
     public function safeUp(): bool
     {
         $execColExists = $this->queryBuilderFactory->make()->field_exists(
@@ -45,10 +38,6 @@ class m2018_08_20_082226_DropBatchCols extends MigrationAbstract
         return true;
     }
 
-    /**
-     * Reverses the migration
-     * @return bool
-     */
     public function safeDown(): bool
     {
         return true;

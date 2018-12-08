@@ -11,15 +11,8 @@ namespace buzzingpixel\executive\migrations;
 
 use buzzingpixel\executive\abstracts\MigrationAbstract;
 
-/**
- * Class m2017_08_26_235904_AddUserMigrationsTable
- */
 class m2017_08_26_235904_AddUserMigrationsTable extends MigrationAbstract
 {
-    /**
-     * Runs the migration
-     * @return bool
-     */
     public function safeUp(): bool
     {
         $tableExists = $this->queryBuilderFactory->make()
@@ -51,10 +44,6 @@ class m2017_08_26_235904_AddUserMigrationsTable extends MigrationAbstract
         return true;
     }
 
-    /**
-     * Reverses the migration
-     * @return bool
-     */
     public function safeDown(): bool
     {
         $tableExists = $this->queryBuilderFactory->make()
