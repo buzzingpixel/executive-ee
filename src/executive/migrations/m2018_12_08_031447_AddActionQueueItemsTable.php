@@ -34,7 +34,7 @@ class m2018_12_08_031447_AddActionQueueItemsTable extends MigrationAbstract
                 'type' => 'INT',
                 'unsigned' => true,
             ],
-            'action_queue_guid' => [
+            'action_queue_id' => [
                 'type' => 'INT',
                 'unsigned' => true,
             ],
