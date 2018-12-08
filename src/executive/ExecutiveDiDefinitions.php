@@ -10,6 +10,7 @@ declare(strict_types=1);
 use buzzingpixel\executive\ExecutiveDi;
 use Symfony\Component\Filesystem\Filesystem;
 use buzzingpixel\executive\models\RouteModel;
+use buzzingpixel\executive\services\QueueApi;
 use Symfony\Component\Console\Input\ArgvInput;
 use buzzingpixel\executive\services\ViewService;
 use buzzingpixel\executive\commands\CacheCommand;
@@ -40,6 +41,7 @@ use buzzingpixel\executive\services\CaseConversionService;
 use buzzingpixel\executive\services\ElevateSessionService;
 use buzzingpixel\executive\services\CliErrorHandlerService;
 use buzzingpixel\executive\services\ChannelDesignerService;
+use buzzingpixel\executive\services\queue\AddToQueueService;
 use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\factories\ConsoleQuestionFactory;
@@ -264,6 +266,9 @@ return [
     /**
      * Services
      */
+    AddToQueueService::class => function () {
+        return new AddToQueueService(new QueryBuilderFactory());
+    },
     CaseConversionService::class => function () {
         return new CaseConversionService();
     },
@@ -353,6 +358,9 @@ return [
             ee('Filesystem'),
             new QueryBuilderFactory()
         );
+    },
+    QueueApi::class => function () {
+        return new QueueApi(new ExecutiveDi());
     },
     RoutingService::class => function () {
         /** @var \EE_Config $config */
