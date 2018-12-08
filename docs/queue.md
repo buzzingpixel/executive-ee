@@ -6,7 +6,7 @@ In order to take advantage of the queue, you must have something like Supervisor
 
 ## Adding items to the queue
 
-Adding items to the queue fairly simple. Here's an example:
+Adding items to the queue is fairly simple. Here's an example:
 
 ```php
 <?php
