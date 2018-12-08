@@ -66,6 +66,12 @@ Run's an add-on's `update` method in the add-on's `upd` file/class.
 
 This will run updates for any add-ons that need to be updated.
 
+## runQueue
+
+`php ee executive runQueue`
+
+This runs the next command in the [queue](queue.md). This should be run by something like Supervisor every second to continually process the queue as items are added to it.
+
 ## runSchedule
 
 `php ee executive runSchedule`
