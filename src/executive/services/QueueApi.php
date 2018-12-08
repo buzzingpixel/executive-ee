@@ -11,8 +11,10 @@ namespace buzzingpixel\executive\services;
 
 use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\models\ActionQueueModel;
+use buzzingpixel\executive\models\ActionQueueItemModel;
 use buzzingpixel\executive\services\queue\AddToQueueService;
 use buzzingpixel\executive\exceptions\InvalidActionQueueModel;
+use buzzingpixel\executive\services\queue\GetNextQueueItemService;
 
 class QueueApi
 {
@@ -31,5 +33,13 @@ class QueueApi
         /** @var AddToQueueService $service */
         $service = $this->di->getFromDefinition(AddToQueueService::class);
         $service->addToQueue($model);
+    }
+
+    public function getNextQueueItem(
+        bool $markAsStarted = false
+    ): ?ActionQueueItemModel {
+        /** @var GetNextQueueItemService $service */
+        $service = $this->di->getFromDefinition(GetNextQueueItemService::class);
+        return $service->getNextQueueItem($markAsStarted);
     }
 }

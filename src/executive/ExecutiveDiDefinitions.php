@@ -54,6 +54,7 @@ use buzzingpixel\executive\factories\CliArgumentsModelFactory;
 use buzzingpixel\executive\controllers\RunMigrationsController;
 use buzzingpixel\executive\factories\ReflectionFunctionFactory;
 use buzzingpixel\executive\factories\ClosureFromCallableFactory;
+use buzzingpixel\executive\services\queue\GetNextQueueItemService;
 use buzzingpixel\executive\services\templatesync\SyncTemplatesFromFilesService;
 use buzzingpixel\executive\services\templatesync\DeleteSnippetsNotOnDiskService;
 use buzzingpixel\executive\services\templatesync\DeleteTemplatesNotOnDiskService;
@@ -349,6 +350,9 @@ return [
     },
     ForceSnippetVarSyncToDatabaseService::class => function () {
         return new ForceSnippetVarSyncToDatabaseService(ee('Model'));
+    },
+    GetNextQueueItemService::class => function () {
+        return new GetNextQueueItemService(new QueryBuilderFactory());
     },
     LayoutDesignerService::class => function () {
         return new LayoutDesignerService(ee('Model'));
