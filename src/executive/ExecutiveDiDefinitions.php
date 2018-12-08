@@ -12,6 +12,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use buzzingpixel\executive\models\RouteModel;
 use buzzingpixel\executive\services\QueueApi;
 use Symfony\Component\Console\Input\ArgvInput;
+use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
 use buzzingpixel\executive\services\ViewService;
 use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\factories\EeDiFactory;
@@ -403,7 +404,8 @@ return [
             ee()->lang,
             new ExecutiveDi(),
             ee()->TMPL,
-            ee()->config
+            ee()->config,
+            new SapiEmitter()
         );
     },
     RunCommandService::class => function () {

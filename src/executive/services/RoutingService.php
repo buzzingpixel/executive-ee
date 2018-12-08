@@ -13,52 +13,33 @@ use EE_Lang;
 use Throwable;
 use EE_Config;
 use EE_Template;
+use Psr\Http\Message\ResponseInterface;
 use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\models\RouteModel;
+use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
 use buzzingpixel\executive\exceptions\InvalidRouteConfiguration;
 
-/**
- * Class RoutingService
- */
 class RoutingService
 {
-    /** @var RouteModel $routeModel */
     private $routeModel;
-
-    /** @var array $routes */
     private $routes;
-
-    /** @var EE_Lang $lang */
     private $lang;
-
-    /** @var ExecutiveDi $executiveDi */
     private $executiveDi;
-
-    /** @var EE_Template $template */
     private $template;
-
-    /** @var EE_Config $config */
     private $config;
+    private $emitter;
 
-    /** @var bool $anyRouteMatched */
     private $anyRouteMatched = false;
+    private $lastResponse;
 
-    /**
-     * RoutingService constructor
-     * @param RouteModel $routeModel
-     * @param array $routes
-     * @param EE_Lang $lang
-     * @param ExecutiveDi $executiveDi
-     * @param EE_Template $template
-     * @param EE_Config $config
-     */
     public function __construct(
         RouteModel $routeModel,
         array $routes,
         EE_Lang $lang,
         ExecutiveDi $executiveDi,
         EE_Template $template,
-        EE_Config $config
+        EE_Config $config,
+        SapiEmitter $emitter
     ) {
         $this->routeModel = $routeModel;
         $this->routes = $routes;
@@ -66,12 +47,10 @@ class RoutingService
         $this->executiveDi = $executiveDi;
         $this->template = $template;
         $this->config = $config;
+        $this->emitter = $emitter;
     }
 
     /**
-     * Routes a URI
-     * @param string $uri
-     * @return array
      * @throws InvalidRouteConfiguration
      */
     public function routeUri(string $uri): array
@@ -123,6 +102,11 @@ class RoutingService
             if ($this->routeModel->getStop()) {
                 return $this->respond();
             }
+        }
+
+        if ($this->lastResponse) {
+            $this->emitter->emit($this->lastResponse);
+            exit();
         }
 
         return $this->respond();
@@ -252,14 +236,15 @@ class RoutingService
 
         $arguments = array_merge([$this->routeModel], $match);
 
-        \call_user_func_array([$class, $method], $arguments);
+        $response = \call_user_func_array([$class, $method], $arguments);
+
+        if ($response instanceof ResponseInterface) {
+            $this->lastResponse = $response;
+            $this->routeModel->setResponse($this->lastResponse);
+        }
     }
 
     /**
-     * Throws an exception and makes sure lang file is loaded
-     * @param string $routeKey
-     * @param string $langKey
-     * @param Throwable $previous
      * @throws InvalidRouteConfiguration
      */
     private function throwInvalidRouteConfigurationException(
