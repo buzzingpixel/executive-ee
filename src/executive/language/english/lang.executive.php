@@ -123,4 +123,13 @@ $lang = [
     'noActionsSpecified' => 'No actions have been specified in config',
     'actionConfigNotFound' => 'Action config not found for `{{action}}`',
     'runSyncTemplatesDescription' => 'Syncs templates with file system',
+    'saveTmplFilesDisabled' => 'The config item "save_tmpl_files" is disabled',
+    'syncingTemplates' => 'Syncing templates...',
+    'ensuringIndexTemplatesExist' => 'Making sure all groups have index templates...',
+    'deletingVariablesNotOnDisk' => 'Deleting variables not present in the filesystem...',
+    'deletingSnippetsNotOnDisk' => 'Deleting snippets not present in the filesystem...',
+    'deletingTemplatesNotOnDisk' => 'Deleting templates not present in the filesystem...',
+    'ensuringSnippetVarsSync' => 'Ensuring Snippets and Variables in the database are in sync with the file versions...',
+    'ensuringTemplatesSync' => 'Ensuring Templates in the database are in sync with the file versions...',
+    'templateSyncComplete' => 'Template sync complete',
 ];

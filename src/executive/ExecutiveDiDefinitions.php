@@ -52,6 +52,13 @@ use buzzingpixel\executive\factories\CliArgumentsModelFactory;
 use buzzingpixel\executive\controllers\RunMigrationsController;
 use buzzingpixel\executive\factories\ReflectionFunctionFactory;
 use buzzingpixel\executive\factories\ClosureFromCallableFactory;
+use buzzingpixel\executive\services\templatesync\SyncTemplatesFromFilesService;
+use buzzingpixel\executive\services\templatesync\DeleteSnippetsNotOnDiskService;
+use buzzingpixel\executive\services\templatesync\DeleteTemplatesNotOnDiskService;
+use buzzingpixel\executive\services\templatesync\DeleteVariablesNotOnDiskService;
+use buzzingpixel\executive\services\templatesync\EnsureIndexTemplatesExistService;
+use buzzingpixel\executive\services\templatesync\ForceSnippetVarSyncToDatabaseService;
+use buzzingpixel\executive\services\templatesync\DeleteTemplateGroupsWithoutTemplatesService;
 
 return [
     /**
@@ -193,7 +200,18 @@ return [
         );
     },
     SyncTemplatesCommand::class => function () {
-        return new SyncTemplatesCommand();
+        return new SyncTemplatesCommand(
+            ee()->lang,
+            new ConsoleOutput(),
+            ee()->config,
+            ExecutiveDi::get(DeleteVariablesNotOnDiskService::class),
+            ExecutiveDi::get(EnsureIndexTemplatesExistService::class),
+            ExecutiveDi::get(DeleteSnippetsNotOnDiskService::class),
+            ExecutiveDi::get(DeleteTemplatesNotOnDiskService::class),
+            ExecutiveDi::get(ForceSnippetVarSyncToDatabaseService::class),
+            ExecutiveDi::get(SyncTemplatesFromFilesService::class),
+            ExecutiveDi::get(DeleteTemplateGroupsWithoutTemplatesService::class)
+        );
     },
 
     /**
@@ -279,6 +297,33 @@ return [
             new CommandModelFactory()
         );
     },
+    DeleteSnippetsNotOnDiskService::class => function () {
+        return new DeleteSnippetsNotOnDiskService(
+            rtrim(PATH_TMPL, DIRECTORY_SEPARATOR),
+            ExecutiveDi::get('eeSiteShortNames'),
+            ee('Model'),
+            new Filesystem()
+        );
+    },
+    DeleteTemplateGroupsWithoutTemplatesService::class => function () {
+        return new DeleteTemplateGroupsWithoutTemplatesService(ee('Model'));
+    },
+    DeleteTemplatesNotOnDiskService::class => function () {
+        return new DeleteTemplatesNotOnDiskService(
+            rtrim(PATH_TMPL, DIRECTORY_SEPARATOR),
+            ExecutiveDi::get('eeSiteShortNames'),
+            ee('Model'),
+            new Filesystem()
+        );
+    },
+    DeleteVariablesNotOnDiskService::class => function () {
+        return new DeleteVariablesNotOnDiskService(
+            rtrim(PATH_TMPL, DIRECTORY_SEPARATOR),
+            ExecutiveDi::get('eeSiteShortNames'),
+            ee('Model'),
+            new Filesystem()
+        );
+    },
     ElevateSessionService::class => function () {
         return new ElevateSessionService(
             new QueryBuilderFactory(),
@@ -287,11 +332,18 @@ return [
             ee()->load
         );
     },
-    ExtensionDesignerService::class => function () {
-        return new ExtensionDesignerService(
-            ee('Model'),
-            ee('db')
+    EnsureIndexTemplatesExistService::class => function () {
+        return new EnsureIndexTemplatesExistService(
+            rtrim(PATH_TMPL, DIRECTORY_SEPARATOR),
+            new FinderFactory(),
+            new Filesystem()
         );
+    },
+    ExtensionDesignerService::class => function () {
+        return new ExtensionDesignerService(ee('Model'), ee('db'));
+    },
+    ForceSnippetVarSyncToDatabaseService::class => function () {
+        return new ForceSnippetVarSyncToDatabaseService(ee('Model'));
     },
     LayoutDesignerService::class => function () {
         return new LayoutDesignerService(ee('Model'));
@@ -339,6 +391,9 @@ return [
             new CliArgumentsModelFactory()
         );
     },
+    SyncTemplatesFromFilesService::class => function () {
+        return new SyncTemplatesFromFilesService();
+    },
     TemplateMakerService::class => function () {
         return new TemplateMakerService(
             new SplFileInfoFactory(),
@@ -360,5 +415,22 @@ return [
             ee('executive:Provider'),
             __DIR__ . '/views'
         );
+    },
+
+    /**
+     * Other
+     */
+    'eeSiteShortNames' => function () {
+        $sites = ee('Model')->get('Site')
+            ->fields('site_name')
+            ->all();
+
+        $sitesArray = [];
+
+        foreach ($sites as $site) {
+            $sitesArray[$site->site_id] = $site->site_name;
+        }
+
+        return $sitesArray;
     },
 ];
