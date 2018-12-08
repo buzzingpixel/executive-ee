@@ -48,9 +48,12 @@ class Audition
         //     ExecutiveDi::get(QueueApi::class)->getNextQueueItem()
         // );
 
-        // Mark item as run
-        ExecutiveDi::get(QueueApi::class)->markItemAsRun(
-            ExecutiveDi::get(QueueApi::class)->getNextQueueItem()
-        );
+        // // Mark item as run
+        // ExecutiveDi::get(QueueApi::class)->markItemAsRun(
+        //     ExecutiveDi::get(QueueApi::class)->getNextQueueItem()
+        // );
+
+        // Update action queue entry status
+        ExecutiveDi::get(QueueApi::class)->updateActionQueueStatus(1);
     }
 }

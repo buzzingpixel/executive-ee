@@ -57,6 +57,7 @@ use buzzingpixel\executive\factories\ClosureFromCallableFactory;
 use buzzingpixel\executive\services\queue\GetNextQueueItemService;
 use buzzingpixel\executive\services\queue\MarkQueueItemAsRunService;
 use buzzingpixel\executive\services\queue\MarkAsStoppedDueToErrorService;
+use buzzingpixel\executive\services\queue\UpdateActionQueueStatusService;
 use buzzingpixel\executive\services\templatesync\SyncTemplatesFromFilesService;
 use buzzingpixel\executive\services\templatesync\DeleteSnippetsNotOnDiskService;
 use buzzingpixel\executive\services\templatesync\DeleteTemplatesNotOnDiskService;
@@ -419,6 +420,9 @@ return [
             new SplFileInfoFactory(),
             new Filesystem()
         );
+    },
+    UpdateActionQueueStatusService::class => function () {
+        return new UpdateActionQueueStatusService(new QueryBuilderFactory());
     },
     ViewService::class => function () {
         /** @var \EE_Config $config */
