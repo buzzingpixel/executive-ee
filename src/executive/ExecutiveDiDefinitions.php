@@ -22,6 +22,7 @@ use buzzingpixel\executive\factories\FinderFactory;
 use buzzingpixel\executive\services\ScheduleService;
 use buzzingpixel\executive\services\CommandsService;
 use buzzingpixel\executive\models\CliArgumentsModel;
+use buzzingpixel\executive\commands\RunQueueCommand;
 use buzzingpixel\executive\services\MigrationsService;
 use buzzingpixel\executive\services\RunCommandService;
 use Composer\Repository\InstalledFilesystemRepository;
@@ -177,6 +178,15 @@ return [
             \is_string($templateLocation) ? $templateLocation : '',
             \is_string($nameSpace) ? $nameSpace : '',
             \is_string($destination) ? $destination : ''
+        );
+    },
+    RunQueueCommand::class => function () {
+        // Let's try not to run out of time
+        @set_time_limit(0);
+
+        return new RunQueueCommand(
+            new ExecutiveDi(),
+            ExecutiveDi::get(QueueApi::class)
         );
     },
     RunScheduleCommand::class => function () {
@@ -364,7 +374,10 @@ return [
         return new MarkAsStoppedDueToErrorService(new QueryBuilderFactory());
     },
     MarkQueueItemAsRunService::class => function () {
-        return new MarkQueueItemAsRunService(new QueryBuilderFactory());
+        return new MarkQueueItemAsRunService(
+            new QueryBuilderFactory(),
+            ExecutiveDi::get(UpdateActionQueueStatusService::class)
+        );
     },
     MigrationsService::class => function () {
         return new MigrationsService(

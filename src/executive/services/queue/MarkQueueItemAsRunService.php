@@ -11,16 +11,30 @@ use buzzingpixel\executive\factories\QueryBuilderFactory;
 class MarkQueueItemAsRunService
 {
     private $queryBuilderFactory;
+    private $updateActionQueueStatus;
 
-    public function __construct(QueryBuilderFactory $queryBuilderFactory)
-    {
+    public function __construct(
+        QueryBuilderFactory $queryBuilderFactory,
+        UpdateActionQueueStatusService $updateActionQueueStatus
+    ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
+        $this->updateActionQueueStatus = $updateActionQueueStatus;
     }
 
     public function markQueueItemAsRun(ActionQueueItemModel $model): void
     {
         $dateTime = new DateTime();
         $dateTime->setTimezone(new DateTimeZone('UTC'));
+
+        $item = $this->queryBuilderFactory->make()
+            ->where('id', $model->id)
+            ->limit(1)
+            ->get('executive_action_queue_items')
+            ->row();
+
+        if (! $item) {
+            return;
+        }
 
         $this->queryBuilderFactory->make()->update(
             'executive_action_queue_items',
@@ -32,6 +46,20 @@ class MarkQueueItemAsRunService
             [
                 'id' => $model->id,
             ]
+        );
+
+        $actionQueueQuery = $this->queryBuilderFactory->make()
+            ->where('id', $item->action_queue_id)
+            ->limit(1)
+            ->get('executive_action_queue')
+            ->row();
+
+        if (! $actionQueueQuery) {
+            return;
+        }
+
+        $this->updateActionQueueStatus->updateActionQueueStatus(
+            $actionQueueQuery->id
         );
     }
 }

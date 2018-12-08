@@ -45,6 +45,7 @@ $lang = [
     'getConfigDescription' => 'Get config item: --key=expressionengine --index=database',
     'clearCachesDescription' => 'Clear caches. Optionally specify type: --type=page (default: "all")',
     'cachesCleared' => 'Caches cleared',
+    'runQueueDescription' => 'Runs next item in queue (use supervisor while loop script to run every second).',
     'runScheduleDescription' => 'Run scheduled commands. You can (and should) run this command every minute on a cron.',
     'isCurrentlyRunning' => 'is currently running',
     'notRunYet' => 'does not need run at this time',
