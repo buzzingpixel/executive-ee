@@ -27,6 +27,7 @@ Executive also provides an interface for you to create custom commands and sched
 - [Custom Commands](docs/custom-commands.md)
 - [Addon Comands](docs/addon-commands.md)
 - [Schedule](docs/schedule.md)
+- [Queue](docs/queue.md)
 - [Addon Schedule](docs/addon-schedule.md)
 - [User Extensions](docs/user-extensions.md)
 - [User Template Tags](docs/user-template-tags.md)
