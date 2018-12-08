@@ -71,3 +71,15 @@ This will run updates for any add-ons that need to be updated.
 `php ee executive runSchedule`
 
 This will run any commands that you have [scheduled](schedule.md) to run in your config file, or other add-on developers have scheduled to run on their add-ons.
+
+## syncTemplates
+
+`php ee executive syncTemplates`
+
+This will sync your filesystem templates to the database. Here are the things this command does:
+
+1. Makes sure all template groups in the filesystem have a index.html template present. This template exists whether you want it to or not so if one doesn't exist yet, Executive assumes you created a new template group and template in that group that is not index.html. The template Executive creates contains a 404 redirect tag to make sure an endpoint you didn't mean to create is not accessible
+2. Deletes all Template Variables not present in the filesystem from the database
+3. Deletes all Template Paritials not present in the filesystem from the database
+4. Deletes all Templates not present in the filesystem from the database
+5. Runs EE's internal methods to ensure the database versions of the templates are synced up from the filesystem
