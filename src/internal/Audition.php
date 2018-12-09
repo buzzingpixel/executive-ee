@@ -33,10 +33,23 @@ class Audition
             ],
         ]);
 
+        // $response->getBody()->write(
+        //     ExecutiveDi::get(EETemplateService::class)->renderTemplate(
+        //         'test',
+        //         'asdf',
+        //         [
+        //             'asdf' => 'thing',
+        //         ]
+        //     )
+        // );
+
         $response->getBody()->write(
-            ExecutiveDi::get(EETemplateService::class)->renderTemplate('test', 'asdf', [
-                'asdf' => 'thing',
-            ])
+            ExecutiveDi::get(EETemplateService::class)->renderPath(
+                APP_DIR . '/src/TestTemplate.html',
+                [
+                    'asdf' => 'thing',
+                ]
+            )
         );
 
         return $response;
