@@ -8,12 +8,14 @@ declare(strict_types=1);
  */
 
 use buzzingpixel\executive\ExecutiveDi;
+use Twig\Environment as TwigEnvironment;
 use Symfony\Component\Filesystem\Filesystem;
 use buzzingpixel\executive\models\RouteModel;
 use buzzingpixel\executive\services\QueueApi;
 use Symfony\Component\Console\Input\ArgvInput;
 use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
 use buzzingpixel\executive\services\ViewService;
+use buzzingpixel\executive\factories\TwigFactory;
 use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\factories\EeDiFactory;
 use buzzingpixel\executive\commands\ConfigCommand;
@@ -475,5 +477,8 @@ return [
         }
 
         return $sitesArray;
+    },
+    TwigEnvironment::class => function () {
+        return (new TwigFactory())->get();
     },
 ];

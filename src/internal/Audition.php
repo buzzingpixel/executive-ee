@@ -13,6 +13,8 @@ use Zend\Diactoros\Response;
 use buzzingpixel\executive\models\RouteModel;
 use buzzingpixel\executive\services\EETemplateService;
 
+use Twig\Environment;
+
 class Audition
 {
     public function route(RouteModel $router)
@@ -43,11 +45,20 @@ class Audition
         //     )
         // );
 
+        // $response->getBody()->write(
+        //     ExecutiveDi::get(EETemplateService::class)->renderPath(
+        //         'src/TestTemplate.html',
+        //         [
+        //             'asdf' => 'thing',
+        //         ]
+        //     )
+        // );
+
         $response->getBody()->write(
-            ExecutiveDi::get(EETemplateService::class)->renderPath(
-                'src/TestTemplate.html',
+            ExecutiveDi::get(Environment::class)->render(
+                'TestTwigTemplate.twig',
                 [
-                    'asdf' => 'thing',
+                    'testVar' => 'thingy',
                 ]
             )
         );

@@ -27,7 +27,8 @@
         "symfony/filesystem": "^4.1",
         "symfony/finder": "^4.1",
         "zendframework/zend-diactoros": "^2.0",
-        "zendframework/zend-httphandlerrunner": "^1.0"
+        "zendframework/zend-httphandlerrunner": "^1.0",
+        "twig/twig": "^2.5"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master"
