@@ -35,15 +35,15 @@ class Audition
             ],
         ]);
 
-        // $response->getBody()->write(
-        //     ExecutiveDi::get(EETemplateService::class)->renderTemplate(
-        //         'test',
-        //         'asdf',
-        //         [
-        //             'asdf' => 'thing',
-        //         ]
-        //     )
-        // );
+        $response->getBody()->write(
+            ExecutiveDi::get(EETemplateService::class)->renderTemplate(
+                'test',
+                'asdf',
+                [
+                    'asdf' => 'thing',
+                ]
+            )
+        );
 
         // $response->getBody()->write(
         //     ExecutiveDi::get(EETemplateService::class)->renderPath(
@@ -54,14 +54,14 @@ class Audition
         //     )
         // );
 
-        $response->getBody()->write(
-            ExecutiveDi::get(Environment::class)->render(
-                'TestTwigTemplate.twig',
-                [
-                    'testVar' => 'thingy',
-                ]
-            )
-        );
+        // $response->getBody()->write(
+        //     ExecutiveDi::get(Environment::class)->render(
+        //         'TestTwigTemplate.twig',
+        //         [
+        //             'testVar' => 'thingy',
+        //         ]
+        //     )
+        // );
 
         return $response;
     }
