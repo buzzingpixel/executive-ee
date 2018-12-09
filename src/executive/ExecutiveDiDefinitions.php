@@ -59,6 +59,7 @@ use buzzingpixel\executive\factories\CliArgumentsModelFactory;
 use buzzingpixel\executive\controllers\RunMigrationsController;
 use buzzingpixel\executive\factories\ReflectionFunctionFactory;
 use buzzingpixel\executive\factories\ClosureFromCallableFactory;
+use buzzingpixel\executive\twigextensions\EETemplateTwigExtension;
 use buzzingpixel\executive\services\queue\GetNextQueueItemService;
 use buzzingpixel\executive\services\queue\MarkQueueItemAsRunService;
 use buzzingpixel\executive\services\queue\MarkAsStoppedDueToErrorService;
@@ -459,6 +460,15 @@ return [
         return new ViewService(
             ee('executive:Provider'),
             __DIR__ . '/views'
+        );
+    },
+
+    /**
+     * Twig Extensions
+     */
+    EETemplateTwigExtension::class => function () {
+        return new EETemplateTwigExtension(
+            ExecutiveDi::get(EETemplateService::class)
         );
     },
 

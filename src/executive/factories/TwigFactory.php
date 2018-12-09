@@ -9,10 +9,11 @@ declare(strict_types=1);
 
 namespace buzzingpixel\executive\factories;
 
-use buzzingpixel\executive\ExecutiveDi;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\Extension\DebugExtension;
+use buzzingpixel\executive\ExecutiveDi;
+use buzzingpixel\executive\twigextensions\EETemplateTwigExtension;
 
 class TwigFactory
 {
@@ -66,6 +67,8 @@ class TwigFactory
 
             $twig->addExtension($instantiatedClass);
         }
+
+        $twig->addExtension(ExecutiveDi::get(EETemplateTwigExtension::class));
 
         if ($debug) {
             $twig->addExtension(new DebugExtension());

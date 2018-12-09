@@ -29,8 +29,11 @@ class EETemplateService extends EE_Template
         $this->extensions = ee()->extensions;
     }
 
-    public function renderTemplate(string $group, string $template, array $variables = []): string
-    {
+    public function renderTemplate(
+        string $group,
+        string $template,
+        array $variables = []
+    ): string {
         $this->start_microtime = microtime(true);
 
         $primaryInstance = $this->legacyApp->TMPL;
