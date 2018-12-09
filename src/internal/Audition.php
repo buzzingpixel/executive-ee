@@ -9,8 +9,39 @@ use buzzingpixel\executive\services\QueueApi;
 use buzzingpixel\executive\models\ActionQueueModel;
 use buzzingpixel\executive\models\ActionQueueItemModel;
 
+use Zend\Diactoros\Response;
+use buzzingpixel\executive\models\RouteModel;
+use buzzingpixel\executive\services\EETemplateService;
+
 class Audition
 {
+    public function route(RouteModel $router)
+    {
+        $response = new Response();
+
+        $response = $response->withStatus(200)
+            ->withHeader('Content-Type', 'text/html');
+
+        $router->setPair('test_pair', [
+            [
+                'thing' => 'thingy',
+                'test' => 'asdf',
+            ],
+            [
+                'thing' => 'two-asdf',
+                'test' => 'two',
+            ],
+        ]);
+
+        $response->getBody()->write(
+            ExecutiveDi::get(EETemplateService::class)->renderTemplate('test', 'asdf', [
+                'asdf' => 'thing',
+            ])
+        );
+
+        return $response;
+    }
+
     public function __invoke(): void
     {
         // // Test adding to queue

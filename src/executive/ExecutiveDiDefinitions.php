@@ -24,6 +24,7 @@ use buzzingpixel\executive\services\ScheduleService;
 use buzzingpixel\executive\services\CommandsService;
 use buzzingpixel\executive\models\CliArgumentsModel;
 use buzzingpixel\executive\commands\RunQueueCommand;
+use buzzingpixel\executive\services\EETemplateService;
 use buzzingpixel\executive\services\MigrationsService;
 use buzzingpixel\executive\services\RunCommandService;
 use Composer\Repository\InstalledFilesystemRepository;
@@ -316,6 +317,9 @@ return [
             ee('Addon'),
             new CommandModelFactory()
         );
+    },
+    EETemplateService::class => function () {
+        return new EETemplateService();
     },
     DeleteSnippetsNotOnDiskService::class => function () {
         return new DeleteSnippetsNotOnDiskService(

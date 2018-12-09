@@ -145,7 +145,7 @@ Gets the array of variable pairs.
 
 #### `getResponse()`
 
-Gets the `\Psr\Http\Message\ResponseInterface` if it has been set, otherwise returns null. There will be more on this in a moment, but the ResponseInterface is an alternative to EE templating.
+Gets the `\Psr\Http\Message\ResponseInterface` if it has been set (by returning an instance of `ResponseInterface` from another routed method), otherwise returns null. There will be more on this in a moment, but the ResponseInterface is an alternative to EE templating.
 
 ## Returning a custom response object
 
