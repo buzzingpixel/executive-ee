@@ -16,10 +16,17 @@ use EllisLab\ExpressionEngine\Model\Site\Site as SiteModel;
 use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
 
+/**
+ * Class ChannelDesignerService
+ * @deprecated This class is trying to do way too much and you can do it all with EE models and things
+ */
 class ChannelDesignerService
 {
     private $modelFacade;
 
+    /**
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
+     */
     public function __construct(ModelFacade $modelFacade)
     {
         $this->modelFacade = $modelFacade;
@@ -27,6 +34,9 @@ class ChannelDesignerService
 
     private $siteName = 'default_site';
 
+    /**
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
+     */
     public function siteName($str): self
     {
         $this->siteName = $str;
@@ -35,6 +45,9 @@ class ChannelDesignerService
 
     private $statuses = array();
 
+    /**
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
+     */
     public function addStatus($status, $color = '000000'): self
     {
         $this->statuses[$status] = $color;
@@ -43,6 +56,9 @@ class ChannelDesignerService
 
     private $removeStatuses = array();
 
+    /**
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
+     */
     public function removeStatus($status): self
     {
         $this->removeStatuses[] = $status;
@@ -51,6 +67,9 @@ class ChannelDesignerService
 
     private $fields = array();
 
+    /**
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
+     */
     public function addField($fieldArray): self
     {
         $this->fields[] = $fieldArray;
@@ -59,6 +78,9 @@ class ChannelDesignerService
 
     private $removeFields = array();
 
+    /**
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
+     */
     public function removeField($fieldName): self
     {
         $this->removeFields[] = $fieldName;
@@ -67,6 +89,9 @@ class ChannelDesignerService
 
     private $channelName;
 
+    /**
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
+     */
     public function channelName($str): self
     {
         $this->channelName = $str;
@@ -75,6 +100,9 @@ class ChannelDesignerService
 
     private $channelTitle;
 
+    /**
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
+     */
     public function channelTitle($str): self
     {
         $this->channelTitle = $str;
@@ -83,6 +111,9 @@ class ChannelDesignerService
 
     private $extendedChannelProperties = array();
 
+    /**
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
+     */
     public function extendedChannelProperties($properties): self
     {
         $this->extendedChannelProperties = $properties;
@@ -91,6 +122,7 @@ class ChannelDesignerService
 
     /**
      * @throws Exception
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
     public function save(): void
     {
