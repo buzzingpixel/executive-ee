@@ -85,6 +85,10 @@ class EETemplateService extends EE_Template
 
     public function renderPath(string $path, array $variables = []): string
     {
+        if (! file_exists($path)) {
+            $path = APP_DIR . '/' . ltrim($path, '/');
+        }
+
         $templateContents = file_get_contents($path) ?: '';
 
         if (! $templateContents) {
