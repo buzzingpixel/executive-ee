@@ -3,11 +3,11 @@
     "extra": {
         "handle": "executive",
         "systemPath": "src/executive",
-        "version": "3.0.0-b.7"
+        "version": "3.0.0-rc.1"
     },
     "name": "buzzingpixel/executive-ee",
-    "version": "3.0.0-b.7",
-    "description": "An ExpressionEngine toolkit that provides a CLI, migrations, command scheduling, custom extensions, custom template tags, custom CP views, and more!",
+    "version": "3.0.0-rc.1",
+    "description": "An ExpressionEngine toolkit that provides a CLI, migrations, command scheduling, queue processing, custom extensions, custom template tags, custom CP views, and more!",
     "authors": [
         {
             "name": "TJ Draper",
@@ -25,7 +25,10 @@
         "vlucas/phpdotenv": "^2.5",
         "symfony/console": "^4.1",
         "symfony/filesystem": "^4.1",
-        "symfony/finder": "^4.1"
+        "symfony/finder": "^4.1",
+        "zendframework/zend-diactoros": "^2.0",
+        "zendframework/zend-httphandlerrunner": "^1.0",
+        "twig/twig": "^2.5"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master"

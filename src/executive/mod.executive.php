@@ -8,6 +8,7 @@ declare(strict_types=1);
  */
 
 use buzzingpixel\executive\ExecutiveDi;
+use Twig\Environment as TwigEnvironment;
 use buzzingpixel\executive\models\RouteModel;
 use buzzingpixel\executive\exceptions\InvalidTagException;
 
@@ -151,5 +152,23 @@ class Executive
             $this->template->tagdata,
             $pair
         );
+    }
+
+    public function render_twig_template()
+    {
+        if (! $template = $this->template->fetch_param('template')) {
+            return '';
+        }
+
+        $varString = $this->template->fetch_param(
+            'vars',
+            $this->template->tagdata
+        );
+        $varString = \is_string($varString) ? $varString : '';
+
+        /** @var TwigEnvironment $twig */
+        $twig = ExecutiveDi::get(TwigEnvironment::class);
+
+        return $twig->render($template, json_decode($varString, true));
     }
 }

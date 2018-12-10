@@ -5,7 +5,7 @@ Executive provides the ability to schedule commands to run at certain intervals.
 Here is an example of the cron:
 
 ```shell
-* * * * * /user/bin/php /path/to/ee executive runSchedule >> /dev/null 2>&1
+* * * * * /user/bin/php /path/to/projet/ee executive runSchedule >> /dev/null 2>&1
 ```
 
 ## Scheduling commands

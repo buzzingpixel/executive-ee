@@ -41,4 +41,28 @@ Because ExpressionEngine expects add-on files to be in a particular location, yo
 
 ## Also note
 
-The `EEFrontController.php` file defines a constant that disables EE install mode. In order to install EE, or update it, you must temporarily set that constant to `true`. Be sure to set it back to `false` when you're done updating EE for safety purposes.
+The `EEFrontController.php` file defines a constant that disables EE install mode. In order to install EE or update it, you must temporarily set that constant to `true`. Be sure to set it back to `false` when you're done updating EE for safety purposes.
+
+## Additional Items
+
+### Running processes on the server
+
+To take full advantage of Executive, you need to set up a couple things to run on the server. That's because Executive has a task scheduler and a queue. The scheduler is great for running a command at specified intervals and the queue is great for breaking up long and/or intensive tasks into steps that will be run by the queue runner.
+
+#### Scheduler
+
+The cliff notes is that in order for the scheduler to work, you need to run the scheduler on a server cron every minute. Here's an example cron command to add to your server:
+
+```shell
+* * * * * /user/bin/php /path/to/projet/ee executive runSchedule >> /dev/null 2>&1
+```
+
+Learn more about the scheduler [here](schedule.md)
+
+#### Queue
+
+Executive has a queue that you can put tasks into. In order to take advantage of it, you need to have your server running the queue. The cliff notes of that is you need to have a process running the `runQueue` command on your server every second and that will restart that process if it dies unexpectedly. For Linux servers (that's basically every web server), there's a program called Supervisor that is great for this.
+
+There's a `queueRunner.sh` shell script in the `install-support` directory that you can have Supervisor run. That shell script uses a `while` loop to create an infinite loop to run the queue again after 1 second once the command completes. And if anything happens to it, Supervisor will start it right up again. Look in the script for more config and Supervisor examples.
+
+Learn more about the queue [here](queue.md)

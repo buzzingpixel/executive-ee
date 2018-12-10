@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace buzzingpixel\executive\models;
 
+use Psr\Http\Message\ResponseInterface;
 use buzzingpixel\executive\abstracts\ModelAbstract;
 
 /**
@@ -102,5 +103,19 @@ class RouteModel extends ModelAbstract
     public function getPairs(): array
     {
         return $this->pairs;
+    }
+
+    /** @var ResponseInterface $response */
+    private $response;
+
+    public function getResponse(): ?ResponseInterface
+    {
+        return $this->response;
+    }
+
+    public function setResponse(ResponseInterface $response): self
+    {
+        $this->response = $response;
+        return $this;
     }
 }

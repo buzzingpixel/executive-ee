@@ -14,9 +14,11 @@ use EllisLab\ExpressionEngine\Core\Provider;
 use Composer\Package\CompletePackageInterface;
 use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\commands\ConfigCommand;
+use buzzingpixel\executive\commands\RunQueueCommand;
 use buzzingpixel\executive\commands\RunScheduleCommand;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use buzzingpixel\executive\commands\MakeMigrationCommand;
+use buzzingpixel\executive\commands\SyncTemplatesCommand;
 use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
@@ -126,10 +128,20 @@ return [
             'method' => 'run',
             'description' => lang('runAddonUpdatesDescription'),
         ],
+        'runQueue' => [
+            'class' => RunQueueCommand::class,
+            'method' => 'run',
+            'description' => lang('runQueueDescription'),
+        ],
         'runSchedule' => [
             'class' => RunScheduleCommand::class,
             'method' => 'run',
             'description' => lang('runScheduleDescription'),
+        ],
+        'syncTemplates' => [
+            'class' => SyncTemplatesCommand::class,
+            'method' => 'run',
+            'description' => lang('runSyncTemplatesDescription'),
         ],
     ],
 ];

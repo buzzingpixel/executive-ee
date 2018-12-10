@@ -136,4 +136,31 @@ class ExecutiveDi
     {
         return self::make($def);
     }
+
+    /**
+     * Checks if the DI has a dependency definition
+     * @param string $def
+     * @return mixed
+     * @throws DependencyInjectionBuilderException
+     */
+    public static function has(string $def)
+    {
+        try {
+            return self::diContainer()->has($def);
+        } catch (Exception $e) {
+            $msg = 'Unable to check if container has dependency';
+            throw new DependencyInjectionBuilderException($msg, 500, $e);
+        }
+    }
+
+    /**
+     * Checks if the DI has a dependency definition
+     * @param string $def
+     * @return mixed
+     * @throws DependencyInjectionBuilderException
+     */
+    public function hasDefinition(string $def)
+    {
+        return self::has($def);
+    }
 }

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace buzzingpixel\executive\services;
 
 use Exception;
+use EllisLab\ExpressionEngine\Model\Status\Status;
 use EllisLab\ExpressionEngine\Model\Channel\ChannelField;
 use EllisLab\ExpressionEngine\Model\Site\Site as SiteModel;
 use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
@@ -17,28 +18,24 @@ use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
 
 /**
  * Class ChannelDesignerService
+ * @deprecated This class is trying to do way too much and you can do it all with EE models and things
  */
 class ChannelDesignerService
 {
-    /** @var ModelFacade $modelFacade */
     private $modelFacade;
 
     /**
-     * ChannelDesignerService constructor
-     * @param ModelFacade $modelFacade
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
     public function __construct(ModelFacade $modelFacade)
     {
         $this->modelFacade = $modelFacade;
     }
 
-    /** @var string $siteName */
     private $siteName = 'default_site';
 
     /**
-     * Set the site name
-     * @param string $str
-     * @return ChannelDesignerService
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
     public function siteName($str): self
     {
@@ -46,14 +43,10 @@ class ChannelDesignerService
         return $this;
     }
 
-    /** @var array $statuses */
     private $statuses = array();
 
     /**
-     * Add status
-     * @param string $status
-     * @param string $color
-     * @return ChannelDesignerService
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
     public function addStatus($status, $color = '000000'): self
     {
@@ -61,13 +54,10 @@ class ChannelDesignerService
         return $this;
     }
 
-    /** @var array $removeStatuses */
     private $removeStatuses = array();
 
     /**
-     * Remove a status
-     * @param $status
-     * @return ChannelDesignerService
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
     public function removeStatus($status): self
     {
@@ -75,13 +65,10 @@ class ChannelDesignerService
         return $this;
     }
 
-    /** @var array $fields */
     private $fields = array();
 
     /**
-     * Add field
-     * @param array $fieldArray
-     * @return ChannelDesignerService
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
     public function addField($fieldArray): self
     {
@@ -89,13 +76,10 @@ class ChannelDesignerService
         return $this;
     }
 
-    /** @var array $removeFields */
     private $removeFields = array();
 
     /**
-     * Remove field
-     * @param $fieldName
-     * @return ChannelDesignerService
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
     public function removeField($fieldName): self
     {
@@ -103,13 +87,10 @@ class ChannelDesignerService
         return $this;
     }
 
-    /** @var string $channelName */
     private $channelName;
 
     /**
-     * Add channel name
-     * @param string $str
-     * @return ChannelDesignerService
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
     public function channelName($str): self
     {
@@ -117,13 +98,10 @@ class ChannelDesignerService
         return $this;
     }
 
-    /** @var string $channelTitle */
     private $channelTitle;
 
     /**
-     * Add channel title
-     * @param string $str
-     * @return ChannelDesignerService
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
     public function channelTitle($str): self
     {
@@ -131,13 +109,10 @@ class ChannelDesignerService
         return $this;
     }
 
-    /** @var array $extendedChannelProperties */
     private $extendedChannelProperties = array();
 
     /**
-     * Set extended channel properties
-     * @param array $properties
-     * @return ChannelDesignerService
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
     public function extendedChannelProperties($properties): self
     {
@@ -146,8 +121,8 @@ class ChannelDesignerService
     }
 
     /**
-     * Save schema design
      * @throws Exception
+     * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
     public function save(): void
     {
@@ -157,11 +132,9 @@ class ChannelDesignerService
         $this->addOrUpdateChannel();
     }
 
-    /** @var SiteModel $siteModel */
     private $siteModel;
 
     /**
-     * Set site model
      * @throws Exception
      */
     private function setSiteModel(): void
@@ -180,9 +153,6 @@ class ChannelDesignerService
         }
     }
 
-    /**
-     * Add or update statuses
-     */
     private function addUpdateStatuses(): void
     {
         if (! $this->statuses) {
@@ -191,6 +161,7 @@ class ChannelDesignerService
 
         $order = 3;
 
+        /** @var Status $lastOrder */
         $lastOrder = $this->modelFacade->get('Status')
             ->order('status_order', 'desc')
             ->first();
@@ -220,9 +191,6 @@ class ChannelDesignerService
         }
     }
 
-    /**
-     * Add or update fields
-     */
     private function addUpdateFields(): void
     {
         if (! $this->fields) {
@@ -274,9 +242,6 @@ class ChannelDesignerService
         }
     }
 
-    /**
-     * Add or update channel
-     */
     private function addOrUpdateChannel(): void
     {
         if (! $this->channelName) {
@@ -327,11 +292,6 @@ class ChannelDesignerService
         $channelModel->save();
     }
 
-    /**
-     * Gets the custom fields
-     * @param ModelCollection $existingFields
-     * @return ModelCollection
-     */
     private function getCustomFieldsCollection($existingFields = null): ModelCollection
     {
         $fieldShortNames = array();
@@ -371,11 +331,6 @@ class ChannelDesignerService
         return new ModelCollection(array_values($fields));
     }
 
-    /**
-     * Gets the status collection
-     * @param ModelCollection $existingStatuses
-     * @return ModelCollection
-     */
     private function getStatusCollection($existingStatuses = null): ModelCollection
     {
         $requiredStatuses = array(

@@ -1,4 +1,8 @@
-# Channel Designer
+# Channel Designer (deprecated)
+
+The Channel Designer service has been deprecated. It was simply trying to do too much and everything it does can be accomplished by using EE's models. See the [Channels and Fields Migration Examples](channels-and-fields-migration-examples.md) documentation to learn how to accomplish channel and field schema with EE's models.
+
+---
 
 `MigrationAbstract` classes have access to Executive's `ChannelDesignerService`. This service is designed to be user friendly and easy to use for anyone. It handles all the heavy lifting of interfacing with EE's models and services to create or update all the things. Here's a brief example of the channel designer in use in a migration class.
 

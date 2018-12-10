@@ -11,15 +11,8 @@ namespace buzzingpixel\executive\migrations;
 
 use buzzingpixel\executive\abstracts\MigrationAbstract;
 
-/**
- * Class m2018_08_23_172651_AddCoreTemplateRouteHook
- */
 class m2018_08_23_172651_AddCoreTemplateRouteHook extends MigrationAbstract
 {
-    /**
-     * Runs the migration
-     * @return bool
-     */
     public function safeUp(): bool
     {
         $query = (int) $this->queryBuilderFactory->make()
@@ -45,10 +38,6 @@ class m2018_08_23_172651_AddCoreTemplateRouteHook extends MigrationAbstract
         return true;
     }
 
-    /**
-     * Reverses the migration
-     * @return bool
-     */
     public function safeDown(): bool
     {
         $this->queryBuilderFactory->make()->delete('extensions', [

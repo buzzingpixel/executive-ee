@@ -142,3 +142,38 @@ Gets a pair that has been set.
 #### `getPairs()`
 
 Gets the array of variable pairs.
+
+#### `getResponse()`
+
+Gets the `\Psr\Http\Message\ResponseInterface` if it has been set (by returning an instance of `ResponseInterface` from another routed method), otherwise returns null. There will be more on this in a moment, but the ResponseInterface is an alternative to EE templating.
+
+## Returning a custom response object
+
+When using Executive Routing, you have the option of returning a `\Psr\Http\Message\ResponseInterface` from your route's called method. When you do this, that response will be emitted instead of continuing on to EE's templating engine and letting EE emit the response.
+
+Executive includes Zend Diactoros as a dependency, so you can use the Diactoros response object which implements the `ResponseInterface` if you would like (or you can use any class that implements `ResponseInterface`). Here's an example:
+
+```php
+<?php
+declare(strict_types=1);
+
+namespace src;
+
+use Zend\Diactoros\Response;
+use buzzingpixel\executive\models\RouteModel;
+
+class SomeController
+{
+    public function __invoke(RouteModel $router)
+    {
+        $response = new Response();
+
+        $response = $response->withStatus(200)
+            ->withHeader('Content-Type', 'text/html');
+
+        $response->getBody()->write('Your HTML will go here');
+
+        return $response;
+    }
+}
+```

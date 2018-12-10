@@ -11,12 +11,12 @@ namespace buzzingpixel\executive\migrations;
 
 use buzzingpixel\executive\abstracts\MigrationAbstract;
 
-class m2017_08_27_320040_AddScheduleTrackingTable extends MigrationAbstract
+class m2018_12_08_031447_AddActionQueueItemsTable extends MigrationAbstract
 {
     public function safeUp(): bool
     {
         $tableExists = $this->queryBuilderFactory->make()
-            ->table_exists('executive_schedule_tracking');
+            ->table_exists('executive_action_queue_items');
 
         if ($tableExists) {
             return true;
@@ -30,28 +30,42 @@ class m2017_08_27_320040_AddScheduleTrackingTable extends MigrationAbstract
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'name' => [
-                'default' => '',
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-            ],
-            'isRunning' => [
+            'order_to_run' => [
                 'type' => 'INT',
                 'unsigned' => true,
             ],
-            'lastRunStartTime' => [
-                'type' => 'DATETIME',
-                'default' => '0000-00-00 00:00:00',
+            'action_queue_id' => [
+                'type' => 'INT',
+                'unsigned' => true,
             ],
-            'lastRunEndTime' => [
+            'is_finished' => [
+                'type' => 'INT',
+                'unsigned' => true,
+            ],
+            'finished_at' => [
+                'null' => true,
                 'type' => 'DATETIME',
-                'default' => '0000-00-00 00:00:00',
+            ],
+            'finished_at_time_zone' => [
+                'null' => true,
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+            ],
+            'class' => [
+                'type' => 'TEXT',
+            ],
+            'method' => [
+                'type' => 'TEXT',
+            ],
+            'context' => [
+                'null' => true,
+                'type' => 'TEXT',
             ],
         ]);
 
         $dbForge->add_key('id', true);
 
-        $dbForge->create_table('executive_schedule_tracking', true);
+        $dbForge->create_table('executive_action_queue_items', true);
 
         return true;
     }
@@ -59,14 +73,15 @@ class m2017_08_27_320040_AddScheduleTrackingTable extends MigrationAbstract
     public function safeDown(): bool
     {
         $tableExists = $this->queryBuilderFactory->make()
-            ->table_exists('executive_schedule_tracking');
+            ->table_exists('executive_action_queue_items');
 
         if (! $tableExists) {
             return true;
         }
 
-        $this->dbForgeFactory->make()
-            ->drop_table('executive_schedule_tracking');
+        $this->dbForgeFactory->make()->drop_table(
+            'executive_action_queue_items'
+        );
 
         return true;
     }

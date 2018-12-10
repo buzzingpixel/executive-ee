@@ -14,19 +14,23 @@ Executive also provides an interface for you to create custom commands and sched
 
 ## Docs
 
-- [Notes on EE 4](docs/ee4.md)
+- [Notes on EE 4+](docs/ee4.md)
 - [Installing](docs/install.md)
 - [Out of the Box Commands](docs/out-of-box-commands.md)
 - [Composer Provisioning](docs/composer-provisioning.md)
 - [Migrations](docs/migrations.md)
-    - [ChannelDesigner](docs/channel-designer.md)
+    - [Channels and Fields Migration Examples](docs/channels-and-fields-migration-examples.md)
     - [ExtensionDesigner](docs/extension-designer.md)
     - [LayoutDesigner](docs/layout-designer.md)
+    - [ChannelDesigner (deprecated)](docs/channel-designer.md)
 - [Dependency Injection](docs/dependency-injection.md)
 - [Custom Routing](docs/custom-routing.md)
+- [EE Template Service](docs/ee-template-service.md)
+- [Twig](docs/twig.md)
 - [Custom Commands](docs/custom-commands.md)
 - [Addon Comands](docs/addon-commands.md)
 - [Schedule](docs/schedule.md)
+- [Queue](docs/queue.md)
 - [Addon Schedule](docs/addon-schedule.md)
 - [User Extensions](docs/user-extensions.md)
 - [User Template Tags](docs/user-template-tags.md)
@@ -42,7 +46,7 @@ Note, these videos are from Executive 1, but the general concepts should still b
 
 ## License
 
-Copyright 2017 BuzzingPixel, LLC
+Copyright 2018 BuzzingPixel, LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
