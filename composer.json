@@ -3,10 +3,10 @@
     "extra": {
         "handle": "executive",
         "systemPath": "src/executive",
-        "version": "3.0.0-b.7"
+        "version": "3.0.0-rc.1"
     },
     "name": "buzzingpixel/executive-ee",
-    "version": "3.0.0-b.7",
+    "version": "3.0.0-rc.1",
     "description": "An ExpressionEngine toolkit that provides a CLI, migrations, command scheduling, queue processing, custom extensions, custom template tags, custom CP views, and more!",
     "authors": [
         {
