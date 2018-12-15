@@ -41,11 +41,11 @@ class m2017_08_27_320040_AddScheduleTrackingTable extends MigrationAbstract
             ],
             'lastRunStartTime' => [
                 'type' => 'DATETIME',
-                'default' => '0000-00-00 00:00:00',
+                'null' => true,
             ],
             'lastRunEndTime' => [
                 'type' => 'DATETIME',
-                'default' => '0000-00-00 00:00:00',
+                'null' => true,
             ],
         ]);
 
