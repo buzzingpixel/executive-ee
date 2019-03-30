@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Dotenv\Dotenv;
 use Whoops\Run as WhoopsRunner;
+use Symfony\Component\Dotenv\Dotenv;
 use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
 use Whoops\Handler\PrettyPageHandler as WhoopsPrettyPageHandler;
@@ -16,8 +16,9 @@ if (file_exists($vendorAutoload)) {
 }
 
 // Load up Dotenv so it will be available
-if (class_exists(Dotenv::class) && file_exists($basePath . $sep . '.env')) {
-    (new Dotenv($basePath))->load();
+$dotEnvFile = $basePath . $sep . '.env';
+if (class_exists(Dotenv::class) && file_exists($dotEnvFile)) {
+    (new Dotenv())->load($dotEnvFile);
 }
 
 // Define constants

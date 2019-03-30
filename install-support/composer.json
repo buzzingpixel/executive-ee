@@ -8,7 +8,8 @@
         "buzzingpixel/executive-ee": "^3.0"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-master"
+        "roave/security-advisories": "dev-master",
+        "symfony/dotenv": "^4.2"
     },
     "config": {
         "bin-compat": "full",
