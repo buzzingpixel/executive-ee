@@ -19,19 +19,19 @@
         "php": ">=7.1",
         "ext-json": "*",
         "ext-zip": "*",
-        "composer/composer": "^1.7",
+        "composer/composer": "^1.8",
+        "filp/whoops": "^2.3",
         "php-di/php-di": "^6.0",
-        "filp/whoops": "^2.2",
-        "vlucas/phpdotenv": "^2.5",
-        "symfony/console": "^4.1",
-        "symfony/filesystem": "^4.1",
-        "symfony/finder": "^4.1",
-        "zendframework/zend-diactoros": "^2.0",
-        "zendframework/zend-httphandlerrunner": "^1.0",
-        "twig/twig": "^2.5"
+        "symfony/console": "^4.2",
+        "symfony/filesystem": "^4.2",
+        "symfony/finder": "^4.2",
+        "twig/twig": "^2.7",
+        "zendframework/zend-diactoros": "^2.1",
+        "zendframework/zend-httphandlerrunner": "^1.1"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-master"
+        "roave/security-advisories": "dev-master",
+        "symfony/dotenv": "^4.2"
     },
     "autoload": {
         "psr-4": {
@@ -44,5 +44,10 @@
             "src/executive/mod.executive.php",
             "src/executive/upd.executive.php"
         ]
+    },
+    "config": {
+        "bin-compat": "full",
+        "optimize-autoloader": true,
+        "sort-packages": true
     }
 }
