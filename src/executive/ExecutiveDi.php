@@ -27,7 +27,7 @@ class ExecutiveDi
      */
     public static function diContainer() : ContainerInterface
     {
-        if (! self::$diContainer) {
+        if (self::$diContainer) {
             return self::$diContainer;
         }
 
@@ -79,38 +79,42 @@ class ExecutiveDi
 
             $builder->useAnnotations(true);
 
-            $builder->ignorePhpDocErrors(in_array(
-                $eeConfig->item('diIgnorePhpDocErrors'),
-                [
-                    true,
-                    'true',
-                    1,
-                    'yes',
-                    'y',
-                ],
-                true
-            ));
+            if ($eeConfig && isset($eeConfig->config['diIgnorePhpDocErrors'])) {
+                $builder->ignorePhpDocErrors(in_array(
+                    $eeConfig->item('diIgnorePhpDocErrors'),
+                    [
+                        true,
+                        'true',
+                        1,
+                        'yes',
+                        'y',
+                    ],
+                    true
+                ));
+            }
 
-            if (in_array(
-                $eeConfig->item('diEnableCompilation'),
-                [
-                    true,
-                    'true',
-                    1,
-                    'yes',
-                    'y',
-                ],
-                true
-            )) {
-                $sep = DIRECTORY_SEPARATOR;
+            if ($eeConfig && isset($eeConfig->config['diEnableCompilation'])) {
+                if (in_array(
+                    $eeConfig->item('diEnableCompilation'),
+                    [
+                        true,
+                        'true',
+                        1,
+                        'yes',
+                        'y',
+                    ],
+                    true
+                )) {
+                    $sep = DIRECTORY_SEPARATOR;
 
-                $compileCacheDir = SYSPATH . 'user' . $sep . 'cache' . $sep . 'diCompileCache';
+                    $compileCacheDir = SYSPATH . 'user' . $sep . 'cache' . $sep . 'diCompileCache';
 
-                $proxyCacheDir = SYSPATH . 'user' . $sep . 'cache' . $sep . 'diProxyCache';
+                    $proxyCacheDir = SYSPATH . 'user' . $sep . 'cache' . $sep . 'diProxyCache';
 
-                $builder->enableCompilation($compileCacheDir);
+                    $builder->enableCompilation($compileCacheDir);
 
-                $builder->writeProxiesToFile(true, $proxyCacheDir);
+                    $builder->writeProxiesToFile(true, $proxyCacheDir);
+                }
             }
 
             $builder->addDefinitions($diConfig);
