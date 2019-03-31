@@ -64,7 +64,8 @@ class ViewService extends View
      *
      * @throws InvalidViewConfigurationException
      */
-    public function getPath() : string
+    /* @codingStandardsIgnoreStart */
+    public function getPath() /* @codingStandardsIgnoreEnd */
     {
         $sep = DIRECTORY_SEPARATOR;
 
@@ -85,10 +86,9 @@ class ViewService extends View
 
     /**
      * Makes a new view
-     *
-     * @return ViewService
      */
-    public function make(string $view) : View
+    /* @codingStandardsIgnoreStart */
+    public function make($view) /* @codingStandardsIgnoreEnd */
     {
         /**
          * If the view has a colon, we should get EE's actual view service,
@@ -115,11 +115,10 @@ class ViewService extends View
     /**
      * Renders the view
      *
-     * @param array $vars
-     *
      * @throws InvalidViewConfigurationException
      */
-    public function render(array $vars = []) : string
+    /* @codingStandardsIgnoreStart */
+    public function render(array $vars = []) /* @codingStandardsIgnoreEnd */
     {
         if (! $this->viewsBasePath) {
             throw new InvalidViewConfigurationException(
