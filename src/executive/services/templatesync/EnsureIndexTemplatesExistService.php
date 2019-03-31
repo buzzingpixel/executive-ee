@@ -1,16 +1,13 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services\templatesync;
 
-use Symfony\Component\Filesystem\Filesystem;
 use buzzingpixel\executive\factories\FinderFactory;
+use SplFileInfo;
+use Symfony\Component\Filesystem\Filesystem;
+use const DIRECTORY_SEPARATOR;
 
 class EnsureIndexTemplatesExistService
 {
@@ -22,8 +19,11 @@ class EnsureIndexTemplatesExistService
         'xml',
     ];
 
+    /** @var string $templatesPath */
     private $templatesPath;
+    /** @var FinderFactory $finderFactory */
     private $finderFactory;
+    /** @var Filesystem $filesystem */
     private $filesystem;
 
     public function __construct(
@@ -33,10 +33,10 @@ class EnsureIndexTemplatesExistService
     ) {
         $this->templatesPath = $templatesPath;
         $this->finderFactory = $finderFactory;
-        $this->filesystem = $filesystem;
+        $this->filesystem    = $filesystem;
     }
 
-    public function run(): void
+    public function run() : void
     {
         if (! $this->filesystem->exists($this->templatesPath)) {
             return;
@@ -52,13 +52,13 @@ class EnsureIndexTemplatesExistService
         }
     }
 
-    private function processSitePath(string $sitePath): void
+    private function processSitePath(string $sitePath) : void
     {
         $finder = $this->finderFactory->make()
             ->directories()
             ->in($sitePath)
             ->depth('< 1')
-            ->filter(function (\SplFileInfo $dir) {
+            ->filter(static function (SplFileInfo $dir) {
                 return $dir->getExtension() === 'group';
             });
 
@@ -67,7 +67,7 @@ class EnsureIndexTemplatesExistService
         }
     }
 
-    private function processGroupPath(string $groupPath): void
+    private function processGroupPath(string $groupPath) : void
     {
         $s = DIRECTORY_SEPARATOR;
 

@@ -1,11 +1,6 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\migrations;
 
@@ -13,7 +8,7 @@ use buzzingpixel\executive\abstracts\MigrationAbstract;
 
 class m2017_08_25_174225_AddSessionsStartHook extends MigrationAbstract
 {
-    public function safeUp(): bool
+    public function safeUp() : bool
     {
         $query = (int) $this->queryBuilderFactory->make()
             ->where('class', 'Executive_ext')
@@ -38,7 +33,7 @@ class m2017_08_25_174225_AddSessionsStartHook extends MigrationAbstract
         return true;
     }
 
-    public function safeDown(): bool
+    public function safeDown() : bool
     {
         $this->queryBuilderFactory->make()->delete('extensions', [
             'class' => 'Executive_ext',

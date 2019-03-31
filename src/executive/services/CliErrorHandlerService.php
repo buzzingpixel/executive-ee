@@ -1,21 +1,25 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
 use EE_Lang;
-use Throwable;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
+use function array_flip;
+use function array_search;
+use function error_get_last;
+use function error_reporting;
+use function in_array;
+use function ini_set;
+use function is_array;
+use function is_string;
+use function print_r;
+use function register_shutdown_function;
+use function set_error_handler;
+use function set_exception_handler;
 
-/**
- * Class CliErrorHandlerService
- */
 class CliErrorHandlerService
 {
     private const ERROR_CODES = [
@@ -38,27 +42,24 @@ class CliErrorHandlerService
 
     /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
-
     /** @var EE_Lang $lang */
     private $lang;
 
     /**
      * CliErrorHandlerService constructor
-     * @param OutputInterface $consoleOutput
-     * @param EE_Lang $lang
      */
     public function __construct(
         OutputInterface $consoleOutput,
         EE_Lang $lang
     ) {
         $this->consoleOutput = $consoleOutput;
-        $this->lang = $lang;
+        $this->lang          = $lang;
     }
 
     /**
      * Registers error handling for the CLI
      */
-    public function register(): void
+    public function register() : void
     {
         ini_set('display_errors', 'On');
         ini_set('html_errors', '0');
@@ -73,22 +74,21 @@ class CliErrorHandlerService
 
     /**
      * Handles PHP Shutdown
-     * @return bool
      */
-    public function shutdownHandler(): bool
+    public function shutdownHandler() : bool
     {
-        if (@\is_array($error = @error_get_last())) {
+        $error = @error_get_last();
+
+        if (@is_array($error)) {
             $this->errorHandler($error);
+
             return true;
         }
 
         return true;
     }
 
-    /**
-     * @param Throwable $e
-     */
-    public function exceptionHandler($e): void
+    public function exceptionHandler(Throwable $e) : void
     {
         $this->errorHandler(
             'Exception',
@@ -98,9 +98,9 @@ class CliErrorHandlerService
         );
 
         $args = EXECUTIVE_RAW_ARGS;
-        $args = \is_array($args) ? $args : [];
+        $args = is_array($args) ? $args : [];
 
-        if (! \in_array('--trace=true', $args, true)) {
+        if (! in_array('--trace=true', $args, true)) {
             $this->consoleOutput->writeln(
                 '<fg=yellow>' .
                 $this->lang->line('getTrace') .
@@ -115,17 +115,13 @@ class CliErrorHandlerService
 
     /**
      * Handles errors
-     * @param $type
-     * @param $message
-     * @param $file
-     * @param $line
      */
     public function errorHandler(
         $type,
         $message = null,
         $file = null,
         $line = null
-    ): void {
+    ) : void {
         if (! error_reporting()) {
             return;
         }
@@ -136,7 +132,7 @@ class CliErrorHandlerService
             $name = 'Exception';
         }
 
-        if (! $name && ! @\is_string(
+        if (! $name && ! @is_string(
             $name = @array_search(
                 $type,
                 @array_flip(

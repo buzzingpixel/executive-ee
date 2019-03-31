@@ -1,17 +1,20 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
+use buzzingpixel\executive\exceptions\InvalidViewConfigurationException;
 use EllisLab\ExpressionEngine\Core\Provider;
 use EllisLab\ExpressionEngine\Service\View\View;
-use buzzingpixel\executive\exceptions\InvalidViewConfigurationException;
+use const DIRECTORY_SEPARATOR;
+use function class_exists;
+use function dirname;
+use function explode;
+use function file_exists;
+use function mb_strpos;
+use function rtrim;
+use function str_replace;
 
 /**
  * When running provisioning or installation from the command line
@@ -20,13 +23,10 @@ use buzzingpixel\executive\exceptions\InvalidViewConfigurationException;
  * we're gonna have a bad time
  */
 if (! class_exists(View::class)) {
-    require \dirname(__DIR__, 2) .  DIRECTORY_SEPARATOR . 'stubs' .
+    require dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'stubs' .
         DIRECTORY_SEPARATOR . 'ExpressionEngineViewStub.php';
 }
 
-/**
- * Class ViewService
- */
 class ViewService extends View
 {
     public const INTERNAL_DI_NAME = 'ExecutiveViewService';
@@ -36,8 +36,6 @@ class ViewService extends View
 
     /**
      * ViewService constructor
-     * @param Provider $provider
-     * @param string $viewsBasePath
      */
     public function __construct(
         Provider $provider,
@@ -53,21 +51,20 @@ class ViewService extends View
 
     /**
      * Sets the relative path to the view file
-     * @param string $view
-     * @return self
      */
-    public function setView(string $view): self
+    public function setView(string $view) : self
     {
         $this->path = $view;
+
         return $this;
     }
 
     /**
      * Get the full server path to the view file
-     * @return string
+     *
      * @throws InvalidViewConfigurationException
      */
-    public function getPath(): string
+    public function getPath() : string
     {
         $sep = DIRECTORY_SEPARATOR;
 
@@ -88,19 +85,19 @@ class ViewService extends View
 
     /**
      * Makes a new view
-     * @param string $view
+     *
      * @return ViewService
      */
-    public function make($view): View
+    public function make(string $view) : View
     {
         /**
          * If the view has a colon, we should get EE's actual view service,
          * because we're trying to get another provider's view
          */
-        if (strpos($view, ':')) {
+        if (mb_strpos($view, ':')) {
             $provider = $this->provider;
 
-            list($prefix, $view) = explode(':', $view, 2);
+            [$prefix, $view] = explode(':', $view, 2);
 
             if ($provider->getPrefix() !== $prefix) {
                 $provider = $provider->make('App')->get($prefix);
@@ -111,16 +108,18 @@ class ViewService extends View
 
         $newView = new static($this->provider, $this->viewsBasePath);
         $newView->setView($view);
+
         return $newView;
     }
 
     /**
      * Renders the view
+     *
      * @param array $vars
-     * @return string
+     *
      * @throws InvalidViewConfigurationException
      */
-    public function render(array $vars = []): string
+    public function render(array $vars = []) : string
     {
         if (! $this->viewsBasePath) {
             throw new InvalidViewConfigurationException(

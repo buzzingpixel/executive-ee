@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace buzzingpixel\executive\internal\migrations;
@@ -8,12 +9,12 @@ use EllisLab\ExpressionEngine\Model\Channel\Channel;
 
 class m2018_12_10_144916_AuditionMigration extends MigrationAbstract
 {
-    public function safeUp(): bool
+    public function safeUp() : bool
     {
         $fieldGroupCollection = $this->modelFacadeFactory->make()->get('ChannelFieldGroup')
             ->filter('group_name', 'IN', [
                 'My First Field Group',
-                'Another Field Group Title'
+                'Another Field Group Title',
             ])
             ->all();
 
@@ -29,9 +30,10 @@ class m2018_12_10_144916_AuditionMigration extends MigrationAbstract
         return true;
     }
 
-    public function safeDown(): bool
+    public function safeDown() : bool
     {
         echo "This migration cannot be reversed (because I'm not going to take the time to write it :))";
+
         return false;
     }
 }

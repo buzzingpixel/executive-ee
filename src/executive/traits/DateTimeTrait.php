@@ -1,29 +1,23 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\traits;
 
 use DateTime;
-use Exception;
 use DateTimeZone;
+use Throwable;
+use const PHP_INT_MAX;
+use function date_default_timezone_get;
+use function is_numeric;
+use function is_string;
 
-/**
- * Class DateTimeTrait
- */
 trait DateTimeTrait
 {
     /**
      * Creates a DateTime object from the incoming value
-     * @param mixed $val
-     * @return DateTime
      */
-    public function createDateTimeFromVal($val): DateTime
+    public function createDateTimeFromVal($val) : DateTime
     {
         if ($val instanceof DateTime) {
             return $val;
@@ -34,19 +28,21 @@ trait DateTimeTrait
         $dateTimeZone = new DateTimeZone(date_default_timezone_get());
 
         if ($this->isValidTimeStamp($val)) {
+            /** @noinspection PhpUnhandledExceptionInspection */
             $dateTime = new DateTime();
             $dateTime->setTimezone($dateTimeZone);
             $dateTime->setTimestamp($val);
         }
 
-        if (! $dateTime && \is_string($val)) {
+        if (! $dateTime && is_string($val)) {
             try {
                 $dateTime = new DateTime($val);
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
             }
         }
 
         if (! $dateTime) {
+            /** @noinspection PhpUnhandledExceptionInspection */
             $dateTime = new DateTime();
             $dateTime->setTimestamp(0);
             $dateTime->setTimezone($dateTimeZone);
@@ -57,10 +53,8 @@ trait DateTimeTrait
 
     /**
      * Checks if value is valid timestamp
-     * @param $val
-     * @return bool
      */
-    public function isValidTimeStamp($val): bool
+    public function isValidTimeStamp($val) : bool
     {
         if (! is_numeric($val)) {
             return false;
@@ -70,16 +64,15 @@ trait DateTimeTrait
 
         try {
             return ($timestamp <= PHP_INT_MAX) && ($timestamp >= ~PHP_INT_MAX);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }
 
     /**
      * Gets the Database formatting string
-     * @return string
      */
-    public function getDatabaseFormatString(): string
+    public function getDatabaseFormatString() : string
     {
         return 'Y-m-d H:i:s';
     }

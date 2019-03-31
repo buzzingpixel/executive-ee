@@ -1,26 +1,17 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\factories;
 
 use buzzingpixel\executive\models\CommandModel;
 
-/**
- * Class CommandModelFactory
- */
 class CommandModelFactory
 {
     /**
      * Gets a CommandModel instance
-     * @return CommandModel
      */
-    public function make(): CommandModel
+    public function make() : CommandModel
     {
         return new CommandModel();
     }

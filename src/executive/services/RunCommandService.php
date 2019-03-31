@@ -1,49 +1,35 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
-use Throwable;
-use ReflectionException;
 use buzzingpixel\executive\ExecutiveDi;
-use buzzingpixel\executive\models\CommandModel;
-use buzzingpixel\executive\factories\EeDiFactory;
-use buzzingpixel\executive\models\CliArgumentsModel;
-use buzzingpixel\executive\factories\ReflectionFunctionFactory;
 use buzzingpixel\executive\factories\ClosureFromCallableFactory;
+use buzzingpixel\executive\factories\EeDiFactory;
+use buzzingpixel\executive\factories\ReflectionFunctionFactory;
+use buzzingpixel\executive\models\CliArgumentsModel;
+use buzzingpixel\executive\models\CommandModel;
+use ReflectionException;
+use Throwable;
+use function call_user_func_array;
+use function method_exists;
 
-/**
- * Class RunCommandService
- */
 class RunCommandService
 {
     /** @var CliArgumentsModel $cliArgumentsModel */
     private $cliArgumentsModel;
-
     /** @var ExecutiveDi $executiveDi */
     private $executiveDi;
-
     /** @var EeDiFactory $eeDiFactory */
     private $eeDiFactory;
-
+    /** @var ClosureFromCallableFactory $closureFromCallableFactory */
     private $closureFromCallableFactory;
-
     /** @var ReflectionFunctionFactory $reflectionMethodFactory */
     private $reflectionMethodFactory;
 
     /**
      * RunCommandService constructor
-     * @param CliArgumentsModel $cliArgumentsModel
-     * @param ExecutiveDi $executiveDi
-     * @param EeDiFactory $eeDiFactory
-     * @param ClosureFromCallableFactory $closureFromCallableFactory
-     * @param ReflectionFunctionFactory $reflectionFunctionFactory
      */
     public function __construct(
         CliArgumentsModel $cliArgumentsModel,
@@ -52,23 +38,23 @@ class RunCommandService
         ClosureFromCallableFactory $closureFromCallableFactory,
         ReflectionFunctionFactory $reflectionFunctionFactory
     ) {
-        $this->cliArgumentsModel = $cliArgumentsModel;
-        $this->executiveDi = $executiveDi;
-        $this->eeDiFactory = $eeDiFactory;
+        $this->cliArgumentsModel          = $cliArgumentsModel;
+        $this->executiveDi                = $executiveDi;
+        $this->eeDiFactory                = $eeDiFactory;
         $this->closureFromCallableFactory = $closureFromCallableFactory;
-        $this->reflectionMethodFactory = $reflectionFunctionFactory;
+        $this->reflectionMethodFactory    = $reflectionFunctionFactory;
     }
 
     /**
      * Gets the available command groups
-     * @param CommandModel $commandModel
+     *
      * @throws ReflectionException
      */
-    public function runCommand(CommandModel $commandModel): void
+    public function runCommand(CommandModel $commandModel) : void
     {
         $callable = $commandModel->getCallable();
-        $class = $commandModel->getClass();
-        $method = $commandModel->getMethod();
+        $class    = $commandModel->getClass();
+        $method   = $commandModel->getMethod();
 
         if ($class && $method) {
             $instantiatedClass = null;
@@ -112,6 +98,6 @@ class RunCommandService
             $params[] = $cliArgumentsModel->getArgument($parameter->name);
         }
 
-        \call_user_func_array($callable, $params);
+        call_user_func_array($callable, $params);
     }
 }

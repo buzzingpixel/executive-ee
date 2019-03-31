@@ -1,70 +1,60 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
+use buzzingpixel\executive\factories\CommandModelFactory;
 use EE_Config;
 use EllisLab\ExpressionEngine\Service\Addon\Addon;
-use buzzingpixel\executive\factories\CommandModelFactory;
 use EllisLab\ExpressionEngine\Service\Addon\Factory as AddOnFactory;
+use function array_filter;
+use function array_map;
+use function array_merge;
+use function is_array;
 
-/**
- * Class CommandsService
- */
 class CommandsService
 {
     /** @var EE_Config $config */
     private $config;
-
     /** @var AddOnFactory $addOnFactory */
     private $addOnFactory;
-
     /** @var CommandModelFactory $commandModelFactory */
     private $commandModelFactory;
 
     /**
      * CommandsService constructor
-     * @param EE_Config $config
-     * @param AddOnFactory $addOnFactory
-     * @param CommandModelFactory $commandModelFactory
      */
     public function __construct(
         EE_Config $config,
         AddOnFactory $addOnFactory,
         CommandModelFactory $commandModelFactory
     ) {
-        $this->config = $config;
-        $this->addOnFactory = $addOnFactory;
+        $this->config              = $config;
+        $this->addOnFactory        = $addOnFactory;
         $this->commandModelFactory = $commandModelFactory;
     }
 
     /**
      * Gets the available command groups
-     * @return array
      */
-    public function getCommandGroups(): array
+    public function getCommandGroups() : array
     {
         $commandGroups = [];
 
         $userCommands = $this->config->item('commands');
-        $userCommands = \is_array($userCommands) ? $userCommands : [];
+        $userCommands = is_array($userCommands) ? $userCommands : [];
 
         if ($userCommands) {
             $commandGroups['user'] = $userCommands;
         }
 
         $providerCommands = array_map(
-            function (Addon $addOn) {
+            static function (Addon $addOn) {
                 $provider = $addOn->getProvider();
 
                 $commands = $provider->get('commands');
-                $commands = \is_array($commands) ? $commands : null;
+                $commands = is_array($commands) ? $commands : null;
 
                 if (! $commands) {
                     return false;
@@ -75,7 +65,7 @@ class CommandsService
             $this->addOnFactory->installed()
         );
 
-        $providerCommands = array_filter($providerCommands, function ($i) {
+        $providerCommands = array_filter($providerCommands, static function ($i) {
             return $i !== false;
         });
 

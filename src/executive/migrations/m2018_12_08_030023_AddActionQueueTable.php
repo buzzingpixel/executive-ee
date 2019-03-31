@@ -1,11 +1,6 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\migrations;
 
@@ -13,7 +8,7 @@ use buzzingpixel\executive\abstracts\MigrationAbstract;
 
 class m2018_12_08_030023_AddActionQueueTable extends MigrationAbstract
 {
-    public function safeUp(): bool
+    public function safeUp() : bool
     {
         $tableExists = $this->queryBuilderFactory->make()
             ->table_exists('executive_action_queue');
@@ -56,9 +51,7 @@ class m2018_12_08_030023_AddActionQueueTable extends MigrationAbstract
                 'type' => 'FLOAT',
                 'unsigned' => true,
             ],
-            'added_at' => [
-                'type' => 'DATETIME',
-            ],
+            'added_at' => ['type' => 'DATETIME'],
             'added_at_time_zone' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
@@ -85,7 +78,7 @@ class m2018_12_08_030023_AddActionQueueTable extends MigrationAbstract
         return true;
     }
 
-    public function safeDown(): bool
+    public function safeDown() : bool
     {
         $tableExists = $this->queryBuilderFactory->make()
             ->table_exists('executive_action_queue');

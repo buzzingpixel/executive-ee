@@ -1,41 +1,33 @@
 <?php
+
 declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
-
-use buzzingpixel\executive\ExecutiveDi;
-use Twig\Environment as TwigEnvironment;
-use buzzingpixel\executive\models\RouteModel;
 use buzzingpixel\executive\exceptions\InvalidTagException;
+use buzzingpixel\executive\ExecutiveDi;
+use buzzingpixel\executive\models\RouteModel;
+use Twig\Environment as TwigEnvironment;
 
-/**
- * Class Executive
- */
 class Executive
 {
     /** @var EE_Template $template */
     private $template;
-
     /** @var EE_Lang $lang */
     private $lang;
-
     /** @var EE_Config */
     private $config;
 
     public function __construct()
     {
         $this->template = ee()->TMPL;
-        $this->lang = ee()->lang;
-        $this->config = ee()->config;
+        $this->lang     = ee()->lang;
+        $this->config   = ee()->config;
     }
 
     /**
      * User tag
+     *
      * @return mixed
+     *
      * @throws InvalidTagException
      */
     public function user()
@@ -48,7 +40,7 @@ class Executive
         /** @var array $tagConf */
         $tagConf = $this->config->item($this->template->tagparts[2], 'tags');
 
-        if (! \is_array($tagConf)) {
+        if (! is_array($tagConf)) {
             $this->lang->loadfile('executive');
             throw new InvalidTagException(
                 str_replace(
@@ -94,7 +86,7 @@ class Executive
 
         try {
             $class = ExecutiveDi::make($tagConf['class']);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $class = new $tagConf['class']();
         }
 
@@ -114,12 +106,12 @@ class Executive
 
     /**
      * Route pair tag
-     * @return string
      */
-    // @codingStandardsIgnoreStart
-    public function route_pair(): string // @codingStandardsIgnoreEnd
+    public function route_pair() : string
     {
-        if (! $name = $this->template->fetch_param('name')) {
+        $name = $this->template->fetch_param('name');
+
+        if (! $name) {
             return '';
         }
 
@@ -136,7 +128,9 @@ class Executive
             return '';
         }
 
-        if ($namespace = $this->template->fetch_param('namespace')) {
+        $namespace = $this->template->fetch_param('namespace');
+
+        if ($namespace) {
             $newPair = [];
 
             foreach ($pair as $key => $varSet) {
@@ -154,9 +148,11 @@ class Executive
         );
     }
 
-    public function render_twig_template()
+    public function render_twig_template() : string
     {
-        if (! $template = $this->template->fetch_param('template')) {
+        $template = $this->template->fetch_param('template');
+
+        if (! $template) {
             return '';
         }
 
@@ -164,7 +160,7 @@ class Executive
             'vars',
             $this->template->tagdata
         );
-        $varString = \is_string($varString) ? $varString : '';
+        $varString = is_string($varString) ? $varString : '';
 
         /** @var TwigEnvironment $twig */
         $twig = ExecutiveDi::get(TwigEnvironment::class);

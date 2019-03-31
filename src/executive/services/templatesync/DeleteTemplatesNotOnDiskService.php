@@ -1,25 +1,25 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services\templatesync;
 
-use Symfony\Component\Filesystem\Filesystem;
-use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 use EllisLab\ExpressionEngine\Model\Template\Template as TemplateModel;
 use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
+use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 use EllisLab\ExpressionEngine\Service\Model\Query\Builder as ModelQueryBuilder;
+use Symfony\Component\Filesystem\Filesystem;
+use const DIRECTORY_SEPARATOR;
 
 class DeleteTemplatesNotOnDiskService
 {
+    /** @var string $templatesPath */
     private $templatesPath;
+    /** @var array $siteShortNames */
     private $siteShortNames;
+    /** @var ModelFacade $modelFacade */
     private $modelFacade;
+    /** @var Filesystem $filesystem */
     private $filesystem;
 
     public function __construct(
@@ -28,13 +28,13 @@ class DeleteTemplatesNotOnDiskService
         ModelFacade $modelFacade,
         Filesystem $filesystem
     ) {
-        $this->templatesPath = $templatesPath;
+        $this->templatesPath  = $templatesPath;
         $this->siteShortNames = $siteShortNames;
-        $this->modelFacade = $modelFacade;
-        $this->filesystem = $filesystem;
+        $this->modelFacade    = $modelFacade;
+        $this->filesystem     = $filesystem;
     }
 
-    public function run(): void
+    public function run() : void
     {
         /** @var ModelQueryBuilder $templateQuery */
         $templateQuery = $this->modelFacade->get('Template');
@@ -44,7 +44,7 @@ class DeleteTemplatesNotOnDiskService
         /** @var ModelCollection $templates */
         $templates = $templateQuery->all();
 
-        $templates->each(function (TemplateModel $model) {
+        $templates->each(function (TemplateModel $model) : void {
             $sep = DIRECTORY_SEPARATOR;
 
             $siteDir = $this->siteShortNames[$model->getProperty('site_id')];

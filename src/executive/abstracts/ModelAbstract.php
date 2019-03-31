@@ -1,13 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
-
 namespace buzzingpixel\executive\abstracts;
+
+use function explode;
+use function method_exists;
+use function ucfirst;
 
 /**
  * Abstract Class ModelAbstract
@@ -16,6 +15,7 @@ abstract class ModelAbstract
 {
     /**
      * FieldSettingsModel constructor
+     *
      * @param array $properties Properties to instantiate the model with
      */
     public function __construct(array $properties = [])
@@ -25,10 +25,8 @@ abstract class ModelAbstract
 
     /**
      * Convert underscore_type string to PascalCase type string
-     * @param string $str
-     * @return string
      */
-    private function convertStringToPascalCase(string $str): string
+    private function convertStringToPascalCase(string $str) : string
     {
         $finalStr = '';
 
@@ -41,9 +39,10 @@ abstract class ModelAbstract
 
     /**
      * Sets properties from array
+     *
      * @param array $properties
      */
-    public function setPropertiesFromArray(array $properties): void
+    public function setPropertiesFromArray(array $properties) : void
     {
         foreach ($properties as $prop => $val) {
             $setMethod = "set{$this->convertStringToPascalCase($prop)}";

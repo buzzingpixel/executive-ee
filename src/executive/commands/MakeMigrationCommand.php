@@ -1,59 +1,42 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\commands;
 
-use EE_Lang;
-use Symfony\Component\Console\Output\OutputInterface;
+use buzzingpixel\executive\services\CaseConversionService;
 use buzzingpixel\executive\services\CliQuestionService;
 use buzzingpixel\executive\services\TemplateMakerService;
-use buzzingpixel\executive\services\CaseConversionService;
+use DateTime;
+use EE_Lang;
+use Symfony\Component\Console\Output\OutputInterface;
+use const DIRECTORY_SEPARATOR;
+use function mb_strlen;
+use function mb_strtolower;
+use function range;
+use function rtrim;
 
-/**
- * Class MakeMigrationCommand
- */
 class MakeMigrationCommand
 {
     /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
-
     /** @var CliQuestionService $cliQuestionService */
     private $cliQuestionService;
-
     /** @var EE_Lang $lang */
     private $lang;
-
     /** @var CaseConversionService $pascaleCaseService */
     private $pascaleCaseService;
-
     /** @var TemplateMakerService $templateMakerService */
     private $templateMakerService;
-
     /** @var string $templateLocation */
     private $templateLocation;
-
     /** @var string $migrationNameSpace */
     private $migrationNameSpace;
-
     /** @var string $migrationDestination */
     private $migrationDestination;
 
     /**
      * CacheCommand constructor
-     * @param OutputInterface $consoleOutput
-     * @param CliQuestionService $cliQuestionService
-     * @param EE_Lang $lang
-     * @param CaseConversionService $pascaleCaseService
-     * @param TemplateMakerService $templateMakerService
-     * @param string $templateLocation
-     * @param string $migrationNameSpace
-     * @param string $migrationDestination
      */
     public function __construct(
         OutputInterface $consoleOutput,
@@ -65,13 +48,13 @@ class MakeMigrationCommand
         string $migrationNameSpace,
         string $migrationDestination
     ) {
-        $this->consoleOutput = $consoleOutput;
-        $this->cliQuestionService = $cliQuestionService;
-        $this->lang = $lang;
-        $this->pascaleCaseService = $pascaleCaseService;
+        $this->consoleOutput        = $consoleOutput;
+        $this->cliQuestionService   = $cliQuestionService;
+        $this->lang                 = $lang;
+        $this->pascaleCaseService   = $pascaleCaseService;
         $this->templateMakerService = $templateMakerService;
-        $this->templateLocation = $templateLocation;
-        $this->migrationNameSpace = $migrationNameSpace;
+        $this->templateLocation     = $templateLocation;
+        $this->migrationNameSpace   = $migrationNameSpace;
         $this->migrationDestination = rtrim(
             rtrim($migrationDestination, '/'),
             DIRECTORY_SEPARATOR
@@ -80,9 +63,8 @@ class MakeMigrationCommand
 
     /**
      * Makes a command class
-     * @param string $name
      */
-    public function make(?string $name = null): void
+    public function make(?string $name = null) : void
     {
         $hasBlockingErrors = false;
 
@@ -130,11 +112,12 @@ class MakeMigrationCommand
 
         $name = $this->pascaleCaseService->convertStringToPascale($name);
 
-        $date = new \DateTime();
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $date = new DateTime();
 
         $namePrefix = 'm' . $date->format('Y_m_d_His');
-        $first = true;
-        foreach (range(\strlen($namePrefix), 18) as $key => $val) {
+        $first      = true;
+        foreach (range(mb_strlen($namePrefix), 18) as $key => $val) {
             if ($first) {
                 $first = false;
                 continue;
@@ -159,12 +142,13 @@ class MakeMigrationCommand
             '</>'
         );
 
-        if (strtolower($proceed) !== 'y') {
+        if (mb_strtolower($proceed) !== 'y') {
             $this->consoleOutput->writeln(
                 '<fg=red>' .
                 $this->lang->line('aborting') .
                 '</>'
             );
+
             return;
         }
 
@@ -187,10 +171,12 @@ class MakeMigrationCommand
                     $this->lang->line('unknownTemplateMakerError') .
                     '</>'
                 );
+
                 return;
             }
 
-            $this->consoleOutput->writeln('<fg=red>' . $lang. '</>');
+            $this->consoleOutput->writeln('<fg=red>' . $lang . '</>');
+
             return;
         }
 

@@ -1,44 +1,33 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\commands;
 
-use EE_Lang;
-use Throwable;
 use buzzingpixel\executive\models\ScheduleItemModel;
+use buzzingpixel\executive\services\RunCommandService;
 use buzzingpixel\executive\services\ScheduleService;
+use EE_Lang;
 use Symfony\Component\Console\Output\OutputInterface;
-use \buzzingpixel\executive\services\RunCommandService;
+use Throwable;
+use function array_map;
+use function count;
+use function in_array;
+use function is_array;
 
-/**
- * Class RunScheduleCommand
- */
 class RunScheduleCommand
 {
     /** @var EE_Lang $lang */
     private $lang;
-
     /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
-
     /** @var ScheduleService $scheduleService */
     private $scheduleService;
-
     /** @var RunCommandService $runCommandService */
     private $runCommandService;
 
     /**
      * RunScheduleCommand constructor
-     * @param EE_Lang $lang
-     * @param OutputInterface $consoleOutput
-     * @param ScheduleService $scheduleService
-     * @param RunCommandService $runCommandService
      */
     public function __construct(
         EE_Lang $lang,
@@ -46,9 +35,9 @@ class RunScheduleCommand
         ScheduleService $scheduleService,
         RunCommandService $runCommandService
     ) {
-        $this->consoleOutput = $consoleOutput;
-        $this->lang = $lang;
-        $this->scheduleService = $scheduleService;
+        $this->consoleOutput     = $consoleOutput;
+        $this->lang              = $lang;
+        $this->scheduleService   = $scheduleService;
         $this->runCommandService = $runCommandService;
     }
 
@@ -57,11 +46,11 @@ class RunScheduleCommand
      *
      * @throws Throwable
      */
-    public function run(): void
+    public function run() : void
     {
         $schedule = $this->scheduleService->getSchedule();
 
-        if (\count($schedule) < 1) {
+        if (count($schedule) < 1) {
             $this->consoleOutput->writeln('<fg=yellow>' . $this->lang->line('noScheduledCommands') . '</>');
 
             return;
@@ -72,10 +61,10 @@ class RunScheduleCommand
 
     /**
      * Runs a schedule item
-     * @param ScheduleItemModel $model
+     *
      * @throws Throwable
      */
-    public function runScheduleItem(ScheduleItemModel $model): void
+    public function runScheduleItem(ScheduleItemModel $model) : void
     {
         try {
             $this->runScheduleItemInner($model);
@@ -85,9 +74,9 @@ class RunScheduleCommand
             $this->scheduleService->saveSchedule($model);
 
             $args = EXECUTIVE_RAW_ARGS;
-            $args = \is_array($args) ? $args : [];
+            $args = is_array($args) ? $args : [];
 
-            if (\in_array('--trace=true', $args, true)) {
+            if (in_array('--trace=true', $args, true)) {
                 throw $e;
             }
 
@@ -114,10 +103,10 @@ class RunScheduleCommand
 
     /**
      * Runs a schedule item
-     * @param ScheduleItemModel $model
+     *
      * @throws Throwable
      */
-    public function runScheduleItemInner(ScheduleItemModel $model): void
+    public function runScheduleItemInner(ScheduleItemModel $model) : void
     {
         if (! $model->shouldRun() && $model->isRunning()) {
             $this->consoleOutput->writeln(

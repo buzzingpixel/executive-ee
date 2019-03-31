@@ -1,43 +1,31 @@
 <?php
+
 declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
-
-use DI\NotFoundException;
-use DI\DependencyException;
-use buzzingpixel\executive\ExecutiveDi;
-use EllisLab\ExpressionEngine\Core\Request;
-use buzzingpixel\executive\services\RoutingService;
 use buzzingpixel\executive\controllers\ConsoleController;
-use buzzingpixel\executive\services\ElevateSessionService;
-use buzzingpixel\executive\services\CliErrorHandlerService;
+use buzzingpixel\executive\exceptions\DependencyInjectionBuilderException;
 use buzzingpixel\executive\exceptions\InvalidActionException;
 use buzzingpixel\executive\exceptions\InvalidRouteConfiguration;
+use buzzingpixel\executive\ExecutiveDi;
+use buzzingpixel\executive\services\CliErrorHandlerService;
+use buzzingpixel\executive\services\ElevateSessionService;
+use buzzingpixel\executive\services\RoutingService;
+use DI\DependencyException;
+use DI\NotFoundException;
+use EllisLab\ExpressionEngine\Core\Request;
 use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
-use buzzingpixel\executive\exceptions\DependencyInjectionBuilderException;
 
-/**
- * Class Executive_ext
- * @SuppressWarnings(PHPMD.CamelCaseClassName)
- * @SuppressWarnings(PHPMD.CamelCaseMethodName)
- */
-// @codingStandardsIgnoreStart
 class Executive_ext
-// @codingStandardsIgnoreEnd
 {
     /** @var string $version */
     public $version = EXECUTIVE_VER;
 
     /**
      * session_start extension
+     *
      * @throws Exception
      */
-    // @codingStandardsIgnoreStart
-    public function sessions_start(): void // @codingStandardsIgnoreEnd
+    public function sessions_start() : void
     {
         if (! defined('REQ') || REQ !== 'CONSOLE') {
             return;
@@ -57,10 +45,10 @@ class Executive_ext
 
     /**
      * core_boot extension
+     *
      * @throws Exception
      */
-    // @codingStandardsIgnoreStart
-    public function core_boot(): void // @codingStandardsIgnoreEnd
+    public function core_boot() : void
     {
         /** @var EE_Lang $lang */
         $lang = ee()->lang;
@@ -139,7 +127,7 @@ class Executive_ext
 
             try {
                 $class = ExecutiveDi::make($actionConfig['class']);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $class = new $actionConfig['class']();
             }
 
@@ -193,15 +181,15 @@ class Executive_ext
 
     /**
      * Runs routing if applicable
-     * @param string $uri
+     *
      * @return mixed
+     *
      * @throws NotFoundException
      * @throws DependencyException
      * @throws InvalidRouteConfiguration
      * @throws DependencyInjectionBuilderException
      */
-    // @codingStandardsIgnoreStart
-    public function core_template_route(string $uri) // @codingStandardsIgnoreEnd
+    public function core_template_route(string $uri)
     {
         /** @var EE_Extensions $extensions */
         $extensions = ee()->extensions;
@@ -222,12 +210,12 @@ class Executive_ext
 
     /**
      * Routes user extensions
-     * @param string $name
+     *
      * @param array $args
      */
-    public function __call($name, $args)
+    public function __call(string $name, array $args) : void
     {
-        if (stripos($name, 'userExtensionRouting') !== 0) {
+        if (mb_stripos($name, 'userExtensionRouting') !== 0) {
             return;
         }
 

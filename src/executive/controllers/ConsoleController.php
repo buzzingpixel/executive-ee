@@ -1,51 +1,38 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\controllers;
 
-use EE_Lang;
-use ReflectionException;
-use buzzingpixel\executive\models\CommandModel;
-use buzzingpixel\executive\services\CommandsService;
-use Symfony\Component\Console\Output\OutputInterface;
-use buzzingpixel\executive\services\RunCommandService;
-use buzzingpixel\executive\models\CliArgumentsModel;
 use buzzingpixel\executive\exceptions\InvalidCommandException;
 use buzzingpixel\executive\exceptions\InvalidCommandGroupException;
+use buzzingpixel\executive\models\CliArgumentsModel;
+use buzzingpixel\executive\models\CommandModel;
+use buzzingpixel\executive\services\CommandsService;
+use buzzingpixel\executive\services\RunCommandService;
+use EE_Lang;
+use ReflectionException;
+use Symfony\Component\Console\Output\OutputInterface;
+use const PHP_EOL;
+use function abs;
+use function mb_strlen;
+use function str_repeat;
 
-/**
- * Class ConsoleController
- */
 class ConsoleController
 {
     /** @var CliArgumentsModel $cliArgumentsModel */
     private $cliArgumentsModel;
-
     /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
-
     /** @var CommandsService $commandsService */
     private $commandsService;
-
     /** @var EE_Lang $lang */
     private $lang;
-
     /** @var RunCommandService $runCommandService */
     private $runCommandService;
 
     /**
      * ConsoleController constructor
-     * @param CliArgumentsModel $cliArgumentsModel
-     * @param OutputInterface $consoleOutput
-     * @param CommandsService $commandsService
-     * @param EE_Lang $lang
-     * @param RunCommandService $runCommandService
      */
     public function __construct(
         CliArgumentsModel $cliArgumentsModel,
@@ -55,19 +42,20 @@ class ConsoleController
         RunCommandService $runCommandService
     ) {
         $this->cliArgumentsModel = $cliArgumentsModel;
-        $this->consoleOutput = $consoleOutput;
-        $this->commandsService = $commandsService;
-        $this->lang = $lang;
+        $this->consoleOutput     = $consoleOutput;
+        $this->commandsService   = $commandsService;
+        $this->lang              = $lang;
         $this->runCommandService = $runCommandService;
     }
 
     /**
      * Runs the console controller
+     *
      * @throws ReflectionException
      * @throws InvalidCommandException
      * @throws InvalidCommandGroupException
      */
-    public function run(): void
+    public function run() : void
     {
         $groups = $this->commandsService->getCommandGroups();
 
@@ -75,10 +63,13 @@ class ConsoleController
 
         if ($group === null) {
             $this->listCommands($groups);
+
             return;
         }
 
-        if (! $groupModels = $groups[$group] ?? null) {
+        $groupModels = $groups[$group] ?? null;
+
+        if (! $groupModels) {
             throw new InvalidCommandGroupException(
                 $this->lang->line('groupNotFound') . ': ' . $group
             );
@@ -88,10 +79,13 @@ class ConsoleController
 
         if ($command === null) {
             $this->listCommands([$group => $groupModels]);
+
             return;
         }
 
-        if (! $commandModel = $groupModels[$command] ?? null) {
+        $commandModel = $groupModels[$command] ?? null;
+
+        if (! $commandModel) {
             throw new InvalidCommandException(
                 $this->lang->line('commandNotFound') .
                 ': ' .
@@ -106,9 +100,8 @@ class ConsoleController
 
     /**
      * Lists commands
-     * @param array $groups
      */
-    private function listCommands(array $groups): void
+    private function listCommands(array $groups) : void
     {
         $this->consoleOutput->writeln(
             $this->lang->line('executiveCommandLine') .
@@ -134,7 +127,7 @@ class ConsoleController
         foreach ($groups as $group) {
             foreach ($group as $commandModel) {
                 /** @var CommandModel $commandModel */
-                $len = \strlen($commandModel->getName());
+                $len          = mb_strlen($commandModel->getName());
                 $toCharacters = $len > $toCharacters ? $len : $toCharacters;
             }
         }
@@ -153,8 +146,8 @@ class ConsoleController
             foreach ($group as $commandModel) {
                 /** @var CommandModel $commandModel */
 
-                $len = \strlen($commandModel->getName());
-                $to = abs($len - $toCharacters);
+                $len = mb_strlen($commandModel->getName());
+                $to  = abs($len - $toCharacters);
 
                 $this->consoleOutput->writeln(
                     '<fg=green>  ' .

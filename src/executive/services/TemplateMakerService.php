@@ -1,54 +1,40 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
-use Throwable;
-use Symfony\Component\Filesystem\Filesystem;
 use buzzingpixel\executive\factories\SplFileInfoFactory;
+use Symfony\Component\Filesystem\Filesystem;
+use Throwable;
+use function str_replace;
 
-/**
- * Class TemplateMakerService
- */
 class TemplateMakerService
 {
-    public const DESTINATION_EXISTS_ERROR = 'fileExistsAtDestination';
-    public const SOURCE_TEMPLATE_MISSING_ERROR = 'sourceTemplateMissing';
+    public const DESTINATION_EXISTS_ERROR                  = 'fileExistsAtDestination';
+    public const SOURCE_TEMPLATE_MISSING_ERROR             = 'sourceTemplateMissing';
     public const CANNOT_CREATE_DESTINATION_DIRECTORY_ERROR = 'cannotCreateTemplateDirectory';
-    public const TEMPLATE_CREATED_SUCCESSFULLY = 'success';
+    public const TEMPLATE_CREATED_SUCCESSFULLY             = 'success';
 
     /** @var SplFileInfoFactory $splFileInfoFactory */
     private $splFileInfoFactory;
-
     /** @var Filesystem $filesystem */
     private $filesystem;
 
     /**
      * CliInstallService constructor
-     * @param SplFileInfoFactory $splFileInfoFactory
-     * @param Filesystem $filesystem
      */
     public function __construct(
         SplFileInfoFactory $splFileInfoFactory,
         Filesystem $filesystem
     ) {
         $this->splFileInfoFactory = $splFileInfoFactory;
-        $this->filesystem = $filesystem;
+        $this->filesystem         = $filesystem;
     }
 
     /**
      * Runs the installation
-     * @param string $oldClassName
-     * @param string $className
-     * @param string $nameSpace
-     * @param string $location
-     * @param string $destination
+     *
      * @return string Returns on of the success or failure constants
      */
     public function makeTemplate(
@@ -57,7 +43,7 @@ class TemplateMakerService
         string $nameSpace,
         string $location,
         string $destination
-    ): string {
+    ) : string {
         if ($this->filesystem->exists($destination)) {
             return self::DESTINATION_EXISTS_ERROR;
         }

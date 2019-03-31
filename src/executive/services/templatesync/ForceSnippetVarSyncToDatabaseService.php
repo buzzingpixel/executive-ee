@@ -1,20 +1,16 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services\templatesync;
 
-use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
-use EllisLab\ExpressionEngine\Model\Template\Snippet as SnippetModel;
 use EllisLab\ExpressionEngine\Model\Template\GlobalVariable as VariableModel;
+use EllisLab\ExpressionEngine\Model\Template\Snippet as SnippetModel;
+use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 
 class ForceSnippetVarSyncToDatabaseService
 {
+    /** @var ModelFacade $modelFacade */
     private $modelFacade;
 
     public function __construct(ModelFacade $modelFacade)
@@ -22,7 +18,7 @@ class ForceSnippetVarSyncToDatabaseService
         $this->modelFacade = $modelFacade;
     }
 
-    public function run(): void
+    public function run() : void
     {
         /** @var SnippetModel $model */
         $model = $this->modelFacade->make('Snippet');

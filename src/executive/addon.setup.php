@@ -1,39 +1,32 @@
-<?php // @codingStandardsIgnoreStart
+<?php
+
 declare(strict_types=1);
 
-// @codingStandardsIgnoreEnd
-
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
-
-use buzzingpixel\executive\ExecutiveDi;
-use EllisLab\ExpressionEngine\Core\Provider;
-use Composer\Package\CompletePackageInterface;
+use buzzingpixel\executive\commands\AddOnUpdatesCommand;
 use buzzingpixel\executive\commands\CacheCommand;
+use buzzingpixel\executive\commands\ComposerProvisionCommand;
 use buzzingpixel\executive\commands\ConfigCommand;
+use buzzingpixel\executive\commands\InstallExecutiveCommand;
+use buzzingpixel\executive\commands\ListUserMigrationsCommand;
+use buzzingpixel\executive\commands\MakeFromTemplateCommand;
+use buzzingpixel\executive\commands\MakeMigrationCommand;
 use buzzingpixel\executive\commands\RunQueueCommand;
 use buzzingpixel\executive\commands\RunScheduleCommand;
-use buzzingpixel\executive\commands\AddOnUpdatesCommand;
-use buzzingpixel\executive\commands\MakeMigrationCommand;
-use buzzingpixel\executive\commands\SyncTemplatesCommand;
-use buzzingpixel\executive\commands\MakeFromTemplateCommand;
-use buzzingpixel\executive\commands\InstallExecutiveCommand;
-use buzzingpixel\executive\commands\ComposerProvisionCommand;
 use buzzingpixel\executive\commands\RunUserMigrationsCommand;
-use buzzingpixel\executive\commands\ListUserMigrationsCommand;
+use buzzingpixel\executive\commands\SyncTemplatesCommand;
+use buzzingpixel\executive\ExecutiveDi;
+use Composer\Package\CompletePackageInterface;
+use EllisLab\ExpressionEngine\Core\Provider;
 
 // Edge case and weirdness with composer
 getenv('HOME') || putenv('HOME=' . APP_DIR);
 
 $composerApp = new Composer\Console\Application();
-$oldCwd = getcwd();
+$oldCwd      = getcwd();
 chdir(APP_DIR);
 /** @noinspection PhpUnhandledExceptionInspection */
-$composer = $composerApp->getComposer();
-$repositoryManager = $composer->getRepositoryManager();
+$composer                      = $composerApp->getComposer();
+$repositoryManager             = $composer->getRepositoryManager();
 $installedFilesystemRepository = $repositoryManager->getLocalRepository();
 /** @var CompletePackageInterface $executive */
 $executive = $installedFilesystemRepository->findPackage(
@@ -42,7 +35,7 @@ $executive = $installedFilesystemRepository->findPackage(
 );
 
 $author = $executive->getAuthors()[0];
-$extra = $executive->getExtra();
+$extra  = $executive->getExtra();
 
 chdir($oldCwd);
 
@@ -63,7 +56,7 @@ if (defined('REQ') && REQ === 'CONSOLE') {
     $exit = ExecutiveDi::make(InstallExecutiveCommand::class)->run();
 
     if ($exit) {
-        exit();
+        exit;
     }
 }
 
@@ -78,7 +71,7 @@ return [
     'settings_exist' => true,
     'version' => EXECUTIVE_VER,
     'services' => [
-        'Provider' => function (Provider $provider) {
+        'Provider' => static function (Provider $provider) {
             return $provider;
         },
     ],

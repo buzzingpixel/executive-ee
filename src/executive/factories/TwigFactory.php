@@ -1,28 +1,28 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\factories;
 
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
-use Twig\Extension\DebugExtension;
 use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\twigextensions\EETemplateTwigExtension;
+use EE_Config;
+use Twig\Environment;
+use Twig\Extension\DebugExtension;
+use Twig\Loader\FilesystemLoader;
+use const DIRECTORY_SEPARATOR;
+use function is_array;
+use function is_dir;
+use function mkdir;
 
 class TwigFactory
 {
     public function get()
     {
-        /** @var \EE_Config $config */
+        /** @var EE_Config $config */
         $config = ee()->config;
-        $debug = $config->item('debug', 'twig');
-        $debug = $debug === 'true' || $debug === true ||
+        $debug  = $config->item('debug', 'twig');
+        $debug  = $debug === 'true' || $debug === true ||
             $debug === 1 || $debug === '1' ||
             $debug === 'y' || $debug === 'yes';
 
@@ -45,14 +45,14 @@ class TwigFactory
         ]);
 
         $globals = $config->item('globals', 'twig');
-        $globals = \is_array($globals) ? $globals : [];
+        $globals = is_array($globals) ? $globals : [];
 
         foreach ($globals as $key => $val) {
             $twig->addGlobal($key, $val);
         }
 
         $extensions = $config->item('extensions', 'twig');
-        $extensions = \is_array($extensions) ? $extensions : [];
+        $extensions = is_array($extensions) ? $extensions : [];
 
         foreach ($extensions as $extension) {
             $instantiatedClass = null;

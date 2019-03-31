@@ -1,54 +1,37 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\commands;
 
-use EE_Lang;
-use Throwable;
-use buzzingpixel\executive\ExecutiveDi;
-use Symfony\Component\Console\Output\OutputInterface;
-use buzzingpixel\executive\services\MigrationsService;
-use buzzingpixel\executive\interfaces\MigrationInterface;
 use buzzingpixel\executive\exceptions\InvalidMigrationException;
+use buzzingpixel\executive\ExecutiveDi;
+use buzzingpixel\executive\interfaces\MigrationInterface;
+use buzzingpixel\executive\services\MigrationsService;
+use EE_Lang;
 use EllisLab\ExpressionEngine\Library\Filesystem\FilesystemException;
+use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
+use function array_map;
+use function str_replace;
 
-/**
- * Class RunUserMigrationsCommand
- */
 class RunUserMigrationsCommand
 {
     /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
-
     /** @var EE_Lang $lang */
     private $lang;
-
     /** @var MigrationsService $migrationsService */
     private $migrationsService;
-
     /** @var string $migrationNamespace */
     private $migrationNamespace;
-
     /** @var string $migrationDestination */
     private $migrationDestination;
-
     /** @var ExecutiveDi $executiveDi */
     private $executiveDi;
 
     /**
      * RunUserMigrationsCommand constructor
-     * @param OutputInterface $consoleOutput
-     * @param EE_Lang $lang
-     * @param MigrationsService $migrationsService
-     * @param string $migrationNamespace
-     * @param string $makeMigrationDestination
-     * @param ExecutiveDi $executiveDi
      */
     public function __construct(
         OutputInterface $consoleOutput,
@@ -58,12 +41,12 @@ class RunUserMigrationsCommand
         string $makeMigrationDestination,
         ExecutiveDi $executiveDi
     ) {
-        $this->consoleOutput = $consoleOutput;
-        $this->lang = $lang;
-        $this->migrationsService = $migrationsService;
-        $this->migrationNamespace = $migrationNamespace;
+        $this->consoleOutput        = $consoleOutput;
+        $this->lang                 = $lang;
+        $this->migrationsService    = $migrationsService;
+        $this->migrationNamespace   = $migrationNamespace;
         $this->migrationDestination = $makeMigrationDestination;
-        $this->executiveDi = $executiveDi;
+        $this->executiveDi          = $executiveDi;
 
         $this->migrationsService->setTable('executive_user_migrations');
 
@@ -74,9 +57,10 @@ class RunUserMigrationsCommand
 
     /**
      * Runs user migrations
+     *
      * @throws FilesystemException
      */
-    public function runMigrations(): void
+    public function runMigrations() : void
     {
         $hasBlockingErrors = false;
 
@@ -127,10 +111,10 @@ class RunUserMigrationsCommand
 
     /**
      * Runs a migration
-     * @param string $migrationClassName
+     *
      * @throws InvalidMigrationException
      */
-    public function runMigration(string $migrationClassName): void
+    public function runMigration(string $migrationClassName) : void
     {
         $className = "{$this->migrationNamespace}\\{$migrationClassName}";
 

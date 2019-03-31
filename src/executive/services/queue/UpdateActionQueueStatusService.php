@@ -1,14 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace buzzingpixel\executive\services\queue;
 
+use buzzingpixel\executive\factories\QueryBuilderFactory;
 use DateTime;
 use DateTimeZone;
-use buzzingpixel\executive\factories\QueryBuilderFactory;
+use function count;
 
 class UpdateActionQueueStatusService
 {
+    /** @var QueryBuilderFactory $queryBuilderFactory */
     private $queryBuilderFactory;
 
     public function __construct(QueryBuilderFactory $queryBuilderFactory)
@@ -16,7 +19,7 @@ class UpdateActionQueueStatusService
         $this->queryBuilderFactory = $queryBuilderFactory;
     }
 
-    public function updateActionQueueStatus(int $actionQueueId): void
+    public function updateActionQueueStatus(int $actionQueueId) : void
     {
         $actionQueueQuery = $this->queryBuilderFactory->make()
             ->where('id', $actionQueueId)
@@ -33,8 +36,8 @@ class UpdateActionQueueStatusService
             ->get('executive_action_queue_items')
             ->result();
 
-        $totalItems = \count($items);
-        $totalRun = 0;
+        $totalItems = count($items);
+        $totalRun   = 0;
 
         foreach ($items as $item) {
             if (! ((int) $item->is_finished)) {
@@ -49,6 +52,7 @@ class UpdateActionQueueStatusService
         }
 
         if ($totalRun >= $totalItems && ! ((int) $actionQueueQuery->is_finished)) {
+            /** @noinspection PhpUnhandledExceptionInspection */
             $dateTime = new DateTime();
             $dateTime->setTimezone(new DateTimeZone('UTC'));
 
@@ -60,26 +64,20 @@ class UpdateActionQueueStatusService
                     'finished_at_time_zone' => $dateTime->getTimezone()->getName(),
                     'percent_complete' => 100,
                 ],
-                [
-                    'id' => $actionQueueId,
-                ]
+                ['id' => $actionQueueId]
             );
 
             return;
         }
 
-        $percentComplete = ($totalRun / $totalItems) * 100;
+        $percentComplete = $totalRun / $totalItems * 100;
         $percentComplete = $percentComplete > 100 ? 100 : $percentComplete;
         $percentComplete = $percentComplete < 0 ? 0 : $percentComplete;
 
         $this->queryBuilderFactory->make()->update(
             'executive_action_queue',
-            [
-                'percent_complete' => $percentComplete,
-            ],
-            [
-                'id' => $actionQueueId,
-            ]
+            ['percent_complete' => $percentComplete],
+            ['id' => $actionQueueId]
         );
     }
 }

@@ -1,11 +1,6 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\migrations;
 
@@ -13,7 +8,7 @@ use buzzingpixel\executive\abstracts\MigrationAbstract;
 
 class m2017_08_26_235904_AddUserMigrationsTable extends MigrationAbstract
 {
-    public function safeUp(): bool
+    public function safeUp() : bool
     {
         $tableExists = $this->queryBuilderFactory->make()
             ->table_exists('executive_user_migrations');
@@ -44,7 +39,7 @@ class m2017_08_26_235904_AddUserMigrationsTable extends MigrationAbstract
         return true;
     }
 
-    public function safeDown(): bool
+    public function safeDown() : bool
     {
         $tableExists = $this->queryBuilderFactory->make()
             ->table_exists('executive_user_migrations');

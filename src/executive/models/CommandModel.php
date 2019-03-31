@@ -1,20 +1,12 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\models;
 
 use buzzingpixel\executive\abstracts\ModelAbstract;
 use buzzingpixel\executive\exceptions\InvalidCommandCallableException;
 
-/**
- * Class CommandModel
- */
 class CommandModel extends ModelAbstract
 {
     /** @var string $name */
@@ -22,20 +14,20 @@ class CommandModel extends ModelAbstract
 
     /**
      * Sets name property
-     * @param string $val
+     *
      * @return CommandModel
      */
-    public function setName(string $val): self
+    public function setName(string $val) : self
     {
         $this->name = $val;
+
         return $this;
     }
 
     /**
      * Gets name property
-     * @return string
      */
-    public function getName(): string
+    public function getName() : string
     {
         return $this->name;
     }
@@ -48,27 +40,27 @@ class CommandModel extends ModelAbstract
      *
      * @throws InvalidCommandCallableException
      */
-    public static function commandCallableNotSpecified(): void
+    public static function commandCallableNotSpecified() : void
     {
         throw new InvalidCommandCallableException(lang('commandCallableNotSpecified'));
     }
 
     /**
      * Sets callable property
-     * @param callable $val
+     *
      * @return CommandModel
      */
-    public function setCallable(callable $val): self
+    public function setCallable(callable $val) : self
     {
         $this->callable = $val;
+
         return $this;
     }
 
     /**
      * Gets callable property
-     * @return callable
      */
-    public function getCallable(): callable
+    public function getCallable() : callable
     {
         return $this->callable;
     }
@@ -78,20 +70,20 @@ class CommandModel extends ModelAbstract
 
     /**
      * Sets class property
-     * @param string $val
+     *
      * @return CommandModel
      */
-    public function setClass(string $val): self
+    public function setClass(string $val) : self
     {
         $this->class = $val;
+
         return $this;
     }
 
     /**
      * Gets class property
-     * @return string
      */
-    public function getClass(): string
+    public function getClass() : string
     {
         return $this->class;
     }
@@ -101,20 +93,20 @@ class CommandModel extends ModelAbstract
 
     /**
      * Sets method property
-     * @param string $val
+     *
      * @return CommandModel
      */
-    public function setMethod(string $val): self
+    public function setMethod(string $val) : self
     {
         $this->method = $val;
+
         return $this;
     }
 
     /**
      * Gets method property
-     * @return string
      */
-    public function getMethod(): string
+    public function getMethod() : string
     {
         return $this->method;
     }
@@ -124,20 +116,20 @@ class CommandModel extends ModelAbstract
 
     /**
      * Sets description property
-     * @param string $val
+     *
      * @return CommandModel
      */
-    public function setDescription(string $val): self
+    public function setDescription(string $val) : self
     {
         $this->description = $val;
+
         return $this;
     }
 
     /**
      * Gets description property
-     * @return string
      */
-    public function getDescription(): string
+    public function getDescription() : string
     {
         return $this->description;
     }
@@ -147,29 +139,28 @@ class CommandModel extends ModelAbstract
 
     /**
      * Sets a custom CLI Arguments Model
-     * @param CliArgumentsModel $model
+     *
      * @return CommandModel
      */
-    public function setCustomCliArgumentsModel(CliArgumentsModel $model): self
+    public function setCustomCliArgumentsModel(CliArgumentsModel $model) : self
     {
         $this->customCliArgumentsModel = $model;
+
         return $this;
     }
 
     /**
      * Checks if there's a custom CLI Arguments Model
-     * @return bool
      */
-    public function hasCustomCliArgumentsModel(): bool
+    public function hasCustomCliArgumentsModel() : bool
     {
         return $this->customCliArgumentsModel !== null;
     }
 
     /**
      * Gets custom CLI Arguments Model
-     * @return CliArgumentsModel
      */
-    public function getCustomCliArgumentsModel(): CliArgumentsModel
+    public function getCustomCliArgumentsModel() : CliArgumentsModel
     {
         return $this->customCliArgumentsModel;
     }

@@ -1,48 +1,41 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
-use EllisLab\ExpressionEngine\Model\Member\MemberGroup;
-use EllisLab\ExpressionEngine\Model\Channel\ChannelLayout;
-use EllisLab\ExpressionEngine\Model\Site\Site as SiteModel;
-use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 use EllisLab\ExpressionEngine\Model\Channel\Channel as ChannelModel;
-use EllisLab\ExpressionEngine\Model\Channel\Display\DefaultChannelLayout;
-use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
 use EllisLab\ExpressionEngine\Model\Channel\ChannelField as ChannelFieldModel;
+use EllisLab\ExpressionEngine\Model\Channel\ChannelLayout;
+use EllisLab\ExpressionEngine\Model\Channel\Display\DefaultChannelLayout;
+use EllisLab\ExpressionEngine\Model\Member\MemberGroup;
+use EllisLab\ExpressionEngine\Model\Site\Site as SiteModel;
+use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
+use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
+use Exception;
+use function array_values;
+use function in_array;
+use function mb_strtolower;
+use function str_replace;
 
-/**
- * Class LayoutDesignerService
- */
 class LayoutDesignerService
 {
     /** @var ModelFacade $modelFacade */
     private $modelFacade;
 
     /** @var array $fieldNameToIdMap */
-    private $fieldNameToIdMap = array();
+    private $fieldNameToIdMap = [];
 
     /** @var array $fieldIdStrToNameMap */
-    private $fieldIdStrToNameMap = array();
+    private $fieldIdStrToNameMap = [];
 
     /** @var array $requiredFieldMap */
-    private $requiredFieldMap = array(
+    private $requiredFieldMap = [
         'title' => true,
         'url_title' => true,
         'entry_date' => true,
-    );
+    ];
 
-    /**
-     * LayoutDesignerService constructor
-     * @param ModelFacade $modelFacade
-     */
     public function __construct(ModelFacade $modelFacade)
     {
         $this->modelFacade = $modelFacade;
@@ -52,18 +45,18 @@ class LayoutDesignerService
         foreach ($fields as $field) {
             /** @var ChannelFieldModel $field */
 
-            $fieldId = $field->getProperty('field_id');
-            $fieldIdStr = "field_id_{$fieldId}";
-            $fieldName = $field->getProperty('field_name');
+            $fieldId    = $field->getProperty('field_id');
+            $fieldIdStr = 'field_id_' . $fieldId;
+            $fieldName  = $field->getProperty('field_name');
 
-            $this->fieldNameToIdMap[$fieldName] = $fieldId;
+            $this->fieldNameToIdMap[$fieldName]     = $fieldId;
             $this->fieldIdStrToNameMap[$fieldIdStr] = $fieldIdStr;
-            $this->requiredFieldMap[$fieldIdStr] = $field->getProperty(
+            $this->requiredFieldMap[$fieldIdStr]    = $field->getProperty(
                 'field_required'
             );
-            $this->requiredFieldMap['title'] = true;
-            $this->requiredFieldMap['url_title'] = true;
-            $this->requiredFieldMap['entry_date'] = true;
+            $this->requiredFieldMap['title']        = true;
+            $this->requiredFieldMap['url_title']    = true;
+            $this->requiredFieldMap['entry_date']   = true;
         }
     }
 
@@ -72,12 +65,13 @@ class LayoutDesignerService
 
     /**
      * Set the site name
-     * @param string $str
+     *
      * @return LayoutDesignerService
      */
-    public function siteName($str): self
+    public function siteName(string $str) : self
     {
         $this->siteName = $str;
+
         return $this;
     }
 
@@ -86,12 +80,13 @@ class LayoutDesignerService
 
     /**
      * Set the channel
-     * @param string $str
+     *
      * @return LayoutDesignerService
      */
-    public function channel($str): self
+    public function channel(string $str) : self
     {
         $this->channel = $str;
+
         return $this;
     }
 
@@ -100,40 +95,43 @@ class LayoutDesignerService
 
     /**
      * Set the layout name
-     * @param string $str
+     *
      * @return LayoutDesignerService
      */
-    public function layoutName($str): self
+    public function layoutName(string $str) : self
     {
         $this->layoutName = $str;
+
         return $this;
     }
 
     /** @var array $memberGroups */
-    private $addMemberGroups = array();
+    private $addMemberGroups = [];
 
     /**
      * Add member group
-     * @param string $str
+     *
      * @return LayoutDesignerService
      */
-    public function addMemberGroup($str): self
+    public function addMemberGroup(string $str) : self
     {
         $this->addMemberGroups[] = $str;
+
         return $this;
     }
 
     /** @var array $memberGroups */
-    private $removeMemberGroups = array();
+    private $removeMemberGroups = [];
 
     /**
      * Remove member group
-     * @param string $str
+     *
      * @return LayoutDesignerService
      */
-    public function removeMemberGroup($str): self
+    public function removeMemberGroup(string $str) : self
     {
         $this->removeMemberGroups[] = $str;
+
         return $this;
     }
 
@@ -142,94 +140,101 @@ class LayoutDesignerService
 
     /**
      * Set the tab to add fields to
-     * @param string $str
+     *
      * @return LayoutDesignerService
      */
-    public function tab($str): self
+    public function tab(string $str) : self
     {
         $this->tab = $str;
+
         return $this;
     }
 
     /** @var array $removeTabs */
-    private $removeTabs = array();
+    private $removeTabs = [];
 
     /**
      * Remove a tab
-     * @param string $str
+     *
      * @return LayoutDesignerService
      */
-    public function removeTab($str): self
+    public function removeTab(string $str) : self
     {
         $this->removeTabs[] = $str;
+
         return $this;
     }
 
     /** @var array $tabVisibility */
-    private $tabVisibility = array();
+    private $tabVisibility = [];
 
     /**
      * Set whether the current working tab is visible
-     * @param bool $val
+     *
      * @return LayoutDesignerService
      */
-    public function tabIsVisible($val = true): self
+    public function tabIsVisible(bool $val = true) : self
     {
         $this->tabVisibility[$this->tab] = $val;
+
         return $this;
     }
 
     /** @var array $tabFields */
-    private $tabFields = array();
+    private $tabFields = [];
 
     /** @var string $currentField */
     private $currentField;
 
     /**
      * Add field to current tab
-     * @param string $str
+     *
      * @return LayoutDesignerService
      */
-    public function addField($str): self
+    public function addField(string $str) : self
     {
-        $this->currentField = $str;
+        $this->currentField            = $str;
         $this->tabFields[$this->tab][] = $str;
+
         return $this;
     }
 
     /** @var array $fieldVisibility */
-    private $fieldVisibility = array();
+    private $fieldVisibility = [];
 
     /**
      * Set whether the current field is visible
-     * @param bool $val
+     *
      * @return LayoutDesignerService
      */
-    public function fieldIsVisible($val = true): self
+    public function fieldIsVisible(bool $val = true) : self
     {
         $this->fieldVisibility[$this->currentField] = $val;
+
         return $this;
     }
 
     /** @var array $fieldCollapsed */
-    private $fieldCollapsed = array();
+    private $fieldCollapsed = [];
 
     /**
      * Set whether the current field is collapsed
-     * @param bool $val
+     *
      * @return LayoutDesignerService
      */
-    public function fieldIsCollapsed($val = true): self
+    public function fieldIsCollapsed(bool $val = true) : self
     {
         $this->fieldCollapsed[$this->currentField] = $val;
+
         return $this;
     }
 
     /**
      * Save schema design
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    public function save(): void
+    public function save() : void
     {
         // Set required items
         $this->setSiteModel();
@@ -245,12 +250,13 @@ class LayoutDesignerService
 
     /**
      * Set site model
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    private function setSiteModel(): void
+    private function setSiteModel() : void
     {
         if (! $this->siteName) {
-            throw new \Exception('Site name not defined');
+            throw new Exception('Site name not defined');
         }
 
         /** @var SiteModel $site */
@@ -259,7 +265,7 @@ class LayoutDesignerService
             ->first();
 
         if (! $this->siteModel) {
-            throw new \Exception('Site not found');
+            throw new Exception('Site not found');
         }
     }
 
@@ -268,12 +274,13 @@ class LayoutDesignerService
 
     /**
      * Set Channel Model
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    private function setChannelModel(): void
+    private function setChannelModel() : void
     {
         if (! $this->channel) {
-            throw new \Exception('Channel not defined');
+            throw new Exception('Channel not defined');
         }
 
         /** @var SiteModel $site */
@@ -283,7 +290,7 @@ class LayoutDesignerService
             ->first();
 
         if (! $this->channelModel) {
-            throw new \Exception('Channel not found');
+            throw new Exception('Channel not found');
         }
     }
 
@@ -292,15 +299,16 @@ class LayoutDesignerService
 
     /**
      * Set layout model
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    private function setLayoutModel(): void
+    private function setLayoutModel() : void
     {
         if (! $this->layoutName) {
-            throw new \Exception('Layout name not defined');
+            throw new Exception('Layout name not defined');
         }
 
-        $siteId = $this->siteModel->getProperty('site_id');
+        $siteId    = $this->siteModel->getProperty('site_id');
         $channelId = $this->channelModel->getProperty('channel_id');
 
         /** @var ChannelLayout $layoutModel */
@@ -324,28 +332,28 @@ class LayoutDesignerService
     /**
      * Process tabs and fields
      */
-    private function processTabsAndFields(): void
+    private function processTabsAndFields() : void
     {
         // Start variables
-        $placedFieldIds = array();
-        $firstTabId = 'publish';
+        $placedFieldIds = [];
+        $firstTabId     = 'publish';
 
         // The publish tab is always first and always visible
-        $tabs = array(
-            'publish' => array(
+        $tabs = [
+            'publish' => [
                 'id' => 'publish',
                 'name' => 'publish',
                 'visible' => true,
-                'fields' => array(),
-            )
-        );
+                'fields' => [],
+            ],
+        ];
 
         // Iterate through user set tab fields
         foreach ($this->tabFields as $tab => $fieldNames) {
             /** @var array $fieldNames */
 
             // Create the tab ID
-            $tabId = str_replace(' ', '_', strtolower($tab));
+            $tabId = str_replace(' ', '_', mb_strtolower($tab));
 
             // If the tab ID is publish, it cannot be hidden
             if ($tabId === 'publish') {
@@ -353,14 +361,14 @@ class LayoutDesignerService
             }
 
             // Create the tab
-            $tabs[$tabId] = array(
+            $tabs[$tabId] = [
                 'id' => $tabId,
                 'name' => $tab,
                 'visible' => isset($this->tabVisibility[$tab]) ?
                     $this->tabVisibility[$tab] !== false :
                     true,
-                'fields' => array(),
-            );
+                'fields' => [],
+            ];
 
             // Iterate through the field names
             foreach ($fieldNames as $fieldName) {
@@ -383,7 +391,7 @@ class LayoutDesignerService
                 }
 
                 // Add the field to the fields array on the tab
-                $tabs[$tabId]['fields'][] = array(
+                $tabs[$tabId]['fields'][] = [
                     'field' => $fieldIdStr,
                     'visible' => isset($this->fieldVisibility[$fieldName]) ?
                         $this->fieldVisibility[$fieldName] !== false :
@@ -391,7 +399,7 @@ class LayoutDesignerService
                     'collapsed' => isset($this->fieldCollapsed[$fieldName]) ?
                         $this->fieldCollapsed[$fieldName] === true :
                         false,
-                );
+                ];
 
                 // Make note that we've placed this field
                 $placedFieldIds[$fieldIdStr] = $fieldIdStr;
@@ -408,7 +416,7 @@ class LayoutDesignerService
             $tabId = $layoutTab['id'];
 
             // If we're supposed to remove this tab, let's stop
-            if (\in_array($layoutTab['name'], $this->removeTabs, true)) {
+            if (in_array($layoutTab['name'], $this->removeTabs, true)) {
                 continue;
             }
 
@@ -418,14 +426,14 @@ class LayoutDesignerService
             }
 
             // Set up the tab
-            $tabs[$tabId] = array(
+            $tabs[$tabId] = [
                 'id' => $tabId,
                 'name' => $layoutTab['name'],
                 'visible' => isset($this->tabVisibility[$layoutTab['name']]) ?
                     $this->tabVisibility[$layoutTab['name']] !== false :
                     $layoutTab['visible'],
-                'fields' => array(),
-            );
+                'fields' => [],
+            ];
         }
 
         // Iterate through the old tabs again and set fields
@@ -463,7 +471,7 @@ class LayoutDesignerService
                 }
 
                 // Add the field to the fields array on the tab
-                $tabs[$tabId]['fields'][] = array(
+                $tabs[$tabId]['fields'][] = [
                     'field' => $fieldIdStr,
                     'visible' => isset($this->fieldVisibility[$fieldName]) ?
                         $this->fieldVisibility[$fieldName] !== false :
@@ -471,7 +479,7 @@ class LayoutDesignerService
                     'collapsed' => isset($this->fieldCollapsed[$fieldName]) ?
                         $this->fieldCollapsed[$fieldName] === true :
                         $field['collapsed'],
-                );
+                ];
 
                 $placedFieldIds[$fieldIdStr] = $fieldIdStr;
             }
@@ -490,11 +498,11 @@ class LayoutDesignerService
             }
 
             // Add the field to the fields array on the tab
-            $tabs[$firstTabId]['fields'][] = array(
+            $tabs[$firstTabId]['fields'][] = [
                 'field' => $fieldIdStr,
                 'visible' => false,
                 'collapsed' => false,
-            );
+            ];
         }
 
         // Get the default layout
@@ -511,12 +519,12 @@ class LayoutDesignerService
 
             // Make sure the tab exists
             if (! isset($tabs[$tabId])) {
-                $tabs[$tabId] = array(
+                $tabs[$tabId] = [
                     'id' => $layoutTab['id'],
                     'name' => $layoutTab['name'],
                     'visible' => false,
-                    'fields' => array(),
-                );
+                    'fields' => [],
+                ];
             }
 
             /** @var array $tabFields */
@@ -543,19 +551,19 @@ class LayoutDesignerService
     /**
      * Process remove member groups
      */
-    private function processMemberGroups(): void
+    private function processMemberGroups() : void
     {
         // Get the member groups
         /** @var ModelCollection $memberGroups */
         $memberGroups = $this->layoutModel->MemberGroups;
 
-        $memberGroupIds = array();
+        $memberGroupIds = [];
 
         // Go through member groups and check if we should delete any of them
         foreach ($memberGroups as $memberGroup) {
             /** @var MemberGroup $memberGroup */
 
-            if (\in_array(
+            if (in_array(
                 $memberGroup->getProperty('group_title'),
                 $this->removeMemberGroups,
                 true
@@ -572,18 +580,20 @@ class LayoutDesignerService
         if (! $this->addMemberGroups) {
             if (! $memberGroupIds) {
                 $this->layoutModel->MemberGroups = null;
+
                 return;
             }
             $this->layoutModel->MemberGroups = $this->modelFacade->get('MemberGroup')
                 ->filter('group_id', 'IN', array_values($memberGroupIds))
                 ->all();
+
             return;
         }
 
         // Check all other layouts for this channel to see if the member group
         // is assigned to a different layout
-        $siteId = $this->siteModel->getProperty('site_id');
-        $channelId = $this->channelModel->getProperty('channel_id');
+        $siteId       = $this->siteModel->getProperty('site_id');
+        $channelId    = $this->channelModel->getProperty('channel_id');
         $otherLayouts = $this->modelFacade->get('ChannelLayout')
             ->filter('site_id', $siteId)
             ->filter('channel_id', $channelId)
@@ -598,12 +608,12 @@ class LayoutDesignerService
             /** @var ModelCollection $thisMemberGroups */
             $thisMemberGroups = $otherLayout->MemberGroups;
 
-            $thisMemberGroupIds = array();
+            $thisMemberGroupIds = [];
 
             foreach ($thisMemberGroups as $memberGroup) {
                 /** @var MemberGroup $memberGroup */
 
-                if (\in_array(
+                if (in_array(
                     $memberGroup->getProperty('group_title'),
                     $this->addMemberGroups,
                     true
@@ -649,6 +659,7 @@ class LayoutDesignerService
 
         if (! $memberGroupIds) {
             $this->layoutModel->MemberGroups = null;
+
             return;
         }
 

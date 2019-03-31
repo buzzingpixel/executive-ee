@@ -1,20 +1,12 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
-use Executive_upd;
 use EllisLab\ExpressionEngine\Library\Filesystem\FilesystemException;
+use Executive_upd;
 
-/**
- * Class CliInstallService
- */
 class CliInstallService
 {
     /** @var Executive_upd $executiveUpd */
@@ -22,7 +14,6 @@ class CliInstallService
 
     /**
      * CliInstallService constructor
-     * @param Executive_upd $executiveUpd
      */
     public function __construct(Executive_upd $executiveUpd)
     {
@@ -31,9 +22,10 @@ class CliInstallService
 
     /**
      * Runs the installation
+     *
      * @throws FilesystemException
      */
-    public function run(): void
+    public function run() : void
     {
         $this->executiveUpd->install();
     }

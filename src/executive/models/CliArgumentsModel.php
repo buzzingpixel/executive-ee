@@ -1,28 +1,22 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\models;
 
-/**
- * Class CliArgumentsModel
- */
+use function array_values;
+use function explode;
+use function mb_strpos;
+
 class CliArgumentsModel
 {
     /** @var array $rawArguments */
     private $rawArguments = [];
-
     /** @var array $parsedArguments */
     private $parsedArguments = [];
 
     /**
      * CliArgumentsModel constructor
-     * @param array $rawArguments
      */
     public function __construct(
         array $rawArguments = []
@@ -33,14 +27,14 @@ class CliArgumentsModel
     /**
      * Sets raw arguments array
      *
-     * @param array $rawArguments
      * @param bool $omitFirst Defaults to true
+     *
      * @return CliArgumentsModel
      */
     public function setRawArguments(
         array $rawArguments,
         bool $omitFirst = true
-    ): self {
+    ) : self {
         $rawArguments = array_values($rawArguments);
 
         if ($omitFirst) {
@@ -64,7 +58,7 @@ class CliArgumentsModel
                 continue;
             }
 
-            if (strpos($rawArgument, '--') !== 0) {
+            if (mb_strpos($rawArgument, '--') !== 0) {
                 continue;
             }
 
@@ -84,28 +78,24 @@ class CliArgumentsModel
 
     /**
      * Gets raw arguments
-     * @return array
      */
-    public function getRawArguments(): array
+    public function getRawArguments() : array
     {
         return $this->rawArguments;
     }
 
     /**
      * Gets parsed arguments
-     * @return array
      */
-    public function getParsedArguments(): array
+    public function getParsedArguments() : array
     {
         return $this->parsedArguments;
     }
 
     /**
      * Gets a specific argument
-     * @param string $key
-     * @return string|null
      */
-    public function getArgument(string $key): ?string
+    public function getArgument(string $key) : ?string
     {
         return $this->parsedArguments[$key] ?? null;
     }

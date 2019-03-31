@@ -1,22 +1,27 @@
 <?php
+
 declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
 use EE_Config;
-use Exception;
-use EE_Template;
 use EE_Extensions;
+use EE_Template;
 use EllisLab\ExpressionEngine\Legacy\Facade as LegacyApp;
+use Throwable;
+use function array_merge;
+use function file_exists;
+use function file_get_contents;
+use function ltrim;
+use function microtime;
+use function random_int;
 
 class EETemplateService extends EE_Template
 {
     /** @var EE_Config $config */
     private $config;
-
     /** @var LegacyApp $legacyApp */
     private $legacyApp;
-
     /** @var EE_Extensions $extensions */
     private $extensions;
 
@@ -24,8 +29,8 @@ class EETemplateService extends EE_Template
     {
         parent::__construct();
 
-        $this->config = ee()->config;
-        $this->legacyApp = ee();
+        $this->config     = ee()->config;
+        $this->legacyApp  = ee();
         $this->extensions = ee()->extensions;
     }
 
@@ -33,7 +38,7 @@ class EETemplateService extends EE_Template
         string $group,
         string $template,
         array $variables = []
-    ): string {
+    ) : string {
         $this->start_microtime = microtime(true);
 
         $primaryInstance = $this->legacyApp->TMPL;
@@ -56,7 +61,7 @@ class EETemplateService extends EE_Template
                 $this->_garbage_collect_cache();
                 ee('ChannelSet')->garbageCollect();
             }
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
         }
 
         $this->log_item("Template: {$group}/{$template}");
@@ -86,7 +91,7 @@ class EETemplateService extends EE_Template
         return $this->final_template;
     }
 
-    public function renderPath(string $path, array $variables = []): string
+    public function renderPath(string $path, array $variables = []) : string
     {
         if (! file_exists($path)) {
             $path = APP_DIR . '/' . ltrim($path, '/');
@@ -101,7 +106,7 @@ class EETemplateService extends EE_Template
         return $this->renderString($templateContents, $variables);
     }
 
-    public function renderString(string $str, array $variables = []): string
+    public function renderString(string $str, array $variables = []) : string
     {
         $this->start_microtime = microtime(true);
 

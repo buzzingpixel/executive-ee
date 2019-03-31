@@ -1,53 +1,41 @@
 <?php
+
 declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
-
-use DI\NotFoundException;
-use DI\DependencyException;
-use buzzingpixel\executive\ExecutiveDi;
-use EllisLab\ExpressionEngine\Library\CP\Table;
-use buzzingpixel\executive\services\ViewService;
-use EllisLab\ExpressionEngine\Service\URL\URLFactory;
-use EllisLab\ExpressionEngine\Service\Alert\AlertCollection;
-use EllisLab\ExpressionEngine\Core\Request as RequestService;
-use buzzingpixel\executive\exceptions\InvalidViewConfigurationException;
 use buzzingpixel\executive\exceptions\DependencyInjectionBuilderException;
+use buzzingpixel\executive\exceptions\InvalidViewConfigurationException;
+use buzzingpixel\executive\ExecutiveDi;
+use buzzingpixel\executive\services\ViewService;
+use DI\DependencyException;
+use DI\NotFoundException;
+use EllisLab\ExpressionEngine\Core\Request as RequestService;
+use EllisLab\ExpressionEngine\Library\CP\Table;
+use EllisLab\ExpressionEngine\Service\Alert\AlertCollection;
+use EllisLab\ExpressionEngine\Service\URL\URLFactory;
 
-/**
- * Class Executive_mcp
- */
-// @codingStandardsIgnoreStart
 class Executive_mcp
-// @codingStandardsIgnoreEnd
 {
-    /** @var \EE_Config $configService */
+    /** @var EE_Config $configService */
     private $configService;
-
     /** @var RequestService $requestService */
     private $requestService;
-
     /** @var URLFactory $urlFactory */
     private $urlFactory;
-
     /** @var ViewService $viewService */
     private $viewService;
 
     /**
      * Executive_mcp constructor
+     *
      * @throws NotFoundException
      * @throws DependencyException
      * @throws DependencyInjectionBuilderException
      */
     public function __construct()
     {
-        $this->configService = ee()->config;
+        $this->configService  = ee()->config;
         $this->requestService = ee('Request');
-        $this->urlFactory = ee('CP/URL');
+        $this->urlFactory     = ee('CP/URL');
 
         $this->viewService = ExecutiveDi::make(
             ViewService::INTERNAL_DI_NAME
@@ -56,10 +44,10 @@ class Executive_mcp
 
     /**
      * Executive's control panel method
-     * @return array
+     *
      * @throws InvalidViewConfigurationException
      */
-    public function index(): array
+    public function index() : array
     {
         // Get controller param
         $section = $this->requestService->get('section');
@@ -100,8 +88,8 @@ class Executive_mcp
 
         try {
             $class = ExecutiveDi::make($sectionConfig[$page]['class']);
-        } catch (\Throwable $e) {
-            $class = new $sectionConfig[$page]['class'];
+        } catch (Throwable $e) {
+            $class = new $sectionConfig[$page]['class']();
         }
 
         return $class->{$sectionConfig[$page]['method']}();
@@ -109,17 +97,17 @@ class Executive_mcp
 
     /**
      * Shows available sections
+     *
      * @return array
+     *
      * @throws InvalidViewConfigurationException
      */
-    private function showAvailableSections(): array
+    private function showAvailableSections() : array
     {
         /** @var Table $table */
         $table = ee('CP/Table');
 
-        $table->setColumns([
-            '',
-        ]);
+        $table->setColumns(['']);
 
         $table->setNoResultsText('noCpSections');
 
@@ -134,9 +122,7 @@ class Executive_mcp
 
             $data[][] = [
                 'content' => $section['index']['title'],
-                'href' => $this->urlFactory->make('addons/settings/executive', [
-                    'section' => $sectionHandle
-                ])
+                'href' => $this->urlFactory->make('addons/settings/executive', ['section' => $sectionHandle]),
             ];
         }
 
@@ -146,7 +132,7 @@ class Executive_mcp
             'heading' => lang('userCpSections'),
             'body' => $this->viewService->setView('CP/Index')->render([
                 'table' => $table->viewData(),
-            ])
+            ]),
         ];
     }
 }

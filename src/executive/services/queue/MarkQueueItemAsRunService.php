@@ -1,28 +1,32 @@
 <?php
+
 declare(strict_types=1);
 
 namespace buzzingpixel\executive\services\queue;
 
+use buzzingpixel\executive\factories\QueryBuilderFactory;
+use buzzingpixel\executive\models\ActionQueueItemModel;
 use DateTime;
 use DateTimeZone;
-use buzzingpixel\executive\models\ActionQueueItemModel;
-use buzzingpixel\executive\factories\QueryBuilderFactory;
 
 class MarkQueueItemAsRunService
 {
+    /** @var QueryBuilderFactory $queryBuilderFactory */
     private $queryBuilderFactory;
+    /** @var UpdateActionQueueStatusService $updateActionQueueStatus */
     private $updateActionQueueStatus;
 
     public function __construct(
         QueryBuilderFactory $queryBuilderFactory,
         UpdateActionQueueStatusService $updateActionQueueStatus
     ) {
-        $this->queryBuilderFactory = $queryBuilderFactory;
+        $this->queryBuilderFactory     = $queryBuilderFactory;
         $this->updateActionQueueStatus = $updateActionQueueStatus;
     }
 
-    public function markQueueItemAsRun(ActionQueueItemModel $model): void
+    public function markQueueItemAsRun(ActionQueueItemModel $model) : void
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $dateTime = new DateTime();
         $dateTime->setTimezone(new DateTimeZone('UTC'));
 

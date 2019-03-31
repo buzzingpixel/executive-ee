@@ -1,17 +1,13 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\traits;
 
-/**
- * Class TruthyTrait
- */
+use function in_array;
+use function is_string;
+use function mb_strtolower;
+
 trait TruthyTrait
 {
     public static $truthyValues = [
@@ -25,15 +21,13 @@ trait TruthyTrait
 
     /**
      * Checks if the incoming value is truthy
-     * @param mixed $val
-     * @return bool
      */
-    public function isValueTruthy($val): bool
+    public function isValueTruthy($val) : bool
     {
-        if (\is_string($val)) {
-            $val = strtolower($val);
+        if (is_string($val)) {
+            $val = mb_strtolower($val);
         }
 
-        return \in_array($val, self::$truthyValues, true);
+        return in_array($val, self::$truthyValues, true);
     }
 }

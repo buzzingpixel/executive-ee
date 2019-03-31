@@ -1,39 +1,29 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
-use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
-use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
 use EllisLab\ExpressionEngine\Model\Addon\Extension as ExtensionModel;
+use EllisLab\ExpressionEngine\Service\Database\Query as QueryBuilder;
+use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
+use Exception;
 
-/**
- * Class ExtensionDesignerService
- */
 class ExtensionDesignerService
 {
     /** @var ModelFacade $modelFacade */
     private $modelFacade;
-
     /** @var QueryBuilder $queryBuilder */
     private $queryBuilder;
 
     /**
      * ExtensionDesignerService constructor
-     * @param ModelFacade $modelFacade
-     * @param QueryBuilder $queryBuilder
      */
     public function __construct(
         ModelFacade $modelFacade,
         QueryBuilder $queryBuilder
     ) {
-        $this->modelFacade = $modelFacade;
+        $this->modelFacade  = $modelFacade;
         $this->queryBuilder = $queryBuilder;
     }
 
@@ -43,12 +33,12 @@ class ExtensionDesignerService
     /**
      * Set the extension class to call
      *
-     * @param string $str
      * @return ExtensionDesignerService
      */
-    public function extClass($str): self
+    public function extClass(string $str) : self
     {
         $this->extClass = $str;
+
         return $this;
     }
 
@@ -58,12 +48,12 @@ class ExtensionDesignerService
     /**
      * Set the extension method to call
      *
-     * @param string $str
      * @return ExtensionDesignerService
      */
-    public function extMethod($str): self
+    public function extMethod(string $str) : self
     {
         $this->extMethod = $str;
+
         return $this;
     }
 
@@ -73,12 +63,12 @@ class ExtensionDesignerService
     /**
      * Set the hook the extension should run on
      *
-     * @param string $str
      * @return ExtensionDesignerService
      */
-    public function extHook($str): self
+    public function extHook(string $str) : self
     {
         $this->extHook = $str;
+
         return $this;
     }
 
@@ -88,37 +78,38 @@ class ExtensionDesignerService
     /**
      * Set the hook the extension should run on
      *
-     * @param int $int
      * @return ExtensionDesignerService
      */
-    public function extPriority($int): self
+    public function extPriority(int $int) : self
     {
         $this->extPriority = (int) $int;
+
         return $this;
     }
 
     /**
      * Add the extension
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    public function add(): void
+    public function add() : void
     {
         $this->checkPropertiesSet();
 
         if (! $this->extPriority) {
-            throw new \Exception(lang('extPriorityRequired'));
+            throw new Exception(lang('extPriorityRequired'));
         }
 
-        $this->queryBuilder->insert('executive_user_extensions', array(
+        $this->queryBuilder->insert('executive_user_extensions', [
             'class' => $this->extClass,
             'method' => $this->extMethod,
             'hook' => $this->extHook,
-        ));
+        ]);
 
         /** @var ExtensionModel $extension */
         $extension = $this->modelFacade->make('Extension');
 
-        $extension->set(array(
+        $extension->set([
             'class' => 'Executive_ext',
             'method' => "userExtensionRouting__{$this->queryBuilder->insert_id()}",
             'hook' => $this->extHook,
@@ -126,16 +117,17 @@ class ExtensionDesignerService
             'priority' => $this->extPriority,
             'version' => EXECUTIVE_VER,
             'enabled' => 'y',
-        ));
+        ]);
 
         $extension->save();
     }
 
     /**
      * Remove extension
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    public function remove(): void
+    public function remove() : void
     {
         $this->checkPropertiesSet();
 
@@ -158,27 +150,26 @@ class ExtensionDesignerService
             ->filter('hook', $this->extHook)
             ->delete();
 
-        $this->queryBuilder->delete('executive_user_extensions', array(
-            'id' => $id,
-        ));
+        $this->queryBuilder->delete('executive_user_extensions', ['id' => $id]);
     }
 
     /**
      * Check properties set
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    private function checkPropertiesSet(): void
+    private function checkPropertiesSet() : void
     {
         if (! $this->extClass) {
-            throw new \Exception(lang('extClassRequired'));
+            throw new Exception(lang('extClassRequired'));
         }
 
         if (! $this->extMethod) {
-            throw new \Exception(lang('extMethodRequired'));
+            throw new Exception(lang('extMethodRequired'));
         }
 
         if (! $this->extHook) {
-            throw new \Exception(lang('extHookRequired'));
+            throw new Exception(lang('extHookRequired'));
         }
     }
 }

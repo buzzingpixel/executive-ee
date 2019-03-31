@@ -1,54 +1,40 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
-use EE_Config;
-use buzzingpixel\executive\models\CommandModel;
-use EllisLab\ExpressionEngine\Service\Addon\Addon;
-use buzzingpixel\executive\models\ScheduleItemModel;
+use buzzingpixel\executive\factories\CliArgumentsModelFactory;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
 use buzzingpixel\executive\factories\ScheduleItemModelFactory;
-use buzzingpixel\executive\factories\CliArgumentsModelFactory;
+use buzzingpixel\executive\models\CommandModel;
+use buzzingpixel\executive\models\ScheduleItemModel;
+use EE_Config;
+use EllisLab\ExpressionEngine\Service\Addon\Addon;
 use EllisLab\ExpressionEngine\Service\Addon\Factory as AddOnFactory;
+use function array_filter;
+use function array_map;
+use function array_merge;
+use function array_values;
+use function is_array;
 
-/**
- * Class ScheduleService
- */
 class ScheduleService
 {
     /** @var EE_Config $config */
     private $config;
-
     /** @var AddOnFactory $addOnFactory */
     private $addOnFactory;
-
     /** @var CommandsService $commandsService */
     private $commandsService;
-
     /** @var ScheduleItemModelFactory $scheduleItemModelFactory */
     private $scheduleItemModelFactory;
-
     /** @var QueryBuilderFactory $queryBuilderFactory */
     private $queryBuilderFactory;
-
     /** @var CliArgumentsModelFactory $cliArgumentsModelFactory */
     private $cliArgumentsModelFactory;
 
     /**
      * ScheduleService constructor
-     * @param EE_Config $config
-     * @param AddOnFactory $addOnFactory
-     * @param CommandsService $commandsService
-     * @param ScheduleItemModelFactory $scheduleItemModelFactory
-     * @param QueryBuilderFactory $queryBuilderFactory
-     * @param CliArgumentsModelFactory $cliArgumentsModelFactory
      */
     public function __construct(
         EE_Config $config,
@@ -58,33 +44,34 @@ class ScheduleService
         QueryBuilderFactory $queryBuilderFactory,
         CliArgumentsModelFactory $cliArgumentsModelFactory
     ) {
-        $this->config = $config;
-        $this->addOnFactory = $addOnFactory;
-        $this->commandsService = $commandsService;
+        $this->config                   = $config;
+        $this->addOnFactory             = $addOnFactory;
+        $this->commandsService          = $commandsService;
         $this->scheduleItemModelFactory = $scheduleItemModelFactory;
-        $this->queryBuilderFactory = $queryBuilderFactory;
+        $this->queryBuilderFactory      = $queryBuilderFactory;
         $this->cliArgumentsModelFactory = $cliArgumentsModelFactory;
     }
 
     /**
      * Gets the schedule item models
+     *
      * @return ScheduleItemModel[]
      */
-    public function getSchedule(): array
+    public function getSchedule() : array
     {
         $scheduleConfig = [];
-        $userSchedule = $this->config->item('schedule');
-        $userSchedule = \is_array($userSchedule) ? $userSchedule : [];
+        $userSchedule   = $this->config->item('schedule');
+        $userSchedule   = is_array($userSchedule) ? $userSchedule : [];
 
         if ($userSchedule) {
             $scheduleConfig['user'] = $userSchedule;
         }
 
         $providerSchedule = array_map(
-            function (Addon $addOn) {
+            static function (Addon $addOn) {
                 $provider = $addOn->getProvider();
                 $schedule = $provider->get('schedule');
-                $schedule = \is_array($schedule) ? $schedule : [];
+                $schedule = is_array($schedule) ? $schedule : [];
 
                 if (! $schedule) {
                     return false;
@@ -95,7 +82,7 @@ class ScheduleService
             $this->addOnFactory->installed()
         );
 
-        $providerSchedule = array_filter($providerSchedule, function ($i) {
+        $providerSchedule = array_filter($providerSchedule, static function ($i) {
             return $i !== false;
         });
 
@@ -103,14 +90,14 @@ class ScheduleService
 
         $commandGroups = $this->commandsService->getCommandGroups();
 
-        $namesToQuery = [];
+        $namesToQuery   = [];
         $scheduleModels = [];
 
         foreach ($scheduleConfig as $sourceName => $config) {
             foreach ($config as $scheduleConfigItem) {
                 $groupName = $scheduleConfigItem['group'] ?? '';
-                $command = $scheduleConfigItem['command'] ?? '';
-                $group = $commandGroups[$groupName] ?? '';
+                $command   = $scheduleConfigItem['command'] ?? '';
+                $group     = $commandGroups[$groupName] ?? '';
 
                 /** @var CommandModel $commandModel */
                 $commandModel = $group[$command] ?? null;
@@ -141,7 +128,7 @@ class ScheduleService
                 $model->setRunEvery($scheduleConfigItem['runEvery'] ?? 'Always');
                 $model->setCommandModel($commandModel);
 
-                $namesToQuery[] = $model->getName();
+                $namesToQuery[]                    = $model->getName();
                 $scheduleModels[$model->getName()] = $model;
             }
         }
@@ -172,9 +159,8 @@ class ScheduleService
 
     /**
      * Saves the schedule model
-     * @param ScheduleItemModel $model
      */
-    public function saveSchedule(ScheduleItemModel $model): void
+    public function saveSchedule(ScheduleItemModel $model) : void
     {
         $saveArray = [
             'name' => $model->getName(),

@@ -1,21 +1,17 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services\templatesync;
 
-use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
-use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
-use EllisLab\ExpressionEngine\Service\Model\Query\Builder as ModelQueryBuilder;
 use EllisLab\ExpressionEngine\Model\Template\TemplateGroup as TemplateGroupModel;
+use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
+use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
+use EllisLab\ExpressionEngine\Service\Model\Query\Builder as ModelQueryBuilder;
 
 class DeleteTemplateGroupsWithoutTemplatesService
 {
+    /** @var ModelFacade $modelFacade */
     private $modelFacade;
 
     public function __construct(ModelFacade $modelFacade)
@@ -23,7 +19,7 @@ class DeleteTemplateGroupsWithoutTemplatesService
         $this->modelFacade = $modelFacade;
     }
 
-    public function run(): void
+    public function run() : void
     {
         /** @var ModelQueryBuilder $query */
         $query = $this->modelFacade->get('TemplateGroup');
@@ -33,7 +29,7 @@ class DeleteTemplateGroupsWithoutTemplatesService
         /** @var ModelCollection $models */
         $models = $query->all();
 
-        $models->each(function (TemplateGroupModel $model) {
+        $models->each(static function (TemplateGroupModel $model) : void {
             if ($model->Templates->count()) {
                 return;
             }

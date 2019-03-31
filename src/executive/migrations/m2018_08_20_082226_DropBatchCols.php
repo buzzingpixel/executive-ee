@@ -1,11 +1,6 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\migrations;
 
@@ -13,7 +8,7 @@ use buzzingpixel\executive\abstracts\MigrationAbstract;
 
 class m2018_08_20_082226_DropBatchCols extends MigrationAbstract
 {
-    public function safeUp(): bool
+    public function safeUp() : bool
     {
         $execColExists = $this->queryBuilderFactory->make()->field_exists(
             'batch',
@@ -38,7 +33,7 @@ class m2018_08_20_082226_DropBatchCols extends MigrationAbstract
         return true;
     }
 
-    public function safeDown(): bool
+    public function safeDown() : bool
     {
         return true;
     }

@@ -1,23 +1,21 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
-use Exception;
-use EllisLab\ExpressionEngine\Model\Status\Status;
 use EllisLab\ExpressionEngine\Model\Channel\ChannelField;
 use EllisLab\ExpressionEngine\Model\Site\Site as SiteModel;
-use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
+use EllisLab\ExpressionEngine\Model\Status\Status;
 use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
+use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
+use Exception;
+use function array_keys;
+use function array_merge;
+use function array_values;
+use function in_array;
 
 /**
- * Class ChannelDesignerService
  * @deprecated This class is trying to do way too much and you can do it all with EE models and things
  */
 class ChannelDesignerService
@@ -37,53 +35,58 @@ class ChannelDesignerService
     /**
      * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
-    public function siteName($str): self
+    public function siteName($str) : self
     {
         $this->siteName = $str;
+
         return $this;
     }
 
-    private $statuses = array();
+    private $statuses = [];
 
     /**
      * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
-    public function addStatus($status, $color = '000000'): self
+    public function addStatus($status, $color = '000000') : self
     {
         $this->statuses[$status] = $color;
+
         return $this;
     }
 
-    private $removeStatuses = array();
+    private $removeStatuses = [];
 
     /**
      * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
-    public function removeStatus($status): self
+    public function removeStatus($status) : self
     {
         $this->removeStatuses[] = $status;
+
         return $this;
     }
 
-    private $fields = array();
+    private $fields = [];
 
     /**
      * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
-    public function addField($fieldArray): self
+    public function addField($fieldArray) : self
     {
         $this->fields[] = $fieldArray;
+
         return $this;
     }
 
-    private $removeFields = array();
+    private $removeFields = [];
 
     /**
      * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
-    public function removeField($fieldName): self
+    public function removeField($fieldName) : self
     {
         $this->removeFields[] = $fieldName;
+
         return $this;
     }
 
@@ -92,9 +95,10 @@ class ChannelDesignerService
     /**
      * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
-    public function channelName($str): self
+    public function channelName($str) : self
     {
         $this->channelName = $str;
+
         return $this;
     }
 
@@ -103,28 +107,31 @@ class ChannelDesignerService
     /**
      * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
-    public function channelTitle($str): self
+    public function channelTitle($str) : self
     {
         $this->channelTitle = $str;
+
         return $this;
     }
 
-    private $extendedChannelProperties = array();
+    private $extendedChannelProperties = [];
 
     /**
      * @deprecated This class is trying to do way too much and you can do it all with EE models and things
      */
-    public function extendedChannelProperties($properties): self
+    public function extendedChannelProperties($properties) : self
     {
         $this->extendedChannelProperties = $properties;
+
         return $this;
     }
 
     /**
-     * @throws Exception
      * @deprecated This class is trying to do way too much and you can do it all with EE models and things
+     *
+     * @throws Exception
      */
-    public function save(): void
+    public function save() : void
     {
         $this->setSiteModel();
         $this->addUpdateStatuses();
@@ -137,7 +144,7 @@ class ChannelDesignerService
     /**
      * @throws Exception
      */
-    private function setSiteModel(): void
+    private function setSiteModel() : void
     {
         if (! $this->siteName) {
             throw new Exception('Site name not defined');
@@ -153,7 +160,7 @@ class ChannelDesignerService
         }
     }
 
-    private function addUpdateStatuses(): void
+    private function addUpdateStatuses() : void
     {
         if (! $this->statuses) {
             return;
@@ -179,11 +186,11 @@ class ChannelDesignerService
                 $statusModel = $this->modelFacade->make('Status');
             }
 
-            $statusModel->set(array(
+            $statusModel->set([
                 'status' => $status,
                 'status_order' => $order,
                 'highlight' => $color,
-            ));
+            ]);
 
             $statusModel->save();
 
@@ -191,7 +198,7 @@ class ChannelDesignerService
         }
     }
 
-    private function addUpdateFields(): void
+    private function addUpdateFields() : void
     {
         if (! $this->fields) {
             return;
@@ -199,13 +206,9 @@ class ChannelDesignerService
 
         $siteId = $this->siteModel->getProperty('site_id');
 
-        $presetProperties = array(
-            'site_id' => $siteId,
-        );
+        $presetProperties = ['site_id' => $siteId];
 
-        $defaultProperties = array(
-            'field_name' => null,
-        );
+        $defaultProperties = ['field_name' => null];
 
         foreach ($this->fields as $field) {
             if (! isset($field['field_name'])) {
@@ -238,11 +241,11 @@ class ChannelDesignerService
 
             $fieldModel->save();
 
-            $_POST = array();
+            $_POST = [];
         }
     }
 
-    private function addOrUpdateChannel(): void
+    private function addOrUpdateChannel() : void
     {
         if (! $this->channelName) {
             return;
@@ -250,10 +253,10 @@ class ChannelDesignerService
 
         $siteId = $this->siteModel->getProperty('site_id');
 
-        $presetProperties = array(
+        $presetProperties = [
             'site_id' => $siteId,
             'channel_name' => $this->channelName,
-        );
+        ];
 
         $channelModel = $this->modelFacade->get('Channel')
             ->filter('site_id', $siteId)
@@ -292,9 +295,9 @@ class ChannelDesignerService
         $channelModel->save();
     }
 
-    private function getCustomFieldsCollection($existingFields = null): ModelCollection
+    private function getCustomFieldsCollection($existingFields = null) : ModelCollection
     {
-        $fieldShortNames = array();
+        $fieldShortNames = [];
 
         foreach ($this->fields as $field) {
             if (! isset($field['field_name'])) {
@@ -312,11 +315,11 @@ class ChannelDesignerService
                 ->all();
         }
 
-        $fields = array();
+        $fields = [];
 
         if ($existingFields) {
             foreach ($existingFields as $field) {
-                if (\in_array($field->field_name, $this->removeFields, false)) {
+                if (in_array($field->field_name, $this->removeFields, false)) {
                     continue;
                 }
 
@@ -331,12 +334,12 @@ class ChannelDesignerService
         return new ModelCollection(array_values($fields));
     }
 
-    private function getStatusCollection($existingStatuses = null): ModelCollection
+    private function getStatusCollection($existingStatuses = null) : ModelCollection
     {
-        $requiredStatuses = array(
+        $requiredStatuses = [
             'open',
             'closed',
-        );
+        ];
 
         $requiredStatusModels = $this->modelFacade->get('Status')
             ->filter('status', 'IN', $requiredStatuses)
@@ -350,7 +353,7 @@ class ChannelDesignerService
                 ->all();
         }
 
-        $statuses = array();
+        $statuses = [];
 
         foreach ($requiredStatusModels as $status) {
             $statuses[$status->status] = $status;
@@ -358,7 +361,7 @@ class ChannelDesignerService
 
         if ($existingStatuses) {
             foreach ($existingStatuses as $status) {
-                if (\in_array($status->status, $this->removeStatuses, false)) {
+                if (in_array($status->status, $this->removeStatuses, false)) {
                     continue;
                 }
 

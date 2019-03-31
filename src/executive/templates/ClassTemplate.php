@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace sample\name\space;
@@ -7,6 +8,7 @@ namespace sample\name\space;
  * TODO: This dependency is only an example, and would only be used for commands
  * It would not be used for a standard service, or a web controller
  */
+
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -37,9 +39,7 @@ $config['commands'] = [
 ```
  */
 
-/**
- * Class ClassTemplate
- */
+
 class ClassTemplate
 {
     /** @var OutputInterface $consoleOutput */
@@ -48,7 +48,6 @@ class ClassTemplate
     /**
      * @todo Set up all dependency injections
      * ClassTemplate constructor
-     * @param OutputInterface $consoleOutput
      */
     public function __construct(OutputInterface $consoleOutput)
     {
@@ -59,9 +58,8 @@ class ClassTemplate
      * @todo Name method appropriately and write appropriate description here
      * Writes "Hello {$someArgument} World!" to the console
      * php ee executive user customCommand --someArgument=SomeValue
-     * @param string $someArgument
      */
-    public function customMethod($someArgument): void
+    public function customMethod(string $someArgument) : void
     {
         // TODO: Update this method to do specific tasks
         $this->consoleOutput->writeln(

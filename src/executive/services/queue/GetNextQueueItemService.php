@@ -1,14 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace buzzingpixel\executive\services\queue;
 
-use Throwable;
-use buzzingpixel\executive\models\ActionQueueItemModel;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
+use buzzingpixel\executive\models\ActionQueueItemModel;
+use Throwable;
+use function json_decode;
 
 class GetNextQueueItemService
 {
+    /** @var QueryBuilderFactory $queryBuilderFactory */
     private $queryBuilderFactory;
 
     public function __construct(QueryBuilderFactory $queryBuilderFactory)
@@ -18,7 +21,7 @@ class GetNextQueueItemService
 
     public function getNextQueueItem(
         bool $markAsStarted = false
-    ): ?ActionQueueItemModel {
+    ) : ?ActionQueueItemModel {
         try {
             $actionQueueQuery = $this->queryBuilderFactory->make()
                 ->where('is_finished', 0)
@@ -51,27 +54,26 @@ class GetNextQueueItemService
                         'id' => $actionQueueQuery->id,
                     ]
                 );
+
                 return null;
             }
 
             if ($markAsStarted && ! ((int) $actionQueueQuery->has_started)) {
                 $this->queryBuilderFactory->make()->update(
                     'executive_action_queue',
-                    [
-                        'has_started' => 1,
-                    ],
+                    ['has_started' => 1],
                     [
                         'id' => $actionQueueQuery->id,
                     ]
                 );
             }
 
-            $model = new ActionQueueItemModel();
-            $model->id = $itemQuery->id;
+            $model             = new ActionQueueItemModel();
+            $model->id         = $itemQuery->id;
             $model->isFinished = false;
-            $model->class = $itemQuery->class;
-            $model->method = $itemQuery->method;
-            $model->context = json_decode($itemQuery->context, true) ?? [];
+            $model->class      = $itemQuery->class;
+            $model->method     = $itemQuery->method;
+            $model->context    = json_decode($itemQuery->context, true) ?? [];
 
             return $model;
         } catch (Throwable $e) {

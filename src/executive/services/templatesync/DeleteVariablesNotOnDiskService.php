@@ -1,25 +1,25 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services\templatesync;
 
-use Symfony\Component\Filesystem\Filesystem;
-use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
-use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
 use EllisLab\ExpressionEngine\Model\Template\GlobalVariable as VariableModel;
+use EllisLab\ExpressionEngine\Service\Model\Collection as ModelCollection;
+use EllisLab\ExpressionEngine\Service\Model\Facade as ModelFacade;
 use EllisLab\ExpressionEngine\Service\Model\Query\Builder as ModelQueryBuilder;
+use Symfony\Component\Filesystem\Filesystem;
+use const DIRECTORY_SEPARATOR;
 
 class DeleteVariablesNotOnDiskService
 {
+    /** @var string $templatesPath */
     private $templatesPath;
+    /** @var array $siteShortNames */
     private $siteShortNames;
+    /** @var ModelFacade $modelFacade */
     private $modelFacade;
+    /** @var Filesystem $filesystem */
     private $filesystem;
 
     public function __construct(
@@ -28,13 +28,13 @@ class DeleteVariablesNotOnDiskService
         ModelFacade $modelFacade,
         Filesystem $filesystem
     ) {
-        $this->templatesPath = $templatesPath;
+        $this->templatesPath  = $templatesPath;
         $this->siteShortNames = $siteShortNames;
-        $this->modelFacade = $modelFacade;
-        $this->filesystem = $filesystem;
+        $this->modelFacade    = $modelFacade;
+        $this->filesystem     = $filesystem;
     }
 
-    public function run(): void
+    public function run() : void
     {
         /** @var ModelQueryBuilder $templateQuery */
         $variableQuery = $this->modelFacade->get('GlobalVariable');
@@ -42,13 +42,13 @@ class DeleteVariablesNotOnDiskService
         /** @var ModelCollection $variables */
         $variables = $variableQuery->all();
 
-        $variables->each(function (VariableModel $model) {
+        $variables->each(function (VariableModel $model) : void {
             $sep = DIRECTORY_SEPARATOR;
 
             $folder = '_global_variables';
 
             if (isset($this->siteShortNames[$model->getProperty('site_id')])) {
-                $folder = $this->siteShortNames[$model->getProperty('site_id')];
+                $folder  = $this->siteShortNames[$model->getProperty('site_id')];
                 $folder .= $sep . '_variables';
             }
 

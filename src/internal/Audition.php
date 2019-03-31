@@ -1,23 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace buzzingpixel\executive\internal;
 
-use buzzingpixel\executive\Noop;
 use buzzingpixel\executive\ExecutiveDi;
-use buzzingpixel\executive\services\QueueApi;
-use buzzingpixel\executive\models\ActionQueueModel;
-use buzzingpixel\executive\models\ActionQueueItemModel;
-
-use Zend\Diactoros\Response;
 use buzzingpixel\executive\models\RouteModel;
 use buzzingpixel\executive\services\EETemplateService;
-
-use Twig\Environment;
+use Psr\Http\Message\ResponseInterface;
+use Zend\Diactoros\Response;
 
 class Audition
 {
-    public function route(RouteModel $router)
+    public function route(RouteModel $router) : ResponseInterface
     {
         $response = new Response();
 
@@ -39,9 +34,7 @@ class Audition
             ExecutiveDi::get(EETemplateService::class)->renderTemplate(
                 'test',
                 'asdf',
-                [
-                    'asdf' => 'thing',
-                ]
+                ['asdf' => 'thing']
             )
         );
 
@@ -66,7 +59,7 @@ class Audition
         return $response;
     }
 
-    public function __invoke(): void
+    public function __invoke() : void
     {
         // // Test adding to queue
         // $actionQueueItemModel1 = new ActionQueueItemModel();

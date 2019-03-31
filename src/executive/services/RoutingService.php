@@ -1,35 +1,53 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
-use EE_Lang;
-use Throwable;
-use EE_Config;
-use EE_Template;
-use Psr\Http\Message\ResponseInterface;
+use buzzingpixel\executive\exceptions\InvalidRouteConfiguration;
 use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\models\RouteModel;
+use EE_Config;
+use EE_Lang;
+use EE_Template;
+use Psr\Http\Message\ResponseInterface;
+use Throwable;
 use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
-use buzzingpixel\executive\exceptions\InvalidRouteConfiguration;
+use function array_merge;
+use function array_shift;
+use function call_user_func_array;
+use function class_exists;
+use function explode;
+use function in_array;
+use function ltrim;
+use function mb_strpos;
+use function method_exists;
+use function preg_match;
+use function rtrim;
+use function str_replace;
+use function trim;
 
 class RoutingService
 {
+    /** @var RouteModel $routeModel */
     private $routeModel;
+    /** @var array $routes */
     private $routes;
+    /** @var EE_Lang $lang */
     private $lang;
+    /** @var ExecutiveDi $executiveDi */
     private $executiveDi;
+    /** @var EE_Template $template */
     private $template;
+    /** @var EE_Config $config */
     private $config;
+    /** @var SapiEmitter $emitter */
     private $emitter;
 
+    /** @var bool $anyRouteMatched */
     private $anyRouteMatched = false;
+
+    /** @var mixed $lastResponse */
     private $lastResponse;
 
     public function __construct(
@@ -41,19 +59,19 @@ class RoutingService
         EE_Config $config,
         SapiEmitter $emitter
     ) {
-        $this->routeModel = $routeModel;
-        $this->routes = $routes;
-        $this->lang = $lang;
+        $this->routeModel  = $routeModel;
+        $this->routes      = $routes;
+        $this->lang        = $lang;
         $this->executiveDi = $executiveDi;
-        $this->template = $template;
-        $this->config = $config;
-        $this->emitter = $emitter;
+        $this->template    = $template;
+        $this->config      = $config;
+        $this->emitter     = $emitter;
     }
 
     /**
      * @throws InvalidRouteConfiguration
      */
-    public function routeUri(string $uri): array
+    public function routeUri(string $uri) : array
     {
         if (! $this->routes) {
             return [];
@@ -106,7 +124,7 @@ class RoutingService
 
         if ($this->lastResponse) {
             $this->emitter->emit($this->lastResponse);
-            exit();
+            exit;
         }
 
         return $this->respond();
@@ -114,12 +132,12 @@ class RoutingService
 
     /**
      * Responds based on RouteModel
-     * @return array
      */
-    private function respond(): array
+    private function respond() : array
     {
         if ($this->routeModel->get404()) {
             $this->template->show_404();
+
             return [];
         }
 
@@ -137,12 +155,10 @@ class RoutingService
 
     /**
      * Runs a rule
-     * @param string $uri
-     * @param string $rule
-     * @param array $params
-     * @throws InvalidRouteConfiguration;
+     *
+     * @throws InvalidRouteConfiguration
      */
-    private function runRule(string $uri, string $rule, array $params): void
+    private function runRule(string $uri, string $rule, array $params) : void
     {
         if (! isset($params['class'])) {
             $this->throwInvalidRouteConfigurationException(
@@ -161,12 +177,12 @@ class RoutingService
         $regex = ltrim(rtrim($rule === ':home' ? '' : $rule, '/'), '/');
         $match = [];
 
-        if (! \in_array($regex, [
+        if (! in_array($regex, [
             ':before',
             ':after',
-            ':catch'
+            ':catch',
         ])) {
-            if (strpos($regex, ':') !== false) {
+            if (mb_strpos($regex, ':') !== false) {
                 $regex = str_replace(
                     [
                         ':any',
@@ -236,12 +252,14 @@ class RoutingService
 
         $arguments = array_merge([$this->routeModel], $match);
 
-        $response = \call_user_func_array([$class, $method], $arguments);
+        $response = call_user_func_array([$class, $method], $arguments);
 
-        if ($response instanceof ResponseInterface) {
-            $this->lastResponse = $response;
-            $this->routeModel->setResponse($this->lastResponse);
+        if (! ($response instanceof ResponseInterface)) {
+            return;
         }
+
+        $this->lastResponse = $response;
+        $this->routeModel->setResponse($this->lastResponse);
     }
 
     /**
@@ -250,8 +268,8 @@ class RoutingService
     private function throwInvalidRouteConfigurationException(
         string $routeKey,
         string $langKey,
-        Throwable $previous = null
-    ): void {
+        ?Throwable $previous = null
+    ) : void {
         $this->lang->loadfile('executive');
 
         throw new InvalidRouteConfiguration(

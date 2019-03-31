@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace EllisLab\ExpressionEngine\Service\View;
 

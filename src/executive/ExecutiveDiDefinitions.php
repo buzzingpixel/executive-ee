@@ -1,82 +1,77 @@
 <?php
+
 declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
-
-use buzzingpixel\executive\ExecutiveDi;
-use Twig\Environment as TwigEnvironment;
-use Symfony\Component\Filesystem\Filesystem;
-use buzzingpixel\executive\models\RouteModel;
-use buzzingpixel\executive\services\QueueApi;
-use Symfony\Component\Console\Input\ArgvInput;
-use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
-use buzzingpixel\executive\services\ViewService;
-use buzzingpixel\executive\factories\TwigFactory;
-use buzzingpixel\executive\commands\CacheCommand;
-use buzzingpixel\executive\factories\EeDiFactory;
-use buzzingpixel\executive\commands\ConfigCommand;
-use buzzingpixel\executive\services\RoutingService;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use buzzingpixel\executive\factories\FinderFactory;
-use buzzingpixel\executive\services\ScheduleService;
-use buzzingpixel\executive\services\CommandsService;
-use buzzingpixel\executive\models\CliArgumentsModel;
-use buzzingpixel\executive\commands\RunQueueCommand;
-use buzzingpixel\executive\services\EETemplateService;
-use buzzingpixel\executive\services\MigrationsService;
-use buzzingpixel\executive\services\RunCommandService;
-use Composer\Repository\InstalledFilesystemRepository;
-use buzzingpixel\executive\services\CliInstallService;
-use buzzingpixel\executive\commands\RunScheduleCommand;
-use buzzingpixel\executive\services\CliQuestionService;
-use buzzingpixel\executive\factories\SplFileInfoFactory;
 use buzzingpixel\executive\commands\AddOnUpdatesCommand;
-use buzzingpixel\executive\services\TemplateMakerService;
-use buzzingpixel\executive\factories\CommandModelFactory;
-use buzzingpixel\executive\commands\MakeMigrationCommand;
-use buzzingpixel\executive\controllers\ConsoleController;
-use buzzingpixel\executive\factories\QueryBuilderFactory;
-use buzzingpixel\executive\commands\SyncTemplatesCommand;
-use buzzingpixel\executive\services\LayoutDesignerService;
-use buzzingpixel\executive\services\CaseConversionService;
-use buzzingpixel\executive\services\ElevateSessionService;
-use buzzingpixel\executive\services\CliErrorHandlerService;
-use buzzingpixel\executive\services\ChannelDesignerService;
-use buzzingpixel\executive\services\queue\AddToQueueService;
-use buzzingpixel\executive\commands\MakeFromTemplateCommand;
-use buzzingpixel\executive\commands\InstallExecutiveCommand;
-use buzzingpixel\executive\factories\ConsoleQuestionFactory;
-use buzzingpixel\executive\commands\RunUserMigrationsCommand;
-use buzzingpixel\executive\services\ExtensionDesignerService;
+use buzzingpixel\executive\commands\CacheCommand;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
+use buzzingpixel\executive\commands\ConfigCommand;
+use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\commands\ListUserMigrationsCommand;
-use buzzingpixel\executive\factories\ScheduleItemModelFactory;
-use buzzingpixel\executive\factories\CliArgumentsModelFactory;
+use buzzingpixel\executive\commands\MakeFromTemplateCommand;
+use buzzingpixel\executive\commands\MakeMigrationCommand;
+use buzzingpixel\executive\commands\RunQueueCommand;
+use buzzingpixel\executive\commands\RunScheduleCommand;
+use buzzingpixel\executive\commands\RunUserMigrationsCommand;
+use buzzingpixel\executive\commands\SyncTemplatesCommand;
+use buzzingpixel\executive\controllers\ConsoleController;
 use buzzingpixel\executive\controllers\RunMigrationsController;
-use buzzingpixel\executive\factories\ReflectionFunctionFactory;
+use buzzingpixel\executive\ExecutiveDi;
+use buzzingpixel\executive\factories\CliArgumentsModelFactory;
 use buzzingpixel\executive\factories\ClosureFromCallableFactory;
-use buzzingpixel\executive\twigextensions\EETemplateTwigExtension;
+use buzzingpixel\executive\factories\CommandModelFactory;
+use buzzingpixel\executive\factories\ConsoleQuestionFactory;
+use buzzingpixel\executive\factories\EeDiFactory;
+use buzzingpixel\executive\factories\FinderFactory;
+use buzzingpixel\executive\factories\QueryBuilderFactory;
+use buzzingpixel\executive\factories\ReflectionFunctionFactory;
+use buzzingpixel\executive\factories\ScheduleItemModelFactory;
+use buzzingpixel\executive\factories\SplFileInfoFactory;
+use buzzingpixel\executive\factories\TwigFactory;
+use buzzingpixel\executive\models\CliArgumentsModel;
+use buzzingpixel\executive\models\RouteModel;
+use buzzingpixel\executive\services\CaseConversionService;
+use buzzingpixel\executive\services\ChannelDesignerService;
+use buzzingpixel\executive\services\CliErrorHandlerService;
+use buzzingpixel\executive\services\CliInstallService;
+use buzzingpixel\executive\services\CliQuestionService;
+use buzzingpixel\executive\services\CommandsService;
+use buzzingpixel\executive\services\EETemplateService;
+use buzzingpixel\executive\services\ElevateSessionService;
+use buzzingpixel\executive\services\ExtensionDesignerService;
+use buzzingpixel\executive\services\LayoutDesignerService;
+use buzzingpixel\executive\services\MigrationsService;
+use buzzingpixel\executive\services\queue\AddToQueueService;
 use buzzingpixel\executive\services\queue\GetNextQueueItemService;
-use buzzingpixel\executive\services\queue\MarkQueueItemAsRunService;
 use buzzingpixel\executive\services\queue\MarkAsStoppedDueToErrorService;
+use buzzingpixel\executive\services\queue\MarkQueueItemAsRunService;
 use buzzingpixel\executive\services\queue\UpdateActionQueueStatusService;
-use buzzingpixel\executive\services\templatesync\SyncTemplatesFromFilesService;
+use buzzingpixel\executive\services\QueueApi;
+use buzzingpixel\executive\services\RoutingService;
+use buzzingpixel\executive\services\RunCommandService;
+use buzzingpixel\executive\services\ScheduleService;
+use buzzingpixel\executive\services\TemplateMakerService;
 use buzzingpixel\executive\services\templatesync\DeleteSnippetsNotOnDiskService;
+use buzzingpixel\executive\services\templatesync\DeleteTemplateGroupsWithoutTemplatesService;
 use buzzingpixel\executive\services\templatesync\DeleteTemplatesNotOnDiskService;
 use buzzingpixel\executive\services\templatesync\DeleteVariablesNotOnDiskService;
 use buzzingpixel\executive\services\templatesync\EnsureIndexTemplatesExistService;
 use buzzingpixel\executive\services\templatesync\ForceSnippetVarSyncToDatabaseService;
-use buzzingpixel\executive\services\templatesync\DeleteTemplateGroupsWithoutTemplatesService;
+use buzzingpixel\executive\services\templatesync\SyncTemplatesFromFilesService;
+use buzzingpixel\executive\services\ViewService;
+use buzzingpixel\executive\twigextensions\EETemplateTwigExtension;
+use Composer\Repository\InstalledFilesystemRepository;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Filesystem\Filesystem;
+use Twig\Environment as TwigEnvironment;
+use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
 
 return [
     /**
      * Commands
      */
-    AddOnUpdatesCommand::class => function () {
+    AddOnUpdatesCommand::class => static function () {
         return new AddOnUpdatesCommand(
             ee('Addon'),
             new ConsoleOutput(),
@@ -84,20 +79,20 @@ return [
             ee()->lang
         );
     },
-    CacheCommand::class => function () {
+    CacheCommand::class => static function () {
         return new CacheCommand(
             ee()->functions,
             new ConsoleOutput(),
             ee()->lang
         );
     },
-    ComposerProvisionCommand::class => function () {
+    ComposerProvisionCommand::class => static function () {
         // Edge case and weirdness with composer
         getenv('HOME') || putenv('HOME=' . APP_DIR);
 
         $composerApp = new Composer\Console\Application();
         /** @noinspection PhpUnhandledExceptionInspection */
-        $composer = $composerApp->getComposer();
+        $composer          = $composerApp->getComposer();
         $repositoryManager = $composer->getRepositoryManager();
         /** @var InstalledFilesystemRepository $installedFilesystemRepository */
         $installedFilesystemRepository = $repositoryManager->getLocalRepository();
@@ -120,40 +115,40 @@ return [
             $provisionEEVersionTag
         );
     },
-    ConfigCommand::class => function () {
+    ConfigCommand::class => static function () {
         return new ConfigCommand(
             ee()->config,
             ee()->lang,
             ExecutiveDi::get(CliQuestionService::class)
         );
     },
-    InstallExecutiveCommand::class => function () {
+    InstallExecutiveCommand::class => static function () {
         return new InstallExecutiveCommand(
             new ConsoleOutput(),
             ee()->lang,
-            defined('EXECUTIVE_RAW_ARGS') && \is_array(EXECUTIVE_RAW_ARGS) ?
+            defined('EXECUTIVE_RAW_ARGS') && is_array(EXECUTIVE_RAW_ARGS) ?
                 EXECUTIVE_RAW_ARGS :
                 [],
             new QueryBuilderFactory(),
             ExecutiveDi::get(CliInstallService::class)
         );
     },
-    ListUserMigrationsCommand::class => function () {
-        /** @var \EE_Config $config */
-        $config = ee()->config;
-        $nameSpace = $config->item('migrationNamespace');
+    ListUserMigrationsCommand::class => static function () {
+        /** @var EE_Config $config */
+        $config      = ee()->config;
+        $nameSpace   = $config->item('migrationNamespace');
         $destination = $config->item('migrationDestination');
 
         return new ListUserMigrationsCommand(
             new ConsoleOutput(),
             ee()->lang,
             ExecutiveDi::get(MigrationsService::class),
-            \is_string($nameSpace) ? $nameSpace : '',
-            \is_string($destination) ? $destination : ''
+            is_string($nameSpace) ? $nameSpace : '',
+            is_string($destination) ? $destination : ''
         );
     },
-    MakeFromTemplateCommand::class => function () {
-        /** @var \EE_Config $config */
+    MakeFromTemplateCommand::class => static function () {
+        /** @var EE_Config $config */
         $config = ee()->config;
 
         $availableConfigurations = $config->item('classTemplateConfigurations');
@@ -164,15 +159,15 @@ return [
             ee()->lang,
             ExecutiveDi::get(CaseConversionService::class),
             ExecutiveDi::get(TemplateMakerService::class),
-            \is_array($availableConfigurations) ? $availableConfigurations : []
+            is_array($availableConfigurations) ? $availableConfigurations : []
         );
     },
-    MakeMigrationCommand::class => function () {
-        /** @var \EE_Config $config */
-        $config = ee()->config;
+    MakeMigrationCommand::class => static function () {
+        /** @var EE_Config $config */
+        $config           = ee()->config;
         $templateLocation = $config->item('migrationTemplateLocation');
-        $nameSpace = $config->item('migrationNamespace');
-        $destination = $config->item('migrationDestination');
+        $nameSpace        = $config->item('migrationNamespace');
+        $destination      = $config->item('migrationDestination');
 
         return new MakeMigrationCommand(
             new ConsoleOutput(),
@@ -180,12 +175,12 @@ return [
             ee()->lang,
             ExecutiveDi::get(CaseConversionService::class),
             ExecutiveDi::get(TemplateMakerService::class),
-            \is_string($templateLocation) ? $templateLocation : '',
-            \is_string($nameSpace) ? $nameSpace : '',
-            \is_string($destination) ? $destination : ''
+            is_string($templateLocation) ? $templateLocation : '',
+            is_string($nameSpace) ? $nameSpace : '',
+            is_string($destination) ? $destination : ''
         );
     },
-    RunQueueCommand::class => function () {
+    RunQueueCommand::class => static function () {
         // Let's try not to run out of time
         @set_time_limit(0);
 
@@ -194,7 +189,7 @@ return [
             ExecutiveDi::get(QueueApi::class)
         );
     },
-    RunScheduleCommand::class => function () {
+    RunScheduleCommand::class => static function () {
         // Let's try not to run out of time
         @set_time_limit(0);
 
@@ -205,22 +200,22 @@ return [
             ExecutiveDi::get(RunCommandService::class)
         );
     },
-    RunUserMigrationsCommand::class => function () {
-        /** @var \EE_Config $config */
-        $config = ee()->config;
-        $nameSpace = $config->item('migrationNamespace');
+    RunUserMigrationsCommand::class => static function () {
+        /** @var EE_Config $config */
+        $config      = ee()->config;
+        $nameSpace   = $config->item('migrationNamespace');
         $destination = $config->item('migrationDestination');
 
         return new RunUserMigrationsCommand(
             new ConsoleOutput(),
             ee()->lang,
             ExecutiveDi::get(MigrationsService::class),
-            \is_string($nameSpace) ? $nameSpace : '',
-            \is_string($destination) ? $destination : '',
+            is_string($nameSpace) ? $nameSpace : '',
+            is_string($destination) ? $destination : '',
             new ExecutiveDi()
         );
     },
-    SyncTemplatesCommand::class => function () {
+    SyncTemplatesCommand::class => static function () {
         return new SyncTemplatesCommand(
             ee()->lang,
             new ConsoleOutput(),
@@ -238,7 +233,7 @@ return [
     /**
      * Controllers
      */
-    ConsoleController::class => function () {
+    ConsoleController::class => static function () {
         return new ConsoleController(
             ExecutiveDi::get(CliArgumentsModel::class),
             new ConsoleOutput(),
@@ -247,7 +242,7 @@ return [
             ExecutiveDi::get(RunCommandService::class)
         );
     },
-    RunMigrationsController::class => function () {
+    RunMigrationsController::class => static function () {
         return new RunMigrationsController(
             '\buzzingpixel\executive\migrations',
             ExecutiveDi::get(MigrationsService::class)
@@ -257,12 +252,13 @@ return [
     /**
      * Models
      */
-    CliArgumentsModel::class => function () {
+    CliArgumentsModel::class => static function () {
         $arguments = EXECUTIVE_RAW_ARGS;
-        $arguments = \is_array($arguments) ? $arguments : [];
+        $arguments = is_array($arguments) ? $arguments : [];
+
         return new CliArgumentsModel($arguments);
     },
-    RouteModel::SINGLETON_DI_NAME => function () {
+    RouteModel::SINGLETON_DI_NAME => static function () {
         // TODO: So php-di caches classes by default with the get() method
         // TODO: and you have to use make() to get new instances so
         // TODO: this all may be unnecessary. But needs testing.
@@ -285,25 +281,25 @@ return [
     /**
      * Services
      */
-    AddToQueueService::class => function () {
+    AddToQueueService::class => static function () {
         return new AddToQueueService(new QueryBuilderFactory());
     },
-    CaseConversionService::class => function () {
+    CaseConversionService::class => static function () {
         return new CaseConversionService();
     },
-    ChannelDesignerService::class => function () {
+    ChannelDesignerService::class => static function () {
         return new ChannelDesignerService(ee('Model'));
     },
-    CliInstallService::class => function () {
+    CliInstallService::class => static function () {
         return new CliInstallService(new Executive_upd());
     },
-    CliErrorHandlerService::class => function () {
+    CliErrorHandlerService::class => static function () {
         return new CliErrorHandlerService(
             new ConsoleOutput(),
             ee()->lang
         );
     },
-    CliQuestionService::class => function () {
+    CliQuestionService::class => static function () {
         return new CliQuestionService(
             (new Symfony\Component\Console\Application())
                 ->getHelperSet()
@@ -314,17 +310,17 @@ return [
             ee()->lang
         );
     },
-    CommandsService::class => function () {
+    CommandsService::class => static function () {
         return new CommandsService(
             ee()->config,
             ee('Addon'),
             new CommandModelFactory()
         );
     },
-    EETemplateService::class => function () {
+    EETemplateService::class => static function () {
         return new EETemplateService();
     },
-    DeleteSnippetsNotOnDiskService::class => function () {
+    DeleteSnippetsNotOnDiskService::class => static function () {
         return new DeleteSnippetsNotOnDiskService(
             rtrim(PATH_TMPL, DIRECTORY_SEPARATOR),
             ExecutiveDi::get('eeSiteShortNames'),
@@ -332,10 +328,10 @@ return [
             new Filesystem()
         );
     },
-    DeleteTemplateGroupsWithoutTemplatesService::class => function () {
+    DeleteTemplateGroupsWithoutTemplatesService::class => static function () {
         return new DeleteTemplateGroupsWithoutTemplatesService(ee('Model'));
     },
-    DeleteTemplatesNotOnDiskService::class => function () {
+    DeleteTemplatesNotOnDiskService::class => static function () {
         return new DeleteTemplatesNotOnDiskService(
             rtrim(PATH_TMPL, DIRECTORY_SEPARATOR),
             ExecutiveDi::get('eeSiteShortNames'),
@@ -343,7 +339,7 @@ return [
             new Filesystem()
         );
     },
-    DeleteVariablesNotOnDiskService::class => function () {
+    DeleteVariablesNotOnDiskService::class => static function () {
         return new DeleteVariablesNotOnDiskService(
             rtrim(PATH_TMPL, DIRECTORY_SEPARATOR),
             ExecutiveDi::get('eeSiteShortNames'),
@@ -351,7 +347,7 @@ return [
             new Filesystem()
         );
     },
-    ElevateSessionService::class => function () {
+    ElevateSessionService::class => static function () {
         return new ElevateSessionService(
             new QueryBuilderFactory(),
             ee()->session,
@@ -359,55 +355,55 @@ return [
             ee()->load
         );
     },
-    EnsureIndexTemplatesExistService::class => function () {
+    EnsureIndexTemplatesExistService::class => static function () {
         return new EnsureIndexTemplatesExistService(
             rtrim(PATH_TMPL, DIRECTORY_SEPARATOR),
             new FinderFactory(),
             new Filesystem()
         );
     },
-    ExtensionDesignerService::class => function () {
+    ExtensionDesignerService::class => static function () {
         return new ExtensionDesignerService(ee('Model'), ee('db'));
     },
-    ForceSnippetVarSyncToDatabaseService::class => function () {
+    ForceSnippetVarSyncToDatabaseService::class => static function () {
         return new ForceSnippetVarSyncToDatabaseService(ee('Model'));
     },
-    GetNextQueueItemService::class => function () {
+    GetNextQueueItemService::class => static function () {
         return new GetNextQueueItemService(new QueryBuilderFactory());
     },
-    LayoutDesignerService::class => function () {
+    LayoutDesignerService::class => static function () {
         return new LayoutDesignerService(ee('Model'));
     },
-    MarkAsStoppedDueToErrorService::class => function () {
+    MarkAsStoppedDueToErrorService::class => static function () {
         return new MarkAsStoppedDueToErrorService(new QueryBuilderFactory());
     },
-    MarkQueueItemAsRunService::class => function () {
+    MarkQueueItemAsRunService::class => static function () {
         return new MarkQueueItemAsRunService(
             new QueryBuilderFactory(),
             ExecutiveDi::get(UpdateActionQueueStatusService::class)
         );
     },
-    MigrationsService::class => function () {
+    MigrationsService::class => static function () {
         return new MigrationsService(
             ee('Filesystem'),
             new QueryBuilderFactory()
         );
     },
-    QueueApi::class => function () {
+    QueueApi::class => static function () {
         return new QueueApi(new ExecutiveDi());
     },
-    RoutingService::class => function () {
-        /** @var \EE_Config $config */
+    RoutingService::class => static function () {
+        /** @var EE_Config $config */
         $config = ee()->config;
         $routes = $config->item('customRoutes');
 
-        /** @var \EE_Loader $loader */
+        /** @var EE_Loader $loader */
         $loader = ee()->load;
         $loader->library('template', null, 'TMPL');
 
         return new RoutingService(
             ExecutiveDi::get(RouteModel::SINGLETON_DI_NAME),
-            \is_array($routes) ? $routes : [],
+            is_array($routes) ? $routes : [],
             ee()->lang,
             new ExecutiveDi(),
             ee()->TMPL,
@@ -415,7 +411,7 @@ return [
             new SapiEmitter()
         );
     },
-    RunCommandService::class => function () {
+    RunCommandService::class => static function () {
         return new RunCommandService(
             ExecutiveDi::get(CliArgumentsModel::class),
             new ExecutiveDi(),
@@ -424,7 +420,7 @@ return [
             new ReflectionFunctionFactory()
         );
     },
-    ScheduleService::class => function () {
+    ScheduleService::class => static function () {
         return new ScheduleService(
             ee()->config,
             ee('Addon'),
@@ -434,29 +430,29 @@ return [
             new CliArgumentsModelFactory()
         );
     },
-    SyncTemplatesFromFilesService::class => function () {
+    SyncTemplatesFromFilesService::class => static function () {
         return new SyncTemplatesFromFilesService();
     },
-    TemplateMakerService::class => function () {
+    TemplateMakerService::class => static function () {
         return new TemplateMakerService(
             new SplFileInfoFactory(),
             new Filesystem()
         );
     },
-    UpdateActionQueueStatusService::class => function () {
+    UpdateActionQueueStatusService::class => static function () {
         return new UpdateActionQueueStatusService(new QueryBuilderFactory());
     },
-    ViewService::class => function () {
-        /** @var \EE_Config $config */
-        $config = ee()->config;
+    ViewService::class => static function () {
+        /** @var EE_Config $config */
+        $config        = ee()->config;
         $viewsBasePath = $config->item('cpViewsBasePath');
 
         return new ViewService(
             ee('executive:Provider'),
-            \is_string($viewsBasePath) ? $viewsBasePath : ''
+            is_string($viewsBasePath) ? $viewsBasePath : ''
         );
     },
-    ViewService::INTERNAL_DI_NAME => function () {
+    ViewService::INTERNAL_DI_NAME => static function () {
         return new ViewService(
             ee('executive:Provider'),
             __DIR__ . '/views'
@@ -466,7 +462,7 @@ return [
     /**
      * Twig Extensions
      */
-    EETemplateTwigExtension::class => function () {
+    EETemplateTwigExtension::class => static function () {
         return new EETemplateTwigExtension(
             ExecutiveDi::get(EETemplateService::class)
         );
@@ -475,7 +471,7 @@ return [
     /**
      * Other
      */
-    'eeSiteShortNames' => function () {
+    'eeSiteShortNames' => static function () {
         $sites = ee('Model')->get('Site')
             ->fields('site_name')
             ->all();
@@ -488,7 +484,7 @@ return [
 
         return $sitesArray;
     },
-    TwigEnvironment::class => function () {
+    TwigEnvironment::class => static function () {
         return (new TwigFactory())->get();
     },
 ];

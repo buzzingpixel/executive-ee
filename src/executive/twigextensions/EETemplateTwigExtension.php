@@ -1,21 +1,18 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\twigextensions;
 
-use Twig_Markup;
-use Twig_Function;
-use Twig_Extension;
 use buzzingpixel\executive\services\EETemplateService;
+use Twig\Extension\AbstractExtension;
+use Twig\Markup;
+use Twig\TwigFunction;
+use function json_decode;
 
-class EETemplateTwigExtension extends Twig_Extension
+class EETemplateTwigExtension extends AbstractExtension
 {
+    /** @var EETemplateService $eeTemplateService */
     private $eeTemplateService;
 
     public function __construct(EETemplateService $eeTemplateService)
@@ -23,15 +20,15 @@ class EETemplateTwigExtension extends Twig_Extension
         $this->eeTemplateService = $eeTemplateService;
     }
 
-    public function getFunctions(): array
+    public function getFunctions() : array
     {
         return [
-            new Twig_Function('renderEETemplate', [$this, 'renderTemplate']),
-            new Twig_Function('renderEETemplateAsJson', [$this, 'renderTemplateAsJson']),
-            new Twig_Function('renderEETemplatePath', [$this, 'renderPath']),
-            new Twig_Function('renderEETemplatePathAsJson', [$this, 'renderPathAsJson']),
-            new Twig_Function('renderEETemplateString', [$this, 'renderString']),
-            new Twig_Function('renderEETemplateStringAsJson', [$this, 'renderStringAsJson']),
+            new TwigFunction('renderEETemplate', [$this, 'renderTemplate']),
+            new TwigFunction('renderEETemplateAsJson', [$this, 'renderTemplateAsJson']),
+            new TwigFunction('renderEETemplatePath', [$this, 'renderPath']),
+            new TwigFunction('renderEETemplatePathAsJson', [$this, 'renderPathAsJson']),
+            new TwigFunction('renderEETemplateString', [$this, 'renderString']),
+            new TwigFunction('renderEETemplateStringAsJson', [$this, 'renderStringAsJson']),
         ];
     }
 
@@ -39,8 +36,8 @@ class EETemplateTwigExtension extends Twig_Extension
         string $group,
         string $template,
         array $variables = []
-    ): Twig_Markup {
-        return new Twig_Markup(
+    ) : Markup {
+        return new Markup(
             $this->eeTemplateService->renderTemplate(
                 $group,
                 $template,
@@ -65,9 +62,9 @@ class EETemplateTwigExtension extends Twig_Extension
         );
     }
 
-    public function renderPath(string $path, array $variables = []): Twig_Markup
+    public function renderPath(string $path, array $variables = []) : Markup
     {
-        return new Twig_Markup(
+        return new Markup(
             $this->eeTemplateService->renderPath($path, $variables),
             'UTF-8'
         );
@@ -81,9 +78,9 @@ class EETemplateTwigExtension extends Twig_Extension
         );
     }
 
-    public function renderString(string $str, array $variables = []): Twig_Markup
+    public function renderString(string $str, array $variables = []) : Markup
     {
-        return new Twig_Markup(
+        return new Markup(
             $this->eeTemplateService->renderString($str, $variables),
             'UTF-8'
         );

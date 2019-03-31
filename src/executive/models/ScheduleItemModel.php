@@ -1,22 +1,16 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\models;
 
-use DateTime;
-use buzzingpixel\executive\traits\TruthyTrait;
-use buzzingpixel\executive\traits\DateTimeTrait;
 use buzzingpixel\executive\abstracts\ModelAbstract;
+use buzzingpixel\executive\traits\DateTimeTrait;
+use buzzingpixel\executive\traits\TruthyTrait;
+use DateTime;
+use function is_numeric;
+use function mb_strtolower;
 
-/**
- * Class ScheduleItemModel
- */
 class ScheduleItemModel extends ModelAbstract
 {
     use TruthyTrait;
@@ -57,20 +51,20 @@ class ScheduleItemModel extends ModelAbstract
 
     /**
      * Sets the ID. Incoming value will be type coerced to integer
-     * @param int $val
+     *
      * @return ScheduleItemModel
      */
-    public function setId($val): self
+    public function setId(int $val) : self
     {
         $this->id = (int) $val;
+
         return $this;
     }
 
     /**
      * Gets the ID
-     * @return int
      */
-    public function getId(): int
+    public function getId() : int
     {
         return $this->id;
     }
@@ -83,20 +77,20 @@ class ScheduleItemModel extends ModelAbstract
      * boolean value `true` or `false` respectively. Additionally `"1"` and
      * `"0"` will be treated the same way. Anything that does not equal a
      * "truthy" value will be considered false
+     *
      * @param mixed $val
-     * @return self
      */
-    public function setRunning($val): self
+    public function setRunning($val) : self
     {
         $this->running = $this->isValueTruthy($val);
+
         return $this;
     }
 
     /**
      * Checks if schedule item is running
-     * @return bool
      */
-    public function isRunning(): bool
+    public function isRunning() : bool
     {
         return $this->running;
     }
@@ -107,20 +101,20 @@ class ScheduleItemModel extends ModelAbstract
     /**
      * Sets Last Run Start Time. Incoming value will be converted to a DateTime
      * object if it is not already.
-     * @param $val
+     *
      * @return ScheduleItemModel
      */
-    public function setLastRunStartTime($val): self
+    public function setLastRunStartTime($val) : self
     {
         $this->lastRunStartTime = $this->createDateTimeFromVal($val);
+
         return $this;
     }
 
     /**
      * Gets Last Run Start Time
-     * @return DateTime
      */
-    public function getLastRunStartTime(): DateTime
+    public function getLastRunStartTime() : DateTime
     {
         return $this->createDateTimeFromVal($this->lastRunStartTime);
     }
@@ -131,20 +125,20 @@ class ScheduleItemModel extends ModelAbstract
     /**
      * Sets Last Run End Time. Incoming value will be converted to a DateTime
      * object if it is not already.
-     * @param $val
+     *
      * @return ScheduleItemModel
      */
-    public function setLastRunEndTime($val): self
+    public function setLastRunEndTime($val) : self
     {
         $this->lastRunEndTime = $this->createDateTimeFromVal($val);
+
         return $this;
     }
 
     /**
      * Gets Last Run End Time
-     * @return DateTime
      */
-    public function getLastRunEndTime(): DateTime
+    public function getLastRunEndTime() : DateTime
     {
         return $this->createDateTimeFromVal($this->lastRunEndTime);
     }
@@ -154,20 +148,20 @@ class ScheduleItemModel extends ModelAbstract
 
     /**
      * Sets Source. Incoming value will be type coerced to string
-     * @param string $val
+     *
      * @return ScheduleItemModel
      */
-    public function setSource($val): self
+    public function setSource(string $val) : self
     {
         $this->source = $val;
+
         return $this;
     }
 
     /**
      * Gets Source
-     * @return string
      */
-    public function getSource(): string
+    public function getSource() : string
     {
         return $this->source;
     }
@@ -177,20 +171,20 @@ class ScheduleItemModel extends ModelAbstract
 
     /**
      * Sets Group. Incoming value will be type coerced to string
-     * @param string $val
+     *
      * @return ScheduleItemModel
      */
-    public function setGroup($val): self
+    public function setGroup(string $val) : self
     {
         $this->group = $val;
+
         return $this;
     }
 
     /**
      * Gets Group
-     * @return string
      */
-    public function getGroup(): string
+    public function getGroup() : string
     {
         return $this->group;
     }
@@ -200,20 +194,20 @@ class ScheduleItemModel extends ModelAbstract
 
     /**
      * Sets Command. Incoming value will be type coerced to string
-     * @param string $val
+     *
      * @return ScheduleItemModel
      */
-    public function setCommand($val): self
+    public function setCommand(string $val) : self
     {
         $this->command = $val;
+
         return $this;
     }
 
     /**
      * Gets Command
-     * @return string
      */
-    public function getCommand(): string
+    public function getCommand() : string
     {
         return $this->command;
     }
@@ -223,20 +217,20 @@ class ScheduleItemModel extends ModelAbstract
 
     /**
      * Sets RunEvery. Incoming value will be type coerced to string
-     * @param string $val
+     *
      * @return ScheduleItemModel
      */
-    public function setRunEvery($val): self
+    public function setRunEvery(string $val) : self
     {
         $this->runEvery = $val;
+
         return $this;
     }
 
     /**
      * Gets RunEvery
-     * @return string
      */
-    public function getRunEvery(): string
+    public function getRunEvery() : string
     {
         return $this->runEvery;
     }
@@ -246,29 +240,28 @@ class ScheduleItemModel extends ModelAbstract
 
     /**
      * Sets Command Model. Incoming value will be type coerced to string
-     * @param CommandModel $val
+     *
      * @return ScheduleItemModel
      */
-    public function setCommandModel(CommandModel $val): self
+    public function setCommandModel(CommandModel $val) : self
     {
         $this->commandModel = $val;
+
         return $this;
     }
 
     /**
      * Gets Command Model
-     * @return CommandModel
      */
-    public function getCommandModel(): CommandModel
+    public function getCommandModel() : CommandModel
     {
         return $this->commandModel;
     }
 
     /**
      * Composes the name from the various properties and returns it
-     * @return string
      */
-    public function getName(): string
+    public function getName() : string
     {
         return $this->getSource() .
             '/' .
@@ -286,6 +279,7 @@ class ScheduleItemModel extends ModelAbstract
      * - Else if the runEvery mapped value is numeric, it is minutes and will be
      * converted to seconds and returned
      * - Else the mapped value will be returned
+     *
      * @return mixed
      */
     public function getTranslatedRunEvery()
@@ -296,7 +290,7 @@ class ScheduleItemModel extends ModelAbstract
             return ((int) $val) * 60;
         }
 
-        $val = strtolower($val);
+        $val = mb_strtolower($val);
 
         if (! isset(self::RUN_EVERY_MAP[$val])) {
             return 0;
@@ -304,8 +298,9 @@ class ScheduleItemModel extends ModelAbstract
 
         $mappedVal = self::RUN_EVERY_MAP[$val];
 
-        if (\is_numeric($mappedVal)) {
+        if (is_numeric($mappedVal)) {
             $mappedVal = (int) $mappedVal;
+
             return $mappedVal * 60;
         }
 
@@ -315,14 +310,15 @@ class ScheduleItemModel extends ModelAbstract
     /**
      * Checks whether it's time for the schedule to run
      */
-    public function shouldRun(): bool
+    public function shouldRun() : bool
     {
-        $currentTime = new \DateTime();
-        $currentTimeStamp = $currentTime->getTimestamp();
-        $lastRunTimeStamp = $this->getLastRunStartTime()->getTimestamp();
-        $oneHourInSeconds = 60 * 60;
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $currentTime         = new DateTime();
+        $currentTimeStamp    = $currentTime->getTimestamp();
+        $lastRunTimeStamp    = $this->getLastRunStartTime()->getTimestamp();
+        $oneHourInSeconds    = 60 * 60;
         $secondsSinceLastRun = $currentTimeStamp - $lastRunTimeStamp;
-        $runEvery = $this->getTranslatedRunEvery();
+        $runEvery            = $this->getTranslatedRunEvery();
 
         // If the task is running, wait on hour before trying again
         if ($secondsSinceLastRun < $oneHourInSeconds && $this->isRunning()) {
@@ -332,6 +328,7 @@ class ScheduleItemModel extends ModelAbstract
         // If $runEvery is numeric we'll check if it's time to run based on that
         if (is_numeric($runEvery)) {
             $runEvery = (int) $runEvery;
+
             return $secondsSinceLastRun >= $runEvery;
         }
 
@@ -395,11 +392,6 @@ class ScheduleItemModel extends ModelAbstract
         }
 
         // If we're running on Monda, and it's Monday, we should run
-        if ($runEvery === 'fridayatmidnight' && $day === 'Friday') {
-            return true;
-        }
-
-        // We didn't have any matches and we shouldn't run
-        return false;
+        return $runEvery === 'fridayatmidnight' && $day === 'Friday';
     }
 }

@@ -1,85 +1,70 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\commands;
 
-use Composer\Package\CompletePackage;
-use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\Filesystem\Filesystem;
 use buzzingpixel\executive\factories\FinderFactory;
-use Symfony\Component\Console\Output\OutputInterface;
+use Composer\Package\CompletePackage;
 use Composer\Repository\InstalledFilesystemRepository;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\SplFileInfo;
+use ZipArchive;
+use const DIRECTORY_SEPARATOR;
+use const PHP_OS;
+use function array_map;
+use function dirname;
+use function exec;
+use function explode;
+use function fopen;
+use function implode;
+use function ltrim;
+use function mb_strpos;
+use function realpath;
+use function rtrim;
+use function sleep;
 
-/**
- * Class ComposerProvisionCommand
- */
 class ComposerProvisionCommand
 {
     /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
-
     /** @var InstalledFilesystemRepository $installedFilesystemRepository */
     private $installedFilesystemRepository;
-
     /** @var string $vendorPath */
     private $vendorPath;
-
     /** @var Filesystem $fileSystem */
     private $fileSystem;
-
     /** @var FinderFactory $finderFactory */
     private $finderFactory;
-
     /** @var array $extraEEAddons */
     private $extraEEAddons;
-
     /** @var array $installFromDownload */
     private $installFromDownload;
-
     /** @var string $appBasePath */
     private $appBasePath;
-
     /** @var string $systemUserAddons */
     private $systemUserAddons;
-
     /** @var string $themesUser */
     private $themesUser;
-
     /** @var string $systemPath */
     private $systemPath;
-
     /** @var string $themesPath */
     private $themesPath;
-
     /** @var array $systemUserAddonsGitIgnore */
     private $systemUserAddonsGitIgnore = [];
-
     /** @var array $systemUserAddonsGitIgnore */
     private $themesUserGitIgnore = [];
-
     /** @var bool $eeProvisioned */
     private $eeProvisioned = false;
-
     /** @var string $provisionEEVersion */
     private $provisionEEVersionTag;
 
     /**
      * ComposerProvisionCommand constructor
-     * @param OutputInterface $consoleOutput
-     * @param InstalledFilesystemRepository $installedFilesystemRepository
-     * @param string $vendorPath
-     * @param Filesystem $fileSystem
-     * @param FinderFactory $finderFactory
-     * @param string $publicDir
+     *
      * @param array $extraEEAddons
      * @param array $installFromDownload
-     * @param string $provisionEEVersionTag
      */
     public function __construct(
         OutputInterface $consoleOutput,
@@ -92,18 +77,18 @@ class ComposerProvisionCommand
         array $installFromDownload,
         string $provisionEEVersionTag
     ) {
-        $this->consoleOutput = $consoleOutput;
+        $this->consoleOutput                 = $consoleOutput;
         $this->installedFilesystemRepository = $installedFilesystemRepository;
-        $this->vendorPath = ltrim(ltrim($vendorPath, '/'), DIRECTORY_SEPARATOR);
-        $this->fileSystem = $fileSystem;
-        $this->finderFactory = $finderFactory;
-        $this->extraEEAddons = $extraEEAddons;
-        $this->installFromDownload = $installFromDownload;
-        $this->provisionEEVersionTag = $provisionEEVersionTag;
+        $this->vendorPath                    = ltrim(ltrim($vendorPath, '/'), DIRECTORY_SEPARATOR);
+        $this->fileSystem                    = $fileSystem;
+        $this->finderFactory                 = $finderFactory;
+        $this->extraEEAddons                 = $extraEEAddons;
+        $this->installFromDownload           = $installFromDownload;
+        $this->provisionEEVersionTag         = $provisionEEVersionTag;
 
         $publicDir = rtrim(rtrim($publicDir, '/'), DIRECTORY_SEPARATOR);
 
-        $this->appBasePath = \dirname($this->vendorPath);
+        $this->appBasePath      = dirname($this->vendorPath);
         $this->systemUserAddons = $this->appBasePath . '/system/user/addons';
 
         $this->themesUser = $this->appBasePath;
@@ -128,7 +113,7 @@ class ComposerProvisionCommand
     /**
      * Runs composer provisioning
      */
-    public function run(): void
+    public function run() : void
     {
         $this->cleanUpPreviousProvisioning();
 
@@ -161,17 +146,17 @@ class ComposerProvisionCommand
         $this->processGitIgnores();
     }
 
-    private function cleanUpPreviousProvisioning(): void
+    private function cleanUpPreviousProvisioning() : void
     {
-        $toRemove = [];
+        $toRemove         = [];
         $systemUserAddons = DIRECTORY_SEPARATOR . $this->systemUserAddons;
-        $themesUser = DIRECTORY_SEPARATOR . $this->themesUser;
+        $themesUser       = DIRECTORY_SEPARATOR . $this->themesUser;
 
         if ($this->fileSystem->exists($systemUserAddons)) {
             $finder = $this->finderFactory->make()
                 ->directories()
                 ->in($systemUserAddons)
-                ->filter(function ($file) {
+                ->filter(static function ($file) {
                     /** @var SplFileInfo $file */
                     return $file->isLink();
                 });
@@ -186,7 +171,7 @@ class ComposerProvisionCommand
             $finder = $this->finderFactory->make()
                 ->directories()
                 ->in(DIRECTORY_SEPARATOR . $this->themesUser)
-                ->filter(function ($file) {
+                ->filter(static function ($file) {
                     /** @var SplFileInfo $file */
                     return $file->isLink();
                 });
@@ -204,10 +189,7 @@ class ComposerProvisionCommand
         $this->fileSystem->remove($toRemove);
     }
 
-    /**
-     * @param CompletePackage $package
-     */
-    private function processPackage(CompletePackage $package): void
+    private function processPackage(CompletePackage $package) : void
     {
         switch ($package->getType()) {
             case 'ee-add-on':
@@ -219,21 +201,21 @@ class ComposerProvisionCommand
         }
     }
 
-    private function processEEOfficial(): void
+    private function processEEOfficial() : void
     {
-        $isWin = strpos(PHP_OS, 'WIN') === 0;
+        $isWin = mb_strpos(PHP_OS, 'WIN') === 0;
 
         $this->consoleOutput->writeln(
             '<comment>Provisioning ExpressionEngine from official repo...</comment>'
         );
 
-        $path = $this->vendorPath . '/expressionengine-provision';
+        $path        = $this->vendorPath . '/expressionengine-provision';
         $installPath = $path . '/ee';
-        $zipFile = $path . '/ee.zip';
+        $zipFile     = $path . '/ee.zip';
 
-        $path = $this->processPathForPlatform($path);
+        $path        = $this->processPathForPlatform($path);
         $installPath = $this->processPathForPlatform($installPath);
-        $zipFile = $this->processPathForPlatform($zipFile);
+        $zipFile     = $this->processPathForPlatform($zipFile);
 
         $this->fileSystem->mkdir($path);
 
@@ -251,12 +233,12 @@ class ComposerProvisionCommand
             exec('rm -rf ' . $installPath);
         }
 
-        $url = 'https://github.com/ExpressionEngine/ExpressionEngine/archive/';
+        $url  = 'https://github.com/ExpressionEngine/ExpressionEngine/archive/';
         $url .= $this->provisionEEVersionTag . '.zip';
 
         $this->fileSystem->appendToFile($zipFile, fopen($url, 'rb'));
 
-        $zipHandler = new \ZipArchive();
+        $zipHandler = new ZipArchive();
         $zipHandler->open($zipFile);
         $zipHandler->extractTo($installPath);
         $zipHandler->close();
@@ -314,9 +296,8 @@ class ComposerProvisionCommand
 
     /**
      * Process ExpressionEngine dependency
-     * @param CompletePackage $package
      */
-    private function processEE(CompletePackage $package): void
+    private function processEE(CompletePackage $package) : void
     {
         $this->consoleOutput->writeln(
             '<comment>Found ExpressionEngine package ' .
@@ -352,13 +333,13 @@ class ComposerProvisionCommand
             return;
         }
 
-        $sysPath = $this->vendorPath;
+        $sysPath  = $this->vendorPath;
         $sysPath .= '/' . $package->getName() . '/' . $extra['systemEEDir'];
-        $sysPath = $this->processPathForPlatform($sysPath);
+        $sysPath  = $this->processPathForPlatform($sysPath);
 
-        $themePath = $this->vendorPath;
+        $themePath  = $this->vendorPath;
         $themePath .= '/' . $package->getName() . '/' . $extra['themesEEDir'];
-        $themePath = $this->processPathForPlatform($themePath);
+        $themePath  = $this->processPathForPlatform($themePath);
 
         if (! $this->fileSystem->exists($sysPath)) {
             $hasBlockingErrors = true;
@@ -421,9 +402,8 @@ class ComposerProvisionCommand
 
     /**
      * Processes an EE Addon Package
-     * @param CompletePackage $package
      */
-    private function provisionEEAddOn(CompletePackage $package): void
+    private function provisionEEAddOn(CompletePackage $package) : void
     {
         $this->consoleOutput->writeln(
             '<comment>Found add-on package ' .
@@ -459,9 +439,9 @@ class ComposerProvisionCommand
             return;
         }
 
-        $sysPath = $this->vendorPath;
+        $sysPath  = $this->vendorPath;
         $sysPath .= '/' . $package->getName() . '/' . $extra['systemPath'];
-        $sysPath = $this->processPathForPlatform($sysPath);
+        $sysPath  = $this->processPathForPlatform($sysPath);
 
         if (! $this->fileSystem->exists($sysPath)) {
             $hasBlockingErrors = true;
@@ -501,9 +481,9 @@ class ComposerProvisionCommand
             return;
         }
 
-        $themePath = $this->vendorPath;
+        $themePath  = $this->vendorPath;
         $themePath .= '/' . $package->getName() . '/' . $extra['themePath'];
-        $themePath = $this->processPathForPlatform($themePath);
+        $themePath  = $this->processPathForPlatform($themePath);
 
         if (! $this->fileSystem->exists($themePath)) {
             $hasBlockingErrors = true;
@@ -542,9 +522,10 @@ class ComposerProvisionCommand
 
     /**
      * Provisions an EE add-on from the composer Extra block
+     *
      * @param array $addOn
      */
-    private function provisionExtraEEAddon(array $addOn): void
+    private function provisionExtraEEAddon(array $addOn) : void
     {
         $hasBlockingErrors = false;
 
@@ -657,9 +638,10 @@ class ComposerProvisionCommand
 
     /**
      * Provisions an EE add-on from download from the composer Extra block
+     *
      * @param array $addOn
      */
-    private function provisionAddonFromDownload(array $addOn): void
+    private function provisionAddonFromDownload(array $addOn) : void
     {
         $hasBlockingErrors = false;
 
@@ -699,13 +681,13 @@ class ComposerProvisionCommand
             '</comment>'
         );
 
-        $installPath = $this->vendorPath . '/install-from-download';
+        $installPath     = $this->vendorPath . '/install-from-download';
         $fullInstallPath = $installPath . '/' . $addOn['handle'];
-        $zipFile = $fullInstallPath . '.zip';
+        $zipFile         = $fullInstallPath . '.zip';
 
-        $installPath = $this->processPathForPlatform($installPath);
+        $installPath     = $this->processPathForPlatform($installPath);
         $fullInstallPath = $this->processPathForPlatform($fullInstallPath);
-        $zipFile = $this->processPathForPlatform($zipFile);
+        $zipFile         = $this->processPathForPlatform($zipFile);
 
         $this->fileSystem->mkdir($installPath);
 
@@ -722,7 +704,7 @@ class ComposerProvisionCommand
             fopen($addOn['url'], 'rb')
         );
 
-        $zipHandler = new \ZipArchive();
+        $zipHandler = new ZipArchive();
         $zipHandler->open($zipFile);
         $zipHandler->extractTo($fullInstallPath);
         $zipHandler->close();
@@ -817,7 +799,7 @@ class ComposerProvisionCommand
     /**
      * Processes setting of GitIgnore
      */
-    private function processGitIgnores(): void
+    private function processGitIgnores() : void
     {
         $ignorePath = $this->processPathForPlatform(
             $this->systemUserAddons . '/' . '.gitignore'
@@ -874,20 +856,20 @@ class ComposerProvisionCommand
             $this->fileSystem->remove($ignorePath);
         }
 
-        if ($this->eeProvisioned) {
-            $this->fileSystem->appendToFile(
-                $ignorePath,
-                "ee\n"
-            );
+        if (! $this->eeProvisioned) {
+            return;
         }
+
+        $this->fileSystem->appendToFile(
+            $ignorePath,
+            "ee\n"
+        );
     }
 
     /**
      * Processes a path for the platform PHP is running on
-     * @param string $path
-     * @return string
      */
-    private function processPathForPlatform(string $path): string
+    private function processPathForPlatform(string $path) : string
     {
         $newPath = '';
 

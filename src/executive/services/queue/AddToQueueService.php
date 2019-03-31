@@ -1,23 +1,24 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2018 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 namespace buzzingpixel\executive\services\queue;
 
+use buzzingpixel\executive\exceptions\InvalidActionQueueModel;
+use buzzingpixel\executive\factories\QueryBuilderFactory;
+use buzzingpixel\executive\models\ActionQueueItemModel;
+use buzzingpixel\executive\models\ActionQueueModel;
 use DateTime;
 use DateTimeZone;
-use buzzingpixel\executive\models\ActionQueueModel;
-use buzzingpixel\executive\models\ActionQueueItemModel;
-use buzzingpixel\executive\factories\QueryBuilderFactory;
-use buzzingpixel\executive\exceptions\InvalidActionQueueModel;
+use function get_class;
+use function is_array;
+use function is_object;
+use function json_encode;
+use function method_exists;
 
 class AddToQueueService
 {
+    /** @var QueryBuilderFactory $queryBuilderFactory */
     private $queryBuilderFactory;
 
     public function __construct(QueryBuilderFactory $queryBuilderFactory)
@@ -28,7 +29,7 @@ class AddToQueueService
     /**
      * @throws InvalidActionQueueModel
      */
-    public function addToQueue(ActionQueueModel $model): void
+    public function addToQueue(ActionQueueModel $model) : void
     {
         $this->validateModel($model);
 
@@ -37,8 +38,9 @@ class AddToQueueService
         $this->saveActionQueueItems($model);
     }
 
-    private function saveActionQueue(ActionQueueModel $model): ActionQueueModel
+    private function saveActionQueue(ActionQueueModel $model) : ActionQueueModel
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $dateTime = new DateTime();
         $dateTime->setTimezone(new DateTimeZone('UTC'));
 
@@ -63,7 +65,7 @@ class AddToQueueService
         return $model;
     }
 
-    private function saveActionQueueItems(ActionQueueModel $model): void
+    private function saveActionQueueItems(ActionQueueModel $model) : void
     {
         $insertData = [];
 
@@ -93,19 +95,19 @@ class AddToQueueService
     /**
      * @throws InvalidActionQueueModel
      */
-    private function validateModel(ActionQueueModel $model): void
+    private function validateModel(ActionQueueModel $model) : void
     {
         if (! $model->actionName ||
             ! $model->actionTitle ||
             ! $model->items ||
-            ! \is_array($model->items)
+            ! is_array($model->items)
         ) {
             throw new InvalidActionQueueModel();
         }
 
         foreach ($model->items as $item) {
-            if (! \is_object($item) ||
-                \get_class($item) !== ActionQueueItemModel::class ||
+            if (! is_object($item) ||
+                get_class($item) !== ActionQueueItemModel::class ||
                 ! $item->class
             ) {
                 throw new InvalidActionQueueModel();
