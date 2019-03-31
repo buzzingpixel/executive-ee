@@ -1,8 +1,13 @@
 #!/usr/bin/env php
 <?php
+
+/**
+ * This is used to get EE in a place where PHPStorm can be aware of it
+ */
+
 declare(strict_types=1);
 
-$tag = '5.0.1';
+$tag = '5.2.2';
 
 // Set up composer
 $sep = DIRECTORY_SEPARATOR;
@@ -14,7 +19,7 @@ if (file_exists($vendorAutoload)) {
 
 use Symfony\Component\Filesystem\Filesystem;
 
-$isWin = strpos(PHP_OS, 'WIN') === 0;
+$isWin = mb_strpos(PHP_OS, 'WIN') === 0;
 
 function processPathForPlatform(string $path): string
 {
@@ -33,7 +38,7 @@ function processPathForPlatform(string $path): string
         $newPath .= DIRECTORY_SEPARATOR . $namePart;
     }
 
-    return $newPath;
+    return DIRECTORY_SEPARATOR . ltrim($newPath, '/\\');
 }
 
 $fileSystem = new Filesystem();
@@ -57,7 +62,7 @@ if (is_dir($unzipPath)) {
 
 $fileSystem->appendToFile($zipFile, fopen($url, 'rb'));
 
-$zipHandler = new \ZipArchive();
+$zipHandler = new ZipArchive();
 $zipHandler->open($zipFile);
 $zipHandler->extractTo($unzipPath);
 $zipHandler->close();
