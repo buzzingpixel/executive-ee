@@ -47,6 +47,8 @@ if ((! $isCpJsRequest && DEBUG === 1) || PHP_SAPI === 'cli') {
     ini_set('display_startup_errors', '1');
     error_reporting(E_ALL);
 
+    require __DIR__ . '/devMode.php';
+
     if (PHP_SAPI !== 'cli' &&
         class_exists(WhoopsRunner::class) &&
         class_exists(WhoopsPrettyPageHandler::class)

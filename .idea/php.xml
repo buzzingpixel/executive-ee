@@ -98,6 +98,7 @@
       <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-common" />
       <path value="$PROJECT_DIR$/vendor/buzzingpixel/corbomite-config-collector" />
       <path value="$PROJECT_DIR$/vendor/buzzingpixel/corbomite-di" />
+      <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
