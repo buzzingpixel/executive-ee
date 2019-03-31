@@ -3,7 +3,8 @@
     "extra": {
         "handle": "executive",
         "systemPath": "src/executive",
-        "version": "3.0.0-rc.1"
+        "version": "3.0.0-rc.1",
+        "diConfigFilePath": "src/di/_collector.php"
     },
     "name": "buzzingpixel/executive-ee",
     "version": "3.0.0-rc.1",
@@ -19,6 +20,7 @@
         "php": ">=7.1",
         "ext-json": "*",
         "ext-zip": "*",
+        "buzzingpixel/corbomite-config-collector": "^1.1",
         "composer/composer": "^1.8",
         "filp/whoops": "^2.3",
         "php-di/php-di": "^6.0",

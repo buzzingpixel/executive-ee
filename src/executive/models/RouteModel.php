@@ -10,8 +10,6 @@ use function array_merge;
 
 class RouteModel extends ModelAbstract
 {
-    public const SINGLETON_DI_NAME = self::class . 'Singleton';
-
     /** @var string $template */
     private $template = '';
 

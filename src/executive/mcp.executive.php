@@ -6,8 +6,6 @@ use buzzingpixel\executive\exceptions\DependencyInjectionBuilderException;
 use buzzingpixel\executive\exceptions\InvalidViewConfigurationException;
 use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\services\ViewService;
-use DI\DependencyException;
-use DI\NotFoundException;
 use EllisLab\ExpressionEngine\Core\Request as RequestService;
 use EllisLab\ExpressionEngine\Library\CP\Table;
 use EllisLab\ExpressionEngine\Service\Alert\AlertCollection;
@@ -27,8 +25,6 @@ class Executive_mcp
     /**
      * Executive_mcp constructor
      *
-     * @throws NotFoundException
-     * @throws DependencyException
      * @throws DependencyInjectionBuilderException
      */
     public function __construct()
@@ -37,7 +33,7 @@ class Executive_mcp
         $this->requestService = ee('Request');
         $this->urlFactory     = ee('CP/URL');
 
-        $this->viewService = ExecutiveDi::make(
+        $this->viewService = ExecutiveDi::diContainer()->get(
             ViewService::INTERNAL_DI_NAME
         );
     }
@@ -87,7 +83,7 @@ class Executive_mcp
         }
 
         try {
-            $class = ExecutiveDi::make($sectionConfig[$page]['class']);
+            $class = ExecutiveDi::diContainer()->get($sectionConfig[$page]['class']);
         } catch (Throwable $e) {
             $class = new $sectionConfig[$page]['class']();
         }

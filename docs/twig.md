@@ -21,7 +21,7 @@ class SomeController
             ->withHeader('Content-Type', 'text/html');
 
         $response->getBody()->write(
-            ExecutiveDi::get(TwigEnvironment::class)->render(
+            ExecutiveDi::diContainer()->get(TwigEnvironment::class)->render(
                 'TestTwigTemplate.twig',
                 [
                     'testVar' => 'thingy',

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace buzzingpixel\executive\commands;
 
 use buzzingpixel\executive\exceptions\InvalidMigrationException;
-use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\interfaces\MigrationInterface;
 use buzzingpixel\executive\services\MigrationsService;
 use EE_Lang;
 use EllisLab\ExpressionEngine\Library\Filesystem\FilesystemException;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 use function array_map;
@@ -27,8 +27,8 @@ class RunUserMigrationsCommand
     private $migrationNamespace;
     /** @var string $migrationDestination */
     private $migrationDestination;
-    /** @var ExecutiveDi $executiveDi */
-    private $executiveDi;
+    /** @var ContainerInterface $di */
+    private $di;
 
     /**
      * RunUserMigrationsCommand constructor
@@ -39,14 +39,14 @@ class RunUserMigrationsCommand
         MigrationsService $migrationsService,
         string $migrationNamespace,
         string $makeMigrationDestination,
-        ExecutiveDi $executiveDi
+        ContainerInterface $di
     ) {
         $this->consoleOutput        = $consoleOutput;
         $this->lang                 = $lang;
         $this->migrationsService    = $migrationsService;
         $this->migrationNamespace   = $migrationNamespace;
         $this->migrationDestination = $makeMigrationDestination;
-        $this->executiveDi          = $executiveDi;
+        $this->di                   = $di;
 
         $this->migrationsService->setTable('executive_user_migrations');
 
@@ -119,7 +119,7 @@ class RunUserMigrationsCommand
         $className = "{$this->migrationNamespace}\\{$migrationClassName}";
 
         try {
-            $class = $this->executiveDi->makeFromDefinition($className);
+            $class = $this->di->get($className);
         } catch (Throwable $e) {
             $class = new $className();
         }

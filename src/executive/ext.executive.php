@@ -36,7 +36,7 @@ class Executive_ext
         $configService->set_item('disable_csrf_protection', 'y');
 
         /** @var CliErrorHandlerService $cliErrorHandlerService */
-        $cliErrorHandlerService = ExecutiveDi::make(
+        $cliErrorHandlerService = ExecutiveDi::diContainer()->get(
             CliErrorHandlerService::class
         );
 
@@ -126,7 +126,7 @@ class Executive_ext
             }
 
             try {
-                $class = ExecutiveDi::make($actionConfig['class']);
+                $class = ExecutiveDi::diContainer()->get($actionConfig['class']);
             } catch (Throwable $e) {
                 $class = new $actionConfig['class']();
             }
@@ -155,7 +155,7 @@ class Executive_ext
         $lang->loadfile('executive');
 
         /** @var ElevateSessionService $elevateSessionService */
-        $elevateSessionService = ExecutiveDi::make(ElevateSessionService::class);
+        $elevateSessionService = ExecutiveDi::diContainer()->get(ElevateSessionService::class);
         $elevateSessionService->run();
 
         // Prevent timeout (hopefully)
@@ -164,11 +164,11 @@ class Executive_ext
         // Run the console controller and catch any errors that bubble up
         try {
             /** @var ConsoleController $consoleController */
-            $consoleController = ExecutiveDi::make(ConsoleController::class);
+            $consoleController = ExecutiveDi::diContainer()->get(ConsoleController::class);
             $consoleController->run();
         } catch (Throwable $e) {
             /** @var CliErrorHandlerService $cliErrorHandlerService */
-            $cliErrorHandlerService = ExecutiveDi::make(
+            $cliErrorHandlerService = ExecutiveDi::diContainer()->get(
                 CliErrorHandlerService::class
             );
 
@@ -195,7 +195,7 @@ class Executive_ext
         $extensions = ee()->extensions;
 
         /** @var RoutingService $routingService */
-        $routingService = ExecutiveDi::make(RoutingService::class);
+        $routingService = ExecutiveDi::diContainer()->get(RoutingService::class);
 
         $result = $routingService->routeUri($uri);
 
@@ -239,7 +239,7 @@ class Executive_ext
         }
 
         try {
-            $class = ExecutiveDi::make($row->class);
+            $class = ExecutiveDi::diContainer()->get($row->class);
         } catch (Throwable $e) {
             $class = new $row->class();
         }

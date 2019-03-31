@@ -4,8 +4,92 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7478b9a66e6e0a42e163e67b4dce71be",
+    "content-hash": "36d690e371789f0b685327b43764d4cc",
     "packages": [
+        {
+            "name": "buzzingpixel/corbomite-config-collector",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/buzzingpixel/corbomite-config-collector.git",
+                "reference": "5fdca5a3b143c5480d3642d7464251e03d7e35e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-config-collector/zipball/5fdca5a3b143c5480d3642d7464251e03d7e35e2",
+                "reference": "5fdca5a3b143c5480d3642d7464251e03d7e35e2",
+                "shasum": ""
+            },
+            "require": {
+                "buzzingpixel/corbomite-di": "^1.0",
+                "ext-json": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "^2.6",
+                "phpunit/phpunit": "^7.5",
+                "roave/security-advisories": "dev-master",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "library",
+            "extra": {
+                "diConfigFilePath": "src/diConfig.php"
+            },
+            "autoload": {
+                "psr-4": {
+                    "corbomite\\configcollector\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "TJ Draper",
+                    "email": "tj@buzzingpixel.com",
+                    "homepage": "https://buzzingpixel.com"
+                }
+            ],
+            "description": "Corbomite Config Collector",
+            "time": "2019-03-04T03:48:44+00:00"
+        },
+        {
+            "name": "buzzingpixel/corbomite-di",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/buzzingpixel/corbomite-di.git",
+                "reference": "e8ef39e88bf5d2ff4893f14c0ba42e192c90fd78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-di/zipball/e8ef39e88bf5d2ff4893f14c0ba42e192c90fd78",
+                "reference": "e8ef39e88bf5d2ff4893f14c0ba42e192c90fd78",
+                "shasum": ""
+            },
+            "require": {
+                "buzzingpixel/corbomite-config-collector": "^1.1",
+                "ext-json": "*",
+                "php": ">=7.2",
+                "php-di/php-di": "^6.0"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "^2.6",
+                "roave/security-advisories": "dev-master",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "corbomite\\di\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Corbomite DI",
+            "homepage": "https://buzzingpixel.com/",
+            "time": "2019-03-30T20:16:02+00:00"
+        },
         {
             "name": "composer/ca-bundle",
             "version": "1.1.4",

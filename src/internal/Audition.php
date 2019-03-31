@@ -30,8 +30,9 @@ class Audition
             ],
         ]);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $response->getBody()->write(
-            ExecutiveDi::get(EETemplateService::class)->renderTemplate(
+            ExecutiveDi::diContainer()->get(EETemplateService::class)->renderTemplate(
                 'test',
                 'asdf',
                 ['asdf' => 'thing']
@@ -39,7 +40,7 @@ class Audition
         );
 
         // $response->getBody()->write(
-        //     ExecutiveDi::get(EETemplateService::class)->renderPath(
+        //     ExecutiveDi::diContainer()->get(EETemplateService::class)->renderPath(
         //         'src/TestTemplate.html',
         //         [
         //             'asdf' => 'thing',
@@ -48,7 +49,7 @@ class Audition
         // );
 
         // $response->getBody()->write(
-        //     ExecutiveDi::get(Environment::class)->render(
+        //     ExecutiveDi::diContainer()->get(Environment::class)->render(
         //         'TestTwigTemplate.twig',
         //         [
         //             'testVar' => 'thingy',
@@ -85,23 +86,23 @@ class Audition
         //     $actionQueueItemModel2,
         // ];
         //
-        // ExecutiveDi::get(QueueApi::class)->addToQueue($actionQueueModel);
+        // ExecutiveDi::diContainer()->get(QueueApi::class)->addToQueue($actionQueueModel);
 
         // // Get next queue item
-        // var_dump(ExecutiveDi::get(QueueApi::class)->getNextQueueItem());
+        // var_dump(ExecutiveDi::diContainer()->get(QueueApi::class)->getNextQueueItem());
         // die;
 
         // // Get next queue item
-        // ExecutiveDi::get(QueueApi::class)->markAsStoppedDueToError(
-        //     ExecutiveDi::get(QueueApi::class)->getNextQueueItem()
+        // ExecutiveDi::diContainer()->get(QueueApi::class)->markAsStoppedDueToError(
+        //     ExecutiveDi::diContainer()->get(QueueApi::class)->getNextQueueItem()
         // );
 
         // // Mark item as run
-        // ExecutiveDi::get(QueueApi::class)->markItemAsRun(
-        //     ExecutiveDi::get(QueueApi::class)->getNextQueueItem()
+        // ExecutiveDi::diContainer()->get(QueueApi::class)->markItemAsRun(
+        //     ExecutiveDi::diContainer()->get(QueueApi::class)->getNextQueueItem()
         // );
 
         // // Update action queue entry status
-        // ExecutiveDi::get(QueueApi::class)->updateActionQueueStatus(1);
+        // ExecutiveDi::diContainer()->get(QueueApi::class)->updateActionQueueStatus(1);
     }
 }

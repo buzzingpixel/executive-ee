@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace buzzingpixel\executive\commands;
 
-use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\models\ActionQueueItemModel;
 use buzzingpixel\executive\services\QueueApi;
+use Psr\Container\ContainerInterface;
 use Throwable;
 
 class RunQueueCommand
 {
-    /** @var ExecutiveDi $di */
+    /** @var ContainerInterface $di */
     private $di;
     /** @var QueueApi $queueApi */
     private $queueApi;
 
-    public function __construct(ExecutiveDi $di, QueueApi $queueApi)
+    public function __construct(ContainerInterface $di, QueueApi $queueApi)
     {
         $this->di       = $di;
         $this->queueApi = $queueApi;
@@ -46,8 +46,8 @@ class RunQueueCommand
     {
         $constructedClass = null;
 
-        if ($this->di->hasDefinition($item->class)) {
-            $constructedClass = $this->di->makeFromDefinition($item->class);
+        if ($this->di->has($item->class)) {
+            $constructedClass = $this->di->get($item->class);
         }
 
         if (! $constructedClass) {

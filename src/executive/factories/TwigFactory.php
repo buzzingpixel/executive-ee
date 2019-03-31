@@ -19,6 +19,9 @@ class TwigFactory
 {
     public function get()
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $di = ExecutiveDi::diContainer();
+
         /** @var EE_Config $config */
         $config = ee()->config;
         $debug  = $config->item('debug', 'twig');
@@ -57,8 +60,8 @@ class TwigFactory
         foreach ($extensions as $extension) {
             $instantiatedClass = null;
 
-            if (ExecutiveDi::has($extension)) {
-                $instantiatedClass = ExecutiveDi::get($extension);
+            if ($di->has($extension)) {
+                $instantiatedClass = $di->get($extension);
             }
 
             if (! $instantiatedClass) {
@@ -68,7 +71,7 @@ class TwigFactory
             $twig->addExtension($instantiatedClass);
         }
 
-        $twig->addExtension(ExecutiveDi::get(EETemplateTwigExtension::class));
+        $twig->addExtension($di->get(EETemplateTwigExtension::class));
 
         if ($debug) {
             $twig->addExtension(new DebugExtension());

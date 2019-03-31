@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
-use Whoops\Run as WhoopsRunner;
-use Symfony\Component\Dotenv\Dotenv;
-use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\commands\ComposerProvisionCommand;
+use buzzingpixel\executive\ExecutiveDi;
+use Symfony\Component\Dotenv\Dotenv;
 use Whoops\Handler\PrettyPageHandler as WhoopsPrettyPageHandler;
+use Whoops\Run as WhoopsRunner;
 
 // Set up composer
-$sep = DIRECTORY_SEPARATOR;
-$basePath = __DIR__;
+$sep            = DIRECTORY_SEPARATOR;
+$basePath       = __DIR__;
 $vendorAutoload = $basePath . $sep . 'vendor' . $sep . 'autoload.php';
 if (file_exists($vendorAutoload)) {
     require_once $vendorAutoload;
@@ -31,7 +32,7 @@ define('DEBUG', getenv('DEV_MODE') === 'true' ? 1 : 0);
 define('INSTALL_MODE', false);
 
 // Set up debugging
-$query = [];
+$query         = [];
 $isCpJsRequest = false;
 
 if (! empty($_SERVER['QUERY_STRING'])) {
@@ -68,9 +69,9 @@ if (PHP_SAPI === 'cli' && defined('EXECUTIVE_RAW_ARGS')) {
         $provisionArg === 'composerProvision'
     ) {
         try {
-            ExecutiveDi::get(ComposerProvisionCommand::class)->run();
-            exit();
-        } catch (Exception $e) {
+            ExecutiveDi::diContainer()->get(ComposerProvisionCommand::class)->run();
+            exit;
+        } catch (Throwable $e) {
             exit(
                 "\033[31m" . $e->getMessage() . "\n" .
                 'File: ' . $e->getFile() . "\n" .
@@ -81,10 +82,14 @@ if (PHP_SAPI === 'cli' && defined('EXECUTIVE_RAW_ARGS')) {
 }
 
 if (! file_exists($sysPath)) {
+    // @codingStandardsIgnoreStart
+    $fileName = SELF;
+    // @codingStandardsIgnoreEnd
+
     if (PHP_SAPI === 'cli') {
         exit(
             "\033[31mYour system folder path does not appear to be set correctly.\n" .
-            "\033[31mDo you need to run \"php " . SELF  . " executive composerProvision\"?.\n"
+            "\033[31mDo you need to run \"php " . $fileName . " executive composerProvision\"?.\n"
         );
     }
 

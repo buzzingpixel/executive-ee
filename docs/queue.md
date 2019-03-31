@@ -49,7 +49,7 @@ $actionQueueModel->items = [
 // (hopefully, you'll dependency inject this into your class, but we're grabbing
 // it directly here as an example)
 /** @var \buzzingpixel\executive\services\QueueApi $queueApi */
-$queueApi = \buzzingpixel\executive\ExecutiveDi::get(
+$queueApi = \buzzingpixel\executive\ExecutiveDi::diContainer()->get(
     \buzzingpixel\executive\services\QueueApi::class
 );
 

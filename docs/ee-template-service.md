@@ -11,11 +11,12 @@ use buzzingpixel\executive\services\EETemplateService;
 
 class MyController
 {
+    /** @var EETemplateService $templateService */
     private $templateService;
     
     public function __construct()
     {
-        $this->templateService = ExecutiveDi::get(EETemplateService::class);
+        $this->templateService = ExecutiveDi::diContainer()->get(EETemplateService::class);
     }
 
     public function renderEETemplate()
@@ -32,7 +33,7 @@ class MyController
 
     public function renderTemplateFromPath()
     {
-        $renderedTemplateString = $this->templateService->renderTemplate(
+        $renderedTemplateString = $this->templateService->renderPath(
             // Provide a path relative to APP_DIR constant or an absolute path
             'relative/path/to/template.html',
             [
@@ -44,7 +45,7 @@ class MyController
 
     public function renderTemplateFromString()
     {
-        $renderedTemplateString = $this->templateService->renderTemplate(
+        $renderedTemplateString = $this->templateService->renderString(
             'string template',
             [
                 'optional1' => 'An optional array of key => value variables',

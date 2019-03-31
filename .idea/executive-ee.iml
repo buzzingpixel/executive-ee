@@ -5,6 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/src/executive" isTestSource="false" packagePrefix="BuzzingPixel\Executive\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/2bj/phanybar" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/corbomite-config-collector" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/buzzingpixel/corbomite-di" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/codedungeon/php-cli-colors" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/codedungeon/phpunit-result-printer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />

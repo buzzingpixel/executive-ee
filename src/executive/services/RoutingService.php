@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace buzzingpixel\executive\services;
 
 use buzzingpixel\executive\exceptions\InvalidRouteConfiguration;
-use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\models\RouteModel;
 use EE_Config;
 use EE_Lang;
 use EE_Template;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
@@ -35,8 +35,8 @@ class RoutingService
     private $routes;
     /** @var EE_Lang $lang */
     private $lang;
-    /** @var ExecutiveDi $executiveDi */
-    private $executiveDi;
+    /** @var ContainerInterface $di */
+    private $di;
     /** @var EE_Template $template */
     private $template;
     /** @var EE_Config $config */
@@ -54,18 +54,18 @@ class RoutingService
         RouteModel $routeModel,
         array $routes,
         EE_Lang $lang,
-        ExecutiveDi $executiveDi,
+        ContainerInterface $di,
         EE_Template $template,
         EE_Config $config,
         SapiEmitter $emitter
     ) {
-        $this->routeModel  = $routeModel;
-        $this->routes      = $routes;
-        $this->lang        = $lang;
-        $this->executiveDi = $executiveDi;
-        $this->template    = $template;
-        $this->config      = $config;
-        $this->emitter     = $emitter;
+        $this->routeModel = $routeModel;
+        $this->routes     = $routes;
+        $this->lang       = $lang;
+        $this->di         = $di;
+        $this->template   = $template;
+        $this->config     = $config;
+        $this->emitter    = $emitter;
     }
 
     /**
@@ -218,7 +218,7 @@ class RoutingService
         }
 
         try {
-            $class = $this->executiveDi->makeFromDefinition($params['class']);
+            $class = $this->di->get($params['class']);
         } catch (Throwable $e) {
             $class = $params['class'];
 

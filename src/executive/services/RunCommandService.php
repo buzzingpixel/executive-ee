@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace buzzingpixel\executive\services;
 
-use buzzingpixel\executive\ExecutiveDi;
 use buzzingpixel\executive\factories\ClosureFromCallableFactory;
 use buzzingpixel\executive\factories\EeDiFactory;
 use buzzingpixel\executive\factories\ReflectionFunctionFactory;
 use buzzingpixel\executive\models\CliArgumentsModel;
 use buzzingpixel\executive\models\CommandModel;
+use Psr\Container\ContainerInterface;
 use ReflectionException;
 use Throwable;
 use function call_user_func_array;
@@ -19,8 +19,8 @@ class RunCommandService
 {
     /** @var CliArgumentsModel $cliArgumentsModel */
     private $cliArgumentsModel;
-    /** @var ExecutiveDi $executiveDi */
-    private $executiveDi;
+    /** @var ContainerInterface $di */
+    private $di;
     /** @var EeDiFactory $eeDiFactory */
     private $eeDiFactory;
     /** @var ClosureFromCallableFactory $closureFromCallableFactory */
@@ -33,13 +33,13 @@ class RunCommandService
      */
     public function __construct(
         CliArgumentsModel $cliArgumentsModel,
-        ExecutiveDi $executiveDi,
+        ContainerInterface $di,
         EeDiFactory $eeDiFactory,
         ClosureFromCallableFactory $closureFromCallableFactory,
         ReflectionFunctionFactory $reflectionFunctionFactory
     ) {
         $this->cliArgumentsModel          = $cliArgumentsModel;
-        $this->executiveDi                = $executiveDi;
+        $this->di                         = $di;
         $this->eeDiFactory                = $eeDiFactory;
         $this->closureFromCallableFactory = $closureFromCallableFactory;
         $this->reflectionMethodFactory    = $reflectionFunctionFactory;
@@ -60,9 +60,7 @@ class RunCommandService
             $instantiatedClass = null;
 
             try {
-                $instantiatedClass = $this->executiveDi->makeFromDefinition(
-                    $class
-                );
+                $instantiatedClass = $this->di->get($class);
             } catch (Throwable $e) {
             }
 

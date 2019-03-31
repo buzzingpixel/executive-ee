@@ -85,7 +85,7 @@ class Executive
         }
 
         try {
-            $class = ExecutiveDi::make($tagConf['class']);
+            $class = ExecutiveDi::diContainer()->get($tagConf['class']);
         } catch (Throwable $e) {
             $class = new $tagConf['class']();
         }
@@ -117,7 +117,7 @@ class Executive
 
         try {
             /** @var RouteModel $routeModel */
-            $routeModel = ExecutiveDi::get(RouteModel::SINGLETON_DI_NAME);
+            $routeModel = ExecutiveDi::diContainer()->get(RouteModel::class);
         } catch (Throwable $e) {
             return '';
         }
@@ -162,9 +162,10 @@ class Executive
         );
         $varString = is_string($varString) ? $varString : '';
 
-        /** @var TwigEnvironment $twig */
-        $twig = ExecutiveDi::get(TwigEnvironment::class);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $twig = ExecutiveDi::diContainer()->get(TwigEnvironment::class);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         return $twig->render($template, json_decode($varString, true));
     }
 }
