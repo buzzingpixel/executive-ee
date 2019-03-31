@@ -20,7 +20,7 @@
         "php": ">=7.1",
         "ext-json": "*",
         "ext-zip": "*",
-        "buzzingpixel/corbomite-config-collector": "^1.1",
+        "buzzingpixel/corbomite-config-collector": "^1.1.2",
         "composer/composer": "^1.8",
         "filp/whoops": "^2.3",
         "php-di/php-di": "^6.0",

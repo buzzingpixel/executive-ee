@@ -4,30 +4,33 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36d690e371789f0b685327b43764d4cc",
+    "content-hash": "96f4b810cccaa9dae6da99f2863010a6",
     "packages": [
         {
             "name": "buzzingpixel/corbomite-config-collector",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/corbomite-config-collector.git",
-                "reference": "5fdca5a3b143c5480d3642d7464251e03d7e35e2"
+                "reference": "b2991644c3ba29769af8265f60cce8159c490e1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/corbomite-config-collector/zipball/5fdca5a3b143c5480d3642d7464251e03d7e35e2",
-                "reference": "5fdca5a3b143c5480d3642d7464251e03d7e35e2",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-config-collector/zipball/b2991644c3ba29769af8265f60cce8159c490e1d",
+                "reference": "b2991644c3ba29769af8265f60cce8159c490e1d",
                 "shasum": ""
             },
             "require": {
-                "buzzingpixel/corbomite-di": "^1.0",
+                "buzzingpixel/corbomite-di": "^1.2",
                 "ext-json": "*",
                 "php": ">=7.1"
             },
             "require-dev": {
+                "codedungeon/phpunit-result-printer": "^0.26.1",
+                "doctrine/coding-standard": "^6.0",
+                "friendsofphp/php-cs-fixer": "^2.14",
                 "phpmd/phpmd": "^2.6",
-                "phpunit/phpunit": "^7.5",
+                "phpunit/phpunit": "^8.0",
                 "roave/security-advisories": "dev-master",
                 "squizlabs/php_codesniffer": "^3.4"
             },
@@ -41,6 +44,9 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
             "authors": [
                 {
                     "name": "TJ Draper",
@@ -49,7 +55,7 @@
                 }
             ],
             "description": "Corbomite Config Collector",
-            "time": "2019-03-04T03:48:44+00:00"
+            "time": "2019-03-31T21:30:52+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-di",
