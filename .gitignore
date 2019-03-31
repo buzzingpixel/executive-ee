@@ -60,6 +60,7 @@ prepros.json
 # System
 #------------------------------------
 
+.php_cs.cache
 .phpunit.result.cache
 .cache
 .DS_Store
