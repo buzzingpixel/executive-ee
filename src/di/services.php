@@ -8,6 +8,7 @@ use buzzingpixel\executive\services\CliErrorHandlerService;
 use buzzingpixel\executive\services\CliInstallService;
 use buzzingpixel\executive\services\CliQuestionService;
 use buzzingpixel\executive\services\CommandsService;
+use buzzingpixel\executive\services\ConditionalSapiStreamEmitter;
 use buzzingpixel\executive\services\EETemplateService;
 use buzzingpixel\executive\services\ElevateSessionService;
 use buzzingpixel\executive\services\MigrationsService;
@@ -31,7 +32,8 @@ use buzzingpixel\executive\services\templatesync\SyncTemplatesFromFilesService;
 use buzzingpixel\executive\services\ViewService;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
+use Zend\HttpHandlerRunner\Emitter\EmitterStack;
+use Zend\HttpHandlerRunner\Emitter\SapiStreamEmitter;
 use function DI\autowire;
 
 return [
@@ -41,6 +43,12 @@ return [
     CliErrorHandlerService::class => autowire(),
     CliQuestionService::class => autowire(),
     CommandsService::class => autowire(),
+    ConditionalSapiStreamEmitter::class => static function (ContainerInterface $di) {
+        return new ConditionalSapiStreamEmitter(
+            $di->get(SapiStreamEmitter::class),
+            8192
+        );
+    },
     EETemplateService::class => autowire(),
     DeleteSnippetsNotOnDiskService::class => static function (ContainerInterface $di) {
         return new DeleteSnippetsNotOnDiskService(
@@ -88,7 +96,7 @@ return [
             $di,
             $di->get(EE_Template::class),
             $config,
-            new SapiEmitter()
+            $di->get(EmitterStack::class)
         );
     },
     RunCommandService::class => autowire(),

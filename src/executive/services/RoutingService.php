@@ -12,7 +12,7 @@ use EE_Template;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
+use Zend\HttpHandlerRunner\Emitter\EmitterStack;
 use function array_merge;
 use function array_shift;
 use function call_user_func_array;
@@ -42,8 +42,8 @@ class RoutingService
     private $template;
     /** @var EE_Config $config */
     private $config;
-    /** @var SapiEmitter $emitter */
-    private $emitter;
+    /** @var EmitterStack $emitterStack */
+    private $emitterStack;
 
     /** @var bool $anyRouteMatched */
     private $anyRouteMatched = false;
@@ -58,15 +58,15 @@ class RoutingService
         ContainerInterface $di,
         EE_Template $template,
         EE_Config $config,
-        SapiEmitter $emitter
+        EmitterStack $emitterStack
     ) {
-        $this->routeModel = $routeModel;
-        $this->routes     = $routes;
-        $this->lang       = $lang;
-        $this->di         = $di;
-        $this->template   = $template;
-        $this->config     = $config;
-        $this->emitter    = $emitter;
+        $this->routeModel   = $routeModel;
+        $this->routes       = $routes;
+        $this->lang         = $lang;
+        $this->di           = $di;
+        $this->template     = $template;
+        $this->config       = $config;
+        $this->emitterStack = $emitterStack;
     }
 
     /**
@@ -124,7 +124,7 @@ class RoutingService
         }
 
         if ($this->lastResponse) {
-            $this->emitter->emit($this->lastResponse);
+            $this->emitterStack->emit($this->lastResponse);
             exit;
         }
 
