@@ -2,14 +2,9 @@
 
 declare(strict_types=1);
 
-use buzzingpixel\executive\services\EETemplateService;
 use buzzingpixel\executive\twigextensions\EETemplateTwigExtension;
-use Psr\Container\ContainerInterface;
+use function DI\autowire;
 
 return [
-    EETemplateTwigExtension::class => static function (ContainerInterface $di) {
-        return new EETemplateTwigExtension(
-            $di->get(EETemplateService::class)
-        );
-    },
+    EETemplateTwigExtension::class => autowire(),
 ];

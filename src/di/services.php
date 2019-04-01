@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-use buzzingpixel\executive\factories\CliArgumentsModelFactory;
-use buzzingpixel\executive\factories\ClosureFromCallableFactory;
-use buzzingpixel\executive\factories\CommandModelFactory;
-use buzzingpixel\executive\factories\ConsoleQuestionFactory;
-use buzzingpixel\executive\factories\EeDiFactory;
-use buzzingpixel\executive\factories\FinderFactory;
-use buzzingpixel\executive\factories\QueryBuilderFactory;
-use buzzingpixel\executive\factories\ReflectionFunctionFactory;
-use buzzingpixel\executive\factories\ScheduleItemModelFactory;
-use buzzingpixel\executive\factories\SplFileInfoFactory;
-use buzzingpixel\executive\models\CliArgumentsModel;
 use buzzingpixel\executive\models\RouteModel;
 use buzzingpixel\executive\services\CaseConversionService;
 use buzzingpixel\executive\services\CliErrorHandlerService;
@@ -41,51 +30,18 @@ use buzzingpixel\executive\services\templatesync\ForceSnippetVarSyncToDatabaseSe
 use buzzingpixel\executive\services\templatesync\SyncTemplatesFromFilesService;
 use buzzingpixel\executive\services\ViewService;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Console\Application as ConsoleApplication;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Filesystem\Filesystem;
 use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
+use function DI\autowire;
 
 return [
-    AddToQueueService::class => static function () {
-        return new AddToQueueService(
-            new QueryBuilderFactory()
-        );
-    },
-    CaseConversionService::class => static function () {
-        return new CaseConversionService();
-    },
-    CliInstallService::class => static function () {
-        return new CliInstallService(new Executive_upd());
-    },
-    CliErrorHandlerService::class => static function () {
-        return new CliErrorHandlerService(
-            new ConsoleOutput(),
-            ee()->lang
-        );
-    },
-    CliQuestionService::class => static function () {
-        return new CliQuestionService(
-            (new ConsoleApplication())
-                ->getHelperSet()
-                ->get('question'),
-            new ArgvInput(),
-            new ConsoleOutput(),
-            new ConsoleQuestionFactory(),
-            ee()->lang
-        );
-    },
-    CommandsService::class => static function () {
-        return new CommandsService(
-            ee()->config,
-            ee('Addon'),
-            new CommandModelFactory()
-        );
-    },
-    EETemplateService::class => static function () {
-        return new EETemplateService();
-    },
+    AddToQueueService::class => autowire(),
+    CaseConversionService::class => autowire(),
+    CliInstallService::class => autowire(),
+    CliErrorHandlerService::class => autowire(),
+    CliQuestionService::class => autowire(),
+    CommandsService::class => autowire(),
+    EETemplateService::class => autowire(),
     DeleteSnippetsNotOnDiskService::class => static function (ContainerInterface $di) {
         return new DeleteSnippetsNotOnDiskService(
             rtrim(PATH_TMPL, DIRECTORY_SEPARATOR),
@@ -94,9 +50,7 @@ return [
             new Filesystem()
         );
     },
-    DeleteTemplateGroupsWithoutTemplatesService::class => static function () {
-        return new DeleteTemplateGroupsWithoutTemplatesService(ee('Model'));
-    },
+    DeleteTemplateGroupsWithoutTemplatesService::class => autowire(),
     DeleteTemplatesNotOnDiskService::class => static function (ContainerInterface $di) {
         return new DeleteTemplatesNotOnDiskService(
             rtrim(PATH_TMPL, DIRECTORY_SEPARATOR),
@@ -113,106 +67,38 @@ return [
             new Filesystem()
         );
     },
-    ElevateSessionService::class => static function () {
-        return new ElevateSessionService(
-            new QueryBuilderFactory(),
-            ee()->session,
-            ee()->router,
-            ee()->load
-        );
-    },
-    EnsureIndexTemplatesExistService::class => static function () {
-        return new EnsureIndexTemplatesExistService(
-            rtrim(PATH_TMPL, DIRECTORY_SEPARATOR),
-            new FinderFactory(),
-            new Filesystem()
-        );
-    },
-    ForceSnippetVarSyncToDatabaseService::class => static function () {
-        return new ForceSnippetVarSyncToDatabaseService(
-            ee('Model')
-        );
-    },
-    GetNextQueueItemService::class => static function () {
-        return new GetNextQueueItemService(
-            new QueryBuilderFactory()
-        );
-    },
-    MarkAsStoppedDueToErrorService::class => static function () {
-        return new MarkAsStoppedDueToErrorService(
-            new QueryBuilderFactory()
-        );
-    },
-    MarkQueueItemAsRunService::class => static function (ContainerInterface $di) {
-        return new MarkQueueItemAsRunService(
-            new QueryBuilderFactory(),
-            $di->get(UpdateActionQueueStatusService::class)
-        );
-    },
-    MigrationsService::class => static function () {
-        return new MigrationsService(
-            ee('Filesystem'),
-            new QueryBuilderFactory()
-        );
-    },
-    QueueApi::class => static function (ContainerInterface $di) {
-        return new QueueApi($di);
-    },
+    ElevateSessionService::class => autowire(),
+    EnsureIndexTemplatesExistService::class => autowire()
+        ->constructorParameter('templatesPath', rtrim(PATH_TMPL, DIRECTORY_SEPARATOR)),
+    ForceSnippetVarSyncToDatabaseService::class => autowire(),
+    GetNextQueueItemService::class => autowire(),
+    MarkAsStoppedDueToErrorService::class => autowire(),
+    MarkQueueItemAsRunService::class => autowire(),
+    MigrationsService::class => autowire(),
+    QueueApi::class => autowire(),
     RoutingService::class => static function (ContainerInterface $di) {
-        /** @var EE_Config $config */
-        $config = ee()->config;
-        $routes = $config->item('customRoutes');
+        $config = $di->get(EE_Config::class);
 
-        /** @var EE_Loader $loader */
-        $loader = ee()->load;
-        $loader->library('template', null, 'TMPL');
+        $routes = $config->item('customRoutes');
 
         return new RoutingService(
             $di->get(RouteModel::class),
             is_array($routes) ? $routes : [],
-            ee()->lang,
+            $di->get(EE_Lang::class),
             $di,
-            ee()->TMPL,
-            ee()->config,
+            $di->get(EE_Template::class),
+            $config,
             new SapiEmitter()
         );
     },
-    RunCommandService::class => static function (ContainerInterface $di) {
-        return new RunCommandService(
-            $di->get(CliArgumentsModel::class),
-            $di,
-            new EeDiFactory(),
-            new ClosureFromCallableFactory(),
-            new ReflectionFunctionFactory()
-        );
-    },
-    ScheduleService::class => static function (ContainerInterface $di) {
-        return new ScheduleService(
-            ee()->config,
-            ee('Addon'),
-            $di->get(CommandsService::class),
-            new ScheduleItemModelFactory(),
-            new QueryBuilderFactory(),
-            new CliArgumentsModelFactory()
-        );
-    },
-    SyncTemplatesFromFilesService::class => static function () {
-        return new SyncTemplatesFromFilesService();
-    },
-    TemplateMakerService::class => static function () {
-        return new TemplateMakerService(
-            new SplFileInfoFactory(),
-            new Filesystem()
-        );
-    },
-    UpdateActionQueueStatusService::class => static function () {
-        return new UpdateActionQueueStatusService(
-            new QueryBuilderFactory()
-        );
-    },
-    ViewService::class => static function () {
-        /** @var EE_Config $config */
-        $config        = ee()->config;
+    RunCommandService::class => autowire(),
+    ScheduleService::class => autowire(),
+    SyncTemplatesFromFilesService::class => autowire(),
+    TemplateMakerService::class => autowire(),
+    UpdateActionQueueStatusService::class => autowire(),
+    ViewService::class => static function (ContainerInterface $di) {
+        $config = $di->get(EE_Config::class);
+
         $viewsBasePath = $config->item('cpViewsBasePath');
 
         return new ViewService(

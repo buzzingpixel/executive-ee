@@ -26,13 +26,11 @@ class AddOnUpdatesCommand
     private $addOnFactory;
     /** @var OutputInterface $consoleOutput */
     private $consoleOutput;
+    /** @var CliQuestionService $cliQuestionService */
     private $cliQuestionService;
     /** @var EE_Lang $lang */
     private $lang;
 
-    /**
-     * AddOnUpdatesCommand constructor
-     */
     public function __construct(
         AddOnFactory $addOnFactory,
         OutputInterface $consoleOutput,

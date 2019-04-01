@@ -158,7 +158,6 @@ return [
 
         return $twig;
     },
-
     Environment::class => static function (ContainerInterface $di) {
         return $di->get(TwigEnvironment::class);
     },

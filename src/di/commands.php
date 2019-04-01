@@ -24,42 +24,26 @@ use buzzingpixel\executive\services\QueueApi;
 use buzzingpixel\executive\services\RunCommandService;
 use buzzingpixel\executive\services\ScheduleService;
 use buzzingpixel\executive\services\TemplateMakerService;
-use buzzingpixel\executive\services\templatesync\DeleteSnippetsNotOnDiskService;
-use buzzingpixel\executive\services\templatesync\DeleteTemplateGroupsWithoutTemplatesService;
-use buzzingpixel\executive\services\templatesync\DeleteTemplatesNotOnDiskService;
-use buzzingpixel\executive\services\templatesync\DeleteVariablesNotOnDiskService;
-use buzzingpixel\executive\services\templatesync\EnsureIndexTemplatesExistService;
-use buzzingpixel\executive\services\templatesync\ForceSnippetVarSyncToDatabaseService;
-use buzzingpixel\executive\services\templatesync\SyncTemplatesFromFilesService;
 use Composer\Repository\InstalledFilesystemRepository;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Filesystem\Filesystem;
+use function DI\autowire;
 
 return [
-    AddOnUpdatesCommand::class => static function (ContainerInterface $di) {
-        return new AddOnUpdatesCommand(
-            ee('Addon'),
-            new ConsoleOutput(),
-            $di->get(CliQuestionService::class),
-            ee()->lang
-        );
-    },
-    CacheCommand::class => static function () {
-        return new CacheCommand(
-            ee()->functions,
-            new ConsoleOutput(),
-            ee()->lang
-        );
-    },
+    AddOnUpdatesCommand::class => autowire(),
+    CacheCommand::class => autowire(),
     ComposerProvisionCommand::class => static function () {
         // Edge case and weirdness with composer
         getenv('HOME') || putenv('HOME=' . APP_DIR);
 
         $composerApp = new Composer\Console\Application();
+
         /** @noinspection PhpUnhandledExceptionInspection */
-        $composer          = $composerApp->getComposer();
+        $composer = $composerApp->getComposer();
+
         $repositoryManager = $composer->getRepositoryManager();
+
         /** @var InstalledFilesystemRepository $installedFilesystemRepository */
         $installedFilesystemRepository = $repositoryManager->getLocalRepository();
 
@@ -81,13 +65,7 @@ return [
             $provisionEEVersionTag
         );
     },
-    ConfigCommand::class => static function (ContainerInterface $di) {
-        return new ConfigCommand(
-            ee()->config,
-            ee()->lang,
-            $di->get(CliQuestionService::class)
-        );
-    },
+    ConfigCommand::class => autowire(),
     InstallExecutiveCommand::class => static function (ContainerInterface $di) {
         return new InstallExecutiveCommand(
             new ConsoleOutput(),
@@ -100,9 +78,10 @@ return [
         );
     },
     ListUserMigrationsCommand::class => static function (ContainerInterface $di) {
-        /** @var EE_Config $config */
-        $config      = ee()->config;
-        $nameSpace   = $config->item('migrationNamespace');
+        $config = $di->get(EE_Config::class);
+
+        $nameSpace = $config->item('migrationNamespace');
+
         $destination = $config->item('migrationDestination');
 
         return new ListUserMigrationsCommand(
@@ -114,15 +93,14 @@ return [
         );
     },
     MakeFromTemplateCommand::class => static function (ContainerInterface $di) {
-        /** @var EE_Config $config */
-        $config = ee()->config;
+        $config = $di->get(EE_Config::class);
 
         $availableConfigurations = $config->item('classTemplateConfigurations');
 
         return new MakeFromTemplateCommand(
             new ConsoleOutput(),
             $di->get(CliQuestionService::class),
-            ee()->lang,
+            $di->get(EE_Lang::class),
             $di->get(CaseConversionService::class),
             $di->get(TemplateMakerService::class),
             is_array($availableConfigurations) ?
@@ -131,16 +109,18 @@ return [
         );
     },
     MakeMigrationCommand::class => static function (ContainerInterface $di) {
-        /** @var EE_Config $config */
-        $config           = ee()->config;
+        $config = $di->get(EE_Config::class);
+
         $templateLocation = $config->item('migrationTemplateLocation');
-        $nameSpace        = $config->item('migrationNamespace');
-        $destination      = $config->item('migrationDestination');
+
+        $nameSpace = $config->item('migrationNamespace');
+
+        $destination = $config->item('migrationDestination');
 
         return new MakeMigrationCommand(
             new ConsoleOutput(),
             $di->get(CliQuestionService::class),
-            ee()->lang,
+            $di->get(EE_Lang::class),
             $di->get(CaseConversionService::class),
             $di->get(TemplateMakerService::class),
             is_string($templateLocation) ? $templateLocation : '',
@@ -162,39 +142,27 @@ return [
         @set_time_limit(0);
 
         return new RunScheduleCommand(
-            ee()->lang,
+            $di->get(EE_Lang::class),
             new ConsoleOutput(),
             $di->get(ScheduleService::class),
             $di->get(RunCommandService::class)
         );
     },
     RunUserMigrationsCommand::class => static function (ContainerInterface $di) {
-        /** @var EE_Config $config */
-        $config      = ee()->config;
-        $nameSpace   = $config->item('migrationNamespace');
+        $config = $di->get(EE_Config::class);
+
+        $nameSpace = $config->item('migrationNamespace');
+
         $destination = $config->item('migrationDestination');
 
         return new RunUserMigrationsCommand(
             new ConsoleOutput(),
-            ee()->lang,
+            $di->get(EE_Lang::class),
             $di->get(MigrationsService::class),
             is_string($nameSpace) ? $nameSpace : '',
             is_string($destination) ? $destination : '',
             $di
         );
     },
-    SyncTemplatesCommand::class => static function (ContainerInterface $di) {
-        return new SyncTemplatesCommand(
-            ee()->lang,
-            new ConsoleOutput(),
-            ee()->config,
-            $di->get(DeleteVariablesNotOnDiskService::class),
-            $di->get(EnsureIndexTemplatesExistService::class),
-            $di->get(DeleteSnippetsNotOnDiskService::class),
-            $di->get(DeleteTemplatesNotOnDiskService::class),
-            $di->get(ForceSnippetVarSyncToDatabaseService::class),
-            $di->get(SyncTemplatesFromFilesService::class),
-            $di->get(DeleteTemplateGroupsWithoutTemplatesService::class)
-        );
-    },
+    SyncTemplatesCommand::class => autowire(),
 ];
