@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExportableFileTemplateSettings">
+    <internal_templates>
+      <template name="PHP Class.php" reformat="false" live-template-enabled="false" enabled="true" />
+      <template name="PHP Interface.php" reformat="false" live-template-enabled="false" enabled="true" />
+      <template name="PHP Trait.php" reformat="false" live-template-enabled="false" enabled="true" />
+      <template name="PHPUnit 6 Test.php" reformat="false" live-template-enabled="false" enabled="true" />
+      <template name="PHPUnit Test.php" reformat="false" live-template-enabled="false" enabled="true" />
+    </internal_templates>
+  </component>
+</project>
