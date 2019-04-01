@@ -5,18 +5,18 @@ Executive offers the ability to set routes that route to class methods. Here's a
 ```php
 $config['customRoutes'] = [
     // :before is a special route that runs before any other routes
-    ':before' => [
-        'class' => \test\Test::class,
-        'method' => 'before',
-    ],
+    // note you can specify just a class and the router will default to use the __invoke method
+    ':before' => \test\Test::class,
     
     // :home is a special route that matches for the home page
+    // Note you can also specify the route as an array, though again, if you don't speicify
+    // method, __invoke is assumed
     ':home' => [
         'class' => \test\Test::class,
-        'method' => 'home',
     ],
     
     // :after is a special route that is run after all other routes
+    // Note here we're specifying a method
     ':after' => [
         'class' => \test\Test::class,
         'method' => 'after'
@@ -62,7 +62,7 @@ Routes are checked for a match and run in the order they are specified in the ar
 
 ## Calling the custom method
 
-When preparing the class to run, Executive will first try to get the class from the [Dependency Injector](dependency-injection.md). This way, you can have fully dependency injected and unit tested code. If you have not defined the class in the dependency injector config, Executive will fall back to trying to new up the class.
+When preparing the class to run, Executive will first try to get the class from the [Dependency Injector](dependency-injection.md). This way, you can have fully dependency injected and unit tested code. If for some reason the class can't be retrieved from the DI, Executive will fall back to trying to new up the class.
 
 ### Routing Model
 
@@ -160,11 +160,12 @@ declare(strict_types=1);
 namespace src;
 
 use Zend\Diactoros\Response;
+use Psr\Http\Message\ResponseInterface;
 use buzzingpixel\executive\models\RouteModel;
 
 class SomeController
 {
-    public function __invoke(RouteModel $router)
+    public function __invoke(RouteModel $router): ResponseInterface
     {
         $response = new Response();
 

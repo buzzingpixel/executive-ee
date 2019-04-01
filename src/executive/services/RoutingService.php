@@ -19,6 +19,7 @@ use function call_user_func_array;
 use function class_exists;
 use function explode;
 use function in_array;
+use function is_array;
 use function ltrim;
 use function mb_strpos;
 use function method_exists;
@@ -158,8 +159,12 @@ class RoutingService
      *
      * @throws InvalidRouteConfiguration
      */
-    private function runRule(string $uri, string $rule, array $params) : void
+    private function runRule(string $uri, string $rule, $params) : void
     {
+        if (! is_array($params)) {
+            $params = ['class' => $params];
+        }
+
         if (! isset($params['class'])) {
             $this->throwInvalidRouteConfigurationException(
                 $rule,
@@ -168,10 +173,7 @@ class RoutingService
         }
 
         if (! isset($params['method'])) {
-            $this->throwInvalidRouteConfigurationException(
-                $rule,
-                'routeMethodNotSet'
-            );
+            $params['method'] = '__invoke';
         }
 
         $regex = ltrim(rtrim($rule === ':home' ? '' : $rule, '/'), '/');
