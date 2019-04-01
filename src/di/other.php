@@ -2,9 +2,6 @@
 
 declare(strict_types=1);
 
-use buzzingpixel\executive\factories\TwigFactory;
-use Twig\Environment as TwigEnvironment;
-
 return [
     'eeSiteShortNames' => static function () {
         $sites = ee('Model')->get('Site')
@@ -18,8 +15,5 @@ return [
         }
 
         return $sitesArray;
-    },
-    TwigEnvironment::class => static function () {
-        return (new TwigFactory())->get();
     },
 ];

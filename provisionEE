@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+declare(strict_types=1);
+
 /**
  * This is used to get EE in a place where PHPStorm can be aware of it
  */
-
-declare(strict_types=1);
 
 $tag = '5.2.2';
 
