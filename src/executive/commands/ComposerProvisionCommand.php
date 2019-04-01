@@ -211,17 +211,13 @@ class ComposerProvisionCommand
 
         $path        = $this->vendorPath . '/expressionengine-provision';
         $installPath = $path . '/ee';
-        $zipFile     = $path . '/ee.zip';
+        $zipFile     = $path . '/ee-' . $this->provisionEEVersionTag . '.zip';
 
         $path        = $this->processPathForPlatform($path);
         $installPath = $this->processPathForPlatform($installPath);
         $zipFile     = $this->processPathForPlatform($zipFile);
 
         $this->fileSystem->mkdir($path);
-
-        if ($this->fileSystem->exists($zipFile)) {
-            $this->fileSystem->remove($zipFile);
-        }
 
         $installPathExists = $this->fileSystem->exists($installPath);
 
@@ -233,10 +229,12 @@ class ComposerProvisionCommand
             exec('rm -rf ' . $installPath);
         }
 
-        $url  = 'https://github.com/ExpressionEngine/ExpressionEngine/archive/';
-        $url .= $this->provisionEEVersionTag . '.zip';
+        if (! $this->fileSystem->exists($zipFile)) {
+            $url  = 'https://github.com/ExpressionEngine/ExpressionEngine/archive/';
+            $url .= $this->provisionEEVersionTag . '.zip';
 
-        $this->fileSystem->appendToFile($zipFile, fopen($url, 'rb'));
+            $this->fileSystem->appendToFile($zipFile, fopen($url, 'rb'));
+        }
 
         $zipHandler = new ZipArchive();
         $zipHandler->open($zipFile);
@@ -246,6 +244,28 @@ class ComposerProvisionCommand
         $unzippedPath = $this->processPathForPlatform(
             $path . '/ee/ExpressionEngine-' . $this->provisionEEVersionTag
         );
+
+        $remoteBootCommonUrl = 'https://raw.githubusercontent.com/buzzingpixel/executive-ee-provision-support/master/system/ee/EllisLab/ExpressionEngine/Boot/boot.common.php';
+
+        $bootCommonPath = $unzippedPath . '/system/ee/EllisLab/ExpressionEngine/Boot/boot.common.php';
+        $bootCommonPath = $this->processPathForPlatform($bootCommonPath);
+
+        if ($isWin) {
+            $this->fileSystem->remove($bootCommonPath);
+        }
+
+        if (! $isWin) {
+            exec('rm ' . $bootCommonPath);
+        }
+
+        $bootCommonStorage = $path . '/boot.common.php';
+        $bootCommonStorage = $this->processPathForPlatform($bootCommonStorage);
+
+        if (! $this->fileSystem->exists($bootCommonStorage)) {
+            $this->fileSystem->appendToFile($bootCommonStorage, fopen($remoteBootCommonUrl, 'rb'));
+        }
+
+        $this->fileSystem->copy($bootCommonStorage, $bootCommonPath);
 
         $fromSysPath = $this->processPathForPlatform(
             $unzippedPath . '/system/ee'
