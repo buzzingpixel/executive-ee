@@ -55,7 +55,7 @@ class Executive_ext
 
         if (! defined('REQ') || REQ !== 'CONSOLE') {
             /**
-             * Note a CLI request, check to see if action request
+             * Not a CLI request, check to see if action request
              */
 
             /** @var Request $request */
@@ -92,6 +92,14 @@ class Executive_ext
 
             $actionConfig = $actions[$actionKey];
 
+            if (is_string($actionConfig)) {
+                $actionConfig = ['class' => $actionConfig];
+            }
+
+            if (! isset($actionConfig['method'])) {
+                $actionConfig['method'] = '__invoke';
+            }
+
             if (! isset($actionConfig['class'])) {
                 $lang->loadfile('executive');
                 throw new InvalidActionException(
@@ -99,17 +107,6 @@ class Executive_ext
                         '{{action}}',
                         $actionKey,
                         $lang->line('actionClassNotSet')
-                    )
-                );
-            }
-
-            if (! isset($actionConfig['method'])) {
-                $lang->loadfile('executive');
-                throw new InvalidActionException(
-                    str_replace(
-                        '{{action}}',
-                        $actionKey,
-                        $lang->line('actionMethodNotSet')
                     )
                 );
             }
