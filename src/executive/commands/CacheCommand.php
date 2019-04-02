@@ -35,7 +35,7 @@ class CacheCommand
     /**
      * Clear caches
      */
-    public function clearCaches(string $type) : void
+    public function clearCaches(?string $type) : void
     {
         $this->functions->clear_caching($type ?: 'all');
 
