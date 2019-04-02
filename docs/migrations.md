@@ -1,6 +1,6 @@
 # Migrations
 
-One of the big power plays for Executive is Migrations. Migrations are classes with a single method that is run once when you `runMigrations`. Those of you who use Laravel or other applications with migrations can probably skip the details, but for clarity's sake:
+One of the big power plays for Executive is Migrations. Migrations are classes with a single method that is run once when you `runMigrations`. Those of you who use Laravel or other applications with migrations (or Phinx) can probably skip the details, but for clarity's sake:
 
 You create a migration file/class and in the `safeUp` method, you write code that manipulates your database. Executive keeps track of the migrations classes that have already run and runs any that haven't been run. Ideally you would have your deployment process set up to run the `runMigrations` command right after deploy. This allows you to make schema changes once, in code, and each environment gets the required schema changes when the code gets out to that environment.
 
@@ -10,11 +10,11 @@ Executive just needs a little bit of setup to know where to store the migration 
 
 ### $config['migrationNamespace']
 
-Example: `$config['migrationNamespace'] = 'myapp\migrations';`
+Example: `$config['migrationNamespace'] = 'MyApp\Migrations';`
 
 ### $config['migrationDestination']
 
-Example: `$config['migrationDestination'] = APP_DIR . '/src/migrations/';`
+Example: `$config['migrationDestination'] = APP_DIR . '/src/Migrations/';`
 
 ## Creating migrations
 
