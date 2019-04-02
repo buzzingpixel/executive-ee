@@ -10,6 +10,7 @@ use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\commands\ListUserMigrationsCommand;
 use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\MakeMigrationCommand;
+use buzzingpixel\executive\commands\ReverseUserMigrationsCommand;
 use buzzingpixel\executive\commands\RunQueueCommand;
 use buzzingpixel\executive\commands\RunScheduleCommand;
 use buzzingpixel\executive\commands\RunUserMigrationsCommand;
@@ -110,6 +111,11 @@ return [
             'class' => RunUserMigrationsCommand::class,
             'method' => 'runMigrations',
             'description' => lang('runMigrationsDescription'),
+        ],
+        'reverseMigrations' => [
+            'class' => ReverseUserMigrationsCommand::class,
+            'method' => 'reverseMigrations',
+            'description' => lang('reverseMigrationsDescription'),
         ],
         'runAddonUpdateMethod' => [
             'class' => AddOnUpdatesCommand::class,

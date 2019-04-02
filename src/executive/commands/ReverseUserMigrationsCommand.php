@@ -6,40 +6,39 @@ namespace buzzingpixel\executive\commands;
 
 use buzzingpixel\executive\exceptions\InvalidMigrationException;
 use buzzingpixel\executive\interfaces\MigrationInterface;
+use buzzingpixel\executive\services\CliQuestionService;
 use buzzingpixel\executive\services\MigrationsService;
 use EE_Lang;
-use EllisLab\ExpressionEngine\Library\Filesystem\FilesystemException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
-use function array_map;
 use function str_replace;
 
-class RunUserMigrationsCommand
+class ReverseUserMigrationsCommand
 {
-    /** @var OutputInterface $consoleOutput */
+    /** @var OutputInterface */
     private $consoleOutput;
-    /** @var EE_Lang $lang */
+    /** @var EE_Lang */
     private $lang;
-    /** @var MigrationsService $migrationsService */
+    /** @var MigrationsService */
     private $migrationsService;
-    /** @var string $migrationNamespace */
+    /** @var string */
     private $migrationNamespace;
-    /** @var string $migrationDestination */
+    /** @var string */
     private $migrationDestination;
-    /** @var ContainerInterface $di */
+    /** @var ContainerInterface */
     private $di;
+    /** @var CliQuestionService */
+    private $questionService;
 
-    /**
-     * RunUserMigrationsCommand constructor
-     */
     public function __construct(
         OutputInterface $consoleOutput,
         EE_Lang $lang,
         MigrationsService $migrationsService,
         string $migrationNamespace,
         string $migrationDestination,
-        ContainerInterface $di
+        ContainerInterface $di,
+        CliQuestionService $questionService
     ) {
         $this->consoleOutput        = $consoleOutput;
         $this->lang                 = $lang;
@@ -47,6 +46,7 @@ class RunUserMigrationsCommand
         $this->migrationNamespace   = $migrationNamespace;
         $this->migrationDestination = $migrationDestination;
         $this->di                   = $di;
+        $this->questionService      = $questionService;
 
         $this->migrationsService->setTable('executive_user_migrations');
 
@@ -56,11 +56,11 @@ class RunUserMigrationsCommand
     }
 
     /**
-     * Runs user migrations
+     * Reverses user migrations
      *
-     * @throws FilesystemException
+     * @throws InvalidMigrationException
      */
-    public function runMigrations() : void
+    public function reverseMigrations() : void
     {
         $hasBlockingErrors = false;
 
@@ -88,33 +88,77 @@ class RunUserMigrationsCommand
             return;
         }
 
-        $migrationsToRun = $this->migrationsService->getMigrationsToRun();
+        $migrationsToReverse = $this->migrationsService->getRunMigrations();
 
-        if (! $migrationsToRun) {
+        if (! $migrationsToReverse) {
             $this->consoleOutput->writeln(
                 '<fg=green>' .
-                $this->lang->line('noMigrationsToRun') .
+                $this->lang->line('noMigrationsToReverse') .
                 '</>'
             );
 
             return;
         }
 
-        array_map([$this, 'runMigration'], $migrationsToRun);
+        $target = $this->questionService->ask(
+            '<fg=cyan>' .
+            $this->lang->line('specifyMigrationTarget') .
+            ': </>',
+            false
+        );
+
+        if ($target && ! isset($migrationsToReverse[$target])) {
+            $this->consoleOutput->writeln(
+                '<fg=red>' .
+                $this->lang->line('invalidReverseMigrationTarget') .
+                '</>'
+            );
+
+            return;
+        }
+
+        $hasLooped = false;
+
+        foreach ($migrationsToReverse as $migration) {
+            if ($hasLooped && ! $target && $target !== '0') {
+                $this->consoleOutput->writeln(
+                    '<fg=green>' .
+                    $this->lang->line('successfullyReversedLastMigration') .
+                    '</>'
+                );
+
+                break;
+            }
+
+            if ($target && $migration === $target) {
+                $this->consoleOutput->writeln(
+                    '<fg=green>' .
+                    $this->lang->line('successfullyReverseMigratedTo:') .
+                    ' ' . $target .
+                    '</>'
+                );
+
+                break;
+            }
+
+            $this->reverseMigration($migration);
+
+            $hasLooped = true;
+        }
 
         $this->consoleOutput->writeln(
             '<fg=green>' .
-            $this->lang->line('migrationsFinished') .
+            $this->lang->line('migrationsReverseFinished') .
             '</>'
         );
     }
 
     /**
-     * Runs a migration
+     * Reverses a user migration
      *
      * @throws InvalidMigrationException
      */
-    public function runMigration(string $migrationClassName) : void
+    public function reverseMigration(string $migrationClassName) : void
     {
         $className = $this->migrationNamespace . '\\' . $migrationClassName;
 
@@ -139,12 +183,12 @@ class RunUserMigrationsCommand
             str_replace(
                 '{{class}}',
                 $migrationClassName,
-                $this->lang->line('runningMigration')
+                $this->lang->line('reversingMigration')
             ) .
             '...</>'
         );
 
-        if (! $class->safeUp()) {
+        if (! $class->safeDown()) {
             throw new InvalidMigrationException(
                 str_replace(
                     '{{class}}',
@@ -154,11 +198,11 @@ class RunUserMigrationsCommand
             );
         }
 
-        $this->migrationsService->addRunMigration($migrationClassName);
+        $this->migrationsService->removeRunMigration($migrationClassName);
 
         $this->consoleOutput->writeln(
             '<fg=green>' .
-            $this->lang->line('migrationRanSuccessfully') .
+            $this->lang->line('migrationReversedSuccessfully') .
             '</>'
         );
     }

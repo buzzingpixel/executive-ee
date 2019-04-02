@@ -10,6 +10,7 @@ use buzzingpixel\executive\commands\InstallExecutiveCommand;
 use buzzingpixel\executive\commands\ListUserMigrationsCommand;
 use buzzingpixel\executive\commands\MakeFromTemplateCommand;
 use buzzingpixel\executive\commands\MakeMigrationCommand;
+use buzzingpixel\executive\commands\ReverseUserMigrationsCommand;
 use buzzingpixel\executive\commands\RunQueueCommand;
 use buzzingpixel\executive\commands\RunScheduleCommand;
 use buzzingpixel\executive\commands\RunUserMigrationsCommand;
@@ -126,6 +127,23 @@ return [
             is_string($templateLocation) ? $templateLocation : '',
             is_string($nameSpace) ? $nameSpace : '',
             is_string($destination) ? $destination : ''
+        );
+    },
+    ReverseUserMigrationsCommand::class => static function (ContainerInterface $di) {
+        $config = $di->get(EE_Config::class);
+
+        $nameSpace = $config->item('migrationNamespace');
+
+        $destination = $config->item('migrationDestination');
+
+        return new ReverseUserMigrationsCommand(
+            new ConsoleOutput(),
+            $di->get(EE_Lang::class),
+            $di->get(MigrationsService::class),
+            is_string($nameSpace) ? $nameSpace : '',
+            is_string($destination) ? $destination : '',
+            $di,
+            $di->get(CliQuestionService::class)
         );
     },
     RunQueueCommand::class => static function (ContainerInterface $di) {

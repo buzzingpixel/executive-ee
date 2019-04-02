@@ -109,11 +109,36 @@ class MigrationsService
         return $allMigrations;
     }
 
+    public function getRunMigrations() : array
+    {
+        /** @var array $runMigrations */
+        $runMigrations = $this->queryBuilderFactory->make()
+            ->order_by('migration', 'desc')
+            ->get($this->table)
+            ->result();
+
+        $migrations = [];
+
+        foreach ($runMigrations as $migration) {
+            $migrations[$migration->migration] = $migration->migration;
+        }
+
+        return $migrations;
+    }
+
     /**
      * Adds a run migration to the database
      */
     public function addRunMigration(string $name) : void
     {
         $this->queryBuilderFactory->make()->insert($this->table, ['migration' => $name]);
+    }
+
+    /**
+     * Removes a run migration from the database
+     */
+    public function removeRunMigration(string $name) : void
+    {
+        $this->queryBuilderFactory->make()->delete($this->table, ['migration' => $name]);
     }
 }
