@@ -48,11 +48,23 @@ $config['classTemplateConfigurations'] = [
 
 Make a migration class. Requires [migrations configuration](migrations.md).
 
+## migrationStatus
+
+`php ee executive migrationStatus`
+
+Lists the migrations status. Requires [migrations configuration](migrations.md).
+
 ## runMigrations
 
 `php ee executive runMigrations`
 
 Runs any migrations that have not been run yet. As long as you are using the command line tool to create the migrations so that they are named in proper sequence, they will be run in the order they were created.
+
+## reverseMigrations
+
+`php ee executive reverseMigrations`
+
+Reverses specified migrations. You will be asked which migrations you want to reverse and can specify the last migration, all migrations, or to a specific migration target.
 
 ## runAddonUpdateMethod
 
