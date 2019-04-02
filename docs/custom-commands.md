@@ -12,4 +12,4 @@ $config['commands'] = [
 ];
 ```
 
-When preparing the command to run, Executive will first try to get the command from the [Dependency Injector](dependency-injection.md). This way, you can have fully dependency injected and unit tested code. If you have not defined the class in the dependency injector config, Executive will fall back to trying to new up the class.
+When preparing the command to run, Executive will first try to get the command from the [Dependency Injector](dependency-injection.md). This way, you can have fully dependency injected and unit tested code. If for some reason the class can't be retrieved from the DI, Executive will fall back to trying to new up the class.
