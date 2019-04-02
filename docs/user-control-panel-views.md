@@ -19,7 +19,7 @@ $config['cpSections'] = array(
 );
 ```
 
-When preparing the class, Executive will first try to get the class from the [Dependency Injector](dependency-injection.md). This way, you can have fully dependency injected and unit tested code. If you have not defined the class in the dependency injector config, Executive will fall back to trying to new up the class.
+When preparing the class, Executive will first try to get the class from the [Dependency Injector](dependency-injection.md). This way, you can have fully dependency injected and unit tested code. If for some reason the class can't be retrieved from the DI, Executive will fall back to trying to new up the class.
 
 Note that each section should have an `index` key. A section's index class/method is invoked by the following URL format:
 
