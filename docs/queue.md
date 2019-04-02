@@ -11,7 +11,7 @@ Adding items to the queue is fairly simple. Here's an example:
 ```php
 <?php
 // Create an item model (an item is like a task), you can add as many of these
-// as you want. The'll be run one at a time, one after the other, in the order
+// as you want. They'll be run one at a time, one after the other, in the order
 // you specify in the array below
 $actionQueueItemModel1 = new \buzzingpixel\executive\models\ActionQueueItemModel();
 $actionQueueItemModel1->class = SomeClass::class;
