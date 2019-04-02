@@ -136,4 +136,6 @@ $lang = [
     'migrationReversedSuccessfully' => 'The migration reversed successfully',
     'successfullyReversedLastMigration' => 'Successfully reversed last migration',
     'successfullyReverseMigratedTo:' => 'Successfully reverse migrated to:',
+    'showMigrationStatusDescription' => 'Shows the status of migrations',
+    'noMigrations' => 'There are no migrations',
 ];

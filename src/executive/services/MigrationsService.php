@@ -141,4 +141,27 @@ class MigrationsService
     {
         $this->queryBuilderFactory->make()->delete($this->table, ['migration' => $name]);
     }
+
+    /**
+     * Get Migrations Status
+     *
+     * @throws FilesystemException
+     */
+    public function getMigrationsStatus() : array
+    {
+        $allMigrations = $this->getAllMigrations();
+
+        $runMigrations = $this->getRunMigrations();
+
+        $status = [];
+
+        foreach ($allMigrations as $migration) {
+            $status[$migration] = [
+                'migrationName' => $migration,
+                'status' => isset($runMigrations[$migration]) ? 'up' : 'down',
+            ];
+        }
+
+        return $status;
+    }
 }

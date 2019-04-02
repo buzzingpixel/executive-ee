@@ -14,6 +14,7 @@ use buzzingpixel\executive\commands\ReverseUserMigrationsCommand;
 use buzzingpixel\executive\commands\RunQueueCommand;
 use buzzingpixel\executive\commands\RunScheduleCommand;
 use buzzingpixel\executive\commands\RunUserMigrationsCommand;
+use BuzzingPixel\Executive\commands\ShowMigrationStatus;
 use buzzingpixel\executive\commands\SyncTemplatesCommand;
 use buzzingpixel\executive\factories\FinderFactory;
 use buzzingpixel\executive\factories\QueryBuilderFactory;
@@ -180,6 +181,18 @@ return [
             is_string($nameSpace) ? $nameSpace : '',
             is_string($destination) ? $destination : '',
             $di
+        );
+    },
+    ShowMigrationStatus::class => static function (ContainerInterface $di) {
+        $config = $di->get(EE_Config::class);
+
+        $destination = $config->item('migrationDestination');
+
+        return new ShowMigrationStatus(
+            new ConsoleOutput(),
+            $di->get(EE_Lang::class),
+            $di->get(MigrationsService::class),
+            is_string($destination) ? $destination : ''
         );
     },
     SyncTemplatesCommand::class => autowire(),

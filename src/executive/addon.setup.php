@@ -14,6 +14,7 @@ use buzzingpixel\executive\commands\ReverseUserMigrationsCommand;
 use buzzingpixel\executive\commands\RunQueueCommand;
 use buzzingpixel\executive\commands\RunScheduleCommand;
 use buzzingpixel\executive\commands\RunUserMigrationsCommand;
+use BuzzingPixel\Executive\commands\ShowMigrationStatus;
 use buzzingpixel\executive\commands\SyncTemplatesCommand;
 use buzzingpixel\executive\ExecutiveDi;
 use Composer\Package\CompletePackageInterface;
@@ -116,6 +117,11 @@ return [
             'class' => ReverseUserMigrationsCommand::class,
             'method' => 'reverseMigrations',
             'description' => lang('reverseMigrationsDescription'),
+        ],
+        'migrationStatus' => [
+            'class' => ShowMigrationStatus::class,
+            'method' => 'showMigrationStatus',
+            'description' => lang('showMigrationStatusDescription'),
         ],
         'runAddonUpdateMethod' => [
             'class' => AddOnUpdatesCommand::class,
