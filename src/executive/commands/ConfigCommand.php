@@ -36,7 +36,7 @@ class ConfigCommand
     /**
      * Get config item
      */
-    public function get(string $key, string $index) : void
+    public function get(?string $key, ?string $index) : void
     {
         if ($key === null) {
             $key = $this->cliQuestionService->ask(
@@ -46,7 +46,7 @@ class ConfigCommand
             );
         }
 
-        $val = $this->config->item($key, $index);
+        $val = $this->config->item($key, $index ?? '');
 
         print_r('(' . gettype($val) . ') ');
         print_r($val);
