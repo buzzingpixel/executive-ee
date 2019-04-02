@@ -108,6 +108,11 @@ return [
             'method' => 'make',
             'description' => lang('makeMigrationDescription'),
         ],
+        'migrationStatus' => [
+            'class' => ShowMigrationStatus::class,
+            'method' => 'showMigrationStatus',
+            'description' => lang('showMigrationStatusDescription'),
+        ],
         'runMigrations' => [
             'class' => RunUserMigrationsCommand::class,
             'method' => 'runMigrations',
@@ -117,11 +122,6 @@ return [
             'class' => ReverseUserMigrationsCommand::class,
             'method' => 'reverseMigrations',
             'description' => lang('reverseMigrationsDescription'),
-        ],
-        'migrationStatus' => [
-            'class' => ShowMigrationStatus::class,
-            'method' => 'showMigrationStatus',
-            'description' => lang('showMigrationStatusDescription'),
         ],
         'runAddonUpdateMethod' => [
             'class' => AddOnUpdatesCommand::class,
