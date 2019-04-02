@@ -60,11 +60,11 @@ To provision using the open source repository, all you need to do is provide a r
 }
 ```
 
-As long as the tag is a valid tag name from the official ExpressionEngine repository, Executive will download EE from that tag and provision EE at that tag version. Here is the EE tags page for you to reference: https://github.com/ExpressionEngine/ExpressionEngine/tags
+As long as the tag is a valid tag name from the official ExpressionEngine repository, Executive will download EE from that tag and provision EE at that tag version. Here is the EE tags page for you to reference: [https://github.com/ExpressionEngine/ExpressionEngine/tags](https://github.com/ExpressionEngine/ExpressionEngine/tags)
 
 ### Provisioning from your own fork of EE
 
-You can also provision from you own repository of EE. Here are some notes on doing that:
+You can also provision from your own repository of EE. Here are some notes on doing that:
 
 Any environment that needs to run `composer install` or `composer update` will need to have access to the repository. If it is a private repo, this can be done with ssh keys or GitHub api keys.
 
@@ -118,7 +118,7 @@ Example composer.json:
 
 ### `eeAddOns`
 
-This configuration options allows add-ons to be installed and symlinked that are either registered with packagist, or otherwise are in a public repo and have a composer.json file, but do not have the settings in the composer.json file to support provisioning. You should provide a `handle` and `systemPath` relative to the project root for each addon. You can optionally provide a `themePath` also relative to project root.
+This configuration option allows add-ons to be installed and symlinked that are either registered with packagist, or otherwise are in a public repo and have a composer.json file, but do not have the settings in the composer.json file to support provisioning. You should provide a `handle` and `systemPath` relative to the project root for each addon. You can optionally provide a `themePath` also relative to project root.
 
 Example:
 
