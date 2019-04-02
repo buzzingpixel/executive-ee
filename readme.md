@@ -24,6 +24,7 @@ Executive also provides an interface for you to create custom commands and sched
     - [ChannelDesigner (deprecated)](docs/channel-designer.md)
 - [Dependency Injection](docs/dependency-injection.md)
 - [Custom Routing](docs/custom-routing.md)
+- [Custom Action Routing](docs/custom-action-routing.md)
 - [EE Template Service](docs/ee-template-service.md)
 - [Twig](docs/twig.md)
 - [Custom Commands](docs/custom-commands.md)
