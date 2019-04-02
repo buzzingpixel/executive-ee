@@ -35,17 +35,9 @@ Executive also provides an interface for you to create custom commands and sched
 - [User Template Tags](docs/user-template-tags.md)
 - [User Control Panel Views](docs/user-control-panel-views.md)
 
-## Videos
-
-Note, these videos are from Executive 1, but the general concepts should still be valid.
-
-- [Installing and Basic Usage](https://vimeo.com/231915582)
-- [Migrations](https://vimeo.com/231917905)
-- [Commands and Scheduling](https://vimeo.com/231919679)
-
 ## License
 
-Copyright 2018 BuzzingPixel, LLC
+Copyright 2019 BuzzingPixel, LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
