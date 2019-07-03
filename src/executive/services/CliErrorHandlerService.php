@@ -126,6 +126,22 @@ class CliErrorHandlerService
             return;
         }
 
+        if (is_array($type)) {
+            if (! isset(
+                $type['type'],
+                $type['message'],
+                $type['file'],
+                $type['line']
+            )) {
+                return;
+            }
+
+            $line    = $type['line'];
+            $file    = $type['file'];
+            $message = $type['message'];
+            $type    = $type['type'];
+        }
+
         $name = null;
 
         if ($type === 'Exception') {
