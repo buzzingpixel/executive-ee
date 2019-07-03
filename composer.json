@@ -7,7 +7,7 @@
         "diConfigFilePath": "src/di/_collector.php"
     },
     "name": "buzzingpixel/executive-ee",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "description": "An ExpressionEngine toolkit that provides a CLI, migrations, command scheduling, queue processing, custom extensions, custom template tags, custom CP views, and more!",
     "license": "Apache-2.0",
     "authors": [
