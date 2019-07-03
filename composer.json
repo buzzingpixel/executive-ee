@@ -3,7 +3,7 @@
     "extra": {
         "handle": "executive",
         "systemPath": "src/executive",
-        "version": "3.0.0",
+        "version": "3.0.1",
         "diConfigFilePath": "src/di/_collector.php"
     },
     "name": "buzzingpixel/executive-ee",

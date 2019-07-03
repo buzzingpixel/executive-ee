@@ -114,64 +114,75 @@ class AddOnUpdatesCommand
             ) {
                 $installed = ee()->addons->get_installed('modules', true);
 
-                $class   = $addon_info->getInstallerClass();
-                $version = $installed[$addon]['module_version'];
+                if (isset($installed[$addon])) {
+                    $class   = $addon_info->getInstallerClass();
+                    $version = $installed[$addon]['module_version'];
 
-                ee()->load->add_package_path($installed[$addon]['path']);
+                    ee()->load->add_package_path($installed[$addon]['path']);
 
-                $UPD           = new $class();
-                $UPD->_ee_path = APPPATH;
+                    $UPD           = new $class();
+                    $UPD->_ee_path = APPPATH;
 
-                if ($UPD->update($version) !== false) {
-                    $new_version = $addon_info->getVersion();
-                    if (version_compare($version, $new_version, '<')) {
-                        $module                 = ee('Model')->get('Module', $installed[$addon]['module_id'])
-                            ->first();
-                        $module->module_version = $new_version;
-                        $module->save();
-                    }
-                }
+                    if ($UPD->update($version) !== false) {
+                        $new_version = $addon_info->getVersion();
+                        if (version_compare($version, $new_version, '<')) {
+                            $module = ee('Model')->get('Module', $installed[$addon]['module_id'])->first();
 
-                $fieldtype = $this->getFieldtype($addon);
-                if (! empty($fieldtype)
-                    && $fieldtype['installed'] === true
-                    && array_key_exists('update', $fieldtype)
-                ) {
-                    ee()->api_channel_fields->include_handler($addon);
-                    $FT = ee()->api_channel_fields->setup_handler($addon, true);
-                    if (method_exists($FT, 'update') &&
-                        $FT->update($fieldtype['version']) !== false
-                    ) {
-                        if (ee()->api_channel_fields->apply('update', [$fieldtype['version']]) !== false) {
-                            $model = ee('Model')->get('Fieldtype')
-                                ->filter('name', $addon)
-                                ->first();
+                            $module->module_version = $new_version;
 
-                            $model->version = $addon_info->getVersion();
-                            $model->save();
+                            $module->save();
                         }
                     }
                 }
+            }
 
-                $extension = $this->getExtension($addon);
-                if (! empty($extension)
-                    && $extension['installed'] === true
-                    && array_key_exists('update', $extension)
+            $fieldtype = $this->getFieldtype($addon);
+            if (! empty($fieldtype)
+                && $fieldtype['installed'] === true
+                && array_key_exists('update', $fieldtype)
+            ) {
+                ee()->load->library('api');
+
+                ee()->legacy_api->instantiate('channel_fields');
+
+                ee()->api_channel_fields->include_handler($addon);
+
+                $FT = ee()->api_channel_fields->setup_handler($addon, true);
+
+                if (method_exists($FT, 'update') &&
+                    $FT->update($fieldtype['version']) !== false
                 ) {
-                    $class = $addon_info->getExtensionClass();
+                    if (ee()->api_channel_fields->apply('update', [$fieldtype['version']]) !== false) {
+                        $model = ee('Model')->get('Fieldtype')
+                            ->filter('name', $addon)
+                            ->first();
 
-                    $class_name = $extension['class'];
-                    $Extension  = new $class();
-                    $Extension->update_extension($extension['version']);
-                    ee()->extensions->version_numbers[$class_name] = $addon_info->getVersion();
+                        $model->version = $addon_info->getVersion();
 
-                    $model = ee('Model')->get('Extension')
-                        ->filter('class', $class_name)
-                        ->all();
-
-                    $model->version = $addon_info->getVersion();
-                    $model->save();
+                        $model->save();
+                    }
                 }
+            }
+
+            $extension = $this->getExtension($addon);
+            if (! empty($extension)
+                && $extension['installed'] === true
+                && array_key_exists('update', $extension)
+            ) {
+                $class = $addon_info->getExtensionClass();
+
+                $class_name = $extension['class'];
+                $Extension  = new $class();
+                $Extension->update_extension($extension['version']);
+                ee()->extensions->version_numbers[$class_name] = $addon_info->getVersion();
+
+                $model = ee('Model')->get('Extension')
+                    ->filter('class', $class_name)
+                    ->all();
+
+                $model->version = $addon_info->getVersion();
+
+                $model->save();
             }
 
             $plugin = $this->getPlugin($addon);
